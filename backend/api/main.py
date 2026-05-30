@@ -36,6 +36,7 @@ from db.redis_client import RedisClient
 from analysis.graph_summary.summarize import run_summary
 from analysis.timeline_reconstruction.reconstruct import run_reconstruction
 from analysis.rule_validation.validate import run_validation_pipeline
+from analysis.rule_validation.relation_analyzer import get_relation_summary_and_metadata
 from Gemini_Engine.main import run_engine
 
 from db.artifact_registry import (
@@ -296,6 +297,17 @@ def read_relationship_risk_profiles():
         with open(file_path, "r", encoding="utf-8") as f:
             return json.load(f)
     return []
+
+@app.get("/api/insights/relation-details")
+def read_relation_details(source: str, target: str):
+    """
+    Computes/returns detailed metadata, interaction counts, raw link list,
+    and a human-readable summary connecting source and target nodes.
+    """
+    try:
+        return get_relation_summary_and_metadata(source, target)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 # ── NEW POSTGRES CASES & USER INPUTS ENDPOINTS ───────────────
 

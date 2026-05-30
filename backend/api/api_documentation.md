@@ -147,3 +147,37 @@ Retrieves the risk assessment scores and supporting evidence descriptions for in
     }
   ]
   ```
+
+### C. Relation Details (`GET /api/insights/relation-details`)
+Computes and returns interactive, real-time bidirectional relationship details, communication/transaction interaction counts, raw link lists, and a comprehensive human-readable summary connecting any two nodes in the graph.
+
+- **Query Parameters**:
+  - `source`: The `master_id` or entity identifier of the first node (e.g. `MASTER_b41353c7`).
+  - `target`: The `master_id` or entity identifier of the second node (e.g. `MASTER_e34927f1`).
+- **Response Schema Example**:
+  ```json
+  {
+    "source_id": "MASTER_b41353c7",
+    "source_name": "Rahul Sen",
+    "target_id": "MASTER_e34927f1",
+    "target_name": "Rajan Mehta",
+    "summary": "Rahul Sen and Rajan Mehta share a strong direct connection evidenced by 4 phone call(s), 2 chat message(s), 1 transaction(s) totaling Rs.250,000. Financial movement initiated from Rahul Sen to Rajan Mehta.",
+    "interactions_count": 7,
+    "relations": [
+      {
+        "source_id": "MASTER_b41353c7",
+        "source_name": "Rahul Sen",
+        "target_id": "MASTER_e34927f1",
+        "target_name": "Rajan Mehta",
+        "type": "CALLED",
+        "timestamp": "2026-05-22T20:10:00+05:30",
+        "confidence": 0.99,
+        "source_type": "unknown",
+        "description": "Rahul Sen called Rajan Mehta -- Duration: 320s",
+        "attributes": {
+          "duration": 320
+        }
+      }
+    ]
+  }
+  ```

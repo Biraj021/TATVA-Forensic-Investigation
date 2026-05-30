@@ -16,6 +16,7 @@ interface ForceGraphKnowledgeGraphProps {
   loading?: boolean;
   error?: string | null;
   onNodeClick?: (node: { id: string; name: string; type: string; val: string }) => void;
+  onLinkClick?: (link: any) => void;
   /** Investigator assessments map — keyed by entity_id */
   assessments?: AssessmentsMap;
   /** Whether to render CLEARED nodes. Default: true */
@@ -131,6 +132,7 @@ export default function ForceGraphKnowledgeGraph({
   loading = false,
   error = null,
   onNodeClick,
+  onLinkClick,
   assessments = {},
   showCleared = true,
   onToggleCleared,
@@ -309,6 +311,7 @@ export default function ForceGraphKnowledgeGraph({
           }}
           linkDirectionalParticleColor={(link) => linkColor(link as RenderLink)}
           linkDirectionalParticleSpeed={getLinkParticleSpeed}
+          onLinkClick={onLinkClick}
           // Physics
           d3AlphaDecay={0.02}
           d3VelocityDecay={0.3}

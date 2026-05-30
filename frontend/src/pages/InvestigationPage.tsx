@@ -53,6 +53,50 @@ export default function InvestigationPage() {
   const [detailReason, setDetailReason] = useState('')
   const [savingAssessment, setSavingAssessment] = useState(false)
 
+  // ── Relation Details state ──────────────────────────────────────────────
+  const [selectedRelation, setSelectedRelation] = useState<any | null>(null)
+  const [relationDetails, setRelationDetails] = useState<any | null>(null)
+  const [relationLoading, setRelationLoading] = useState(false)
+
+  const [riskProfiles, setRiskProfiles] = useState<any[]>([])
+
+  useEffect(() => {
+    fetch('http://localhost:8000/api/insights/risk-profiles')
+      .then(res => res.json())
+      .then(data => setRiskProfiles(data))
+      .catch(err => console.error('Failed to load risk profiles:', err))
+  }, [])
+
+  // Derive the selected entity's risk profile
+  const selectedProfile = useMemo(() => {
+    if (!selectedEntity) return null
+    return riskProfiles.find(p => p.person_id === selectedEntity.id)
+  }, [selectedEntity, riskProfiles])
+
+  const handleLinkClick = async (link: any) => {
+    const srcId = typeof link.source === 'object' ? link.source.id : link.source
+    const tgtId = typeof link.target === 'object' ? link.target.id : link.target
+    
+    // Clear node selection to avoid sidebar clutter
+    setSelectedEntity(null)
+    
+    setSelectedRelation(link)
+    setRelationLoading(true)
+    setRelationDetails(null)
+    
+    try {
+      const res = await fetch(`http://localhost:8000/api/insights/relation-details?source=${srcId}&target=${tgtId}`)
+      if (res.ok) {
+        const data = await res.json()
+        setRelationDetails(data)
+      }
+    } catch (err) {
+      console.error('Failed to fetch relation details:', err)
+    } finally {
+      setRelationLoading(false)
+    }
+  }
+
   useEffect(() => {
     fetch('http://localhost:8000/api/insights/suspects')
       .then(res => res.json())
@@ -240,45 +284,89 @@ export default function InvestigationPage() {
               graphData={filteredGraphData}
               loading={graphLoading}
               error={graphError}
-              onNodeClick={(node) => setSelectedEntity(node)}
+              onNodeClick={(node) => {
+                setSelectedEntity(node)
+                setSelectedRelation(null) // Clear selected relation on node click
+              }}
+              onLinkClick={handleLinkClick}
               assessments={assessments}
               showCleared={showCleared}
               onToggleCleared={setShowCleared}
             />
           </div>
 
-          {/* ── Temporal Controls (Bottom) ── */}
-          <div className="absolute left-1/2 -translate-x-1/2 glass-panel rounded-xl flex items-center gap-6 border-[#feb700]/20 z-10" style={{ bottom: '40px', padding: '16px', width: '75%', maxWidth: '672px', backdropFilter: 'blur(12px)' }}>
-            <div className="flex items-center gap-3">
-              <button className="material-symbols-outlined hover:scale-110 transition-transform" style={{ color: '#ffdb9d' }}>play_arrow</button>
-              <span style={{ fontFamily: 'JetBrains Mono', fontSize: '12px', color: '#ffdb9d' }}>00:00:00:00</span>
-            </div>
-            <div className="flex-1 h-1 bg-[#353436] rounded-full relative overflow-hidden">
-              <div className="absolute inset-y-0 left-0 w-1/3 bg-[#feb700]" />
-            </div>
-            <div className="flex items-center gap-4">
-              <span style={{ fontFamily: 'JetBrains Mono', fontSize: '12px', color: '#bec7d4' }}>T-MINUS: 14D 02H</span>
-              <button className="material-symbols-outlined hover:text-[#ffdb9d]" style={{ color: '#bec7d4' }}>settings_ethernet</button>
-            </div>
-          </div>
 
-          {/* ── HUD Overlays ── */}
-          <div className="absolute top-8 left-8 glass-panel p-3 rounded flex flex-col gap-1 z-10">
-            <div className="flex justify-between items-center gap-10">
-              <span className="uppercase" style={{ fontFamily: 'JetBrains Mono', fontSize: '12px', color: '#bec7d4' }}>Spatial Lock</span>
-              <span style={{ fontFamily: 'JetBrains Mono', fontSize: '10px', color: '#ffdb9d' }}>SYS-884</span>
-            </div>
-            <div style={{ fontFamily: 'JetBrains Mono', fontSize: '12px', color: 'rgba(255,219,157,0.7)', letterSpacing: '-0.03em' }}>LAT: 34.0522° N</div>
-            <div style={{ fontFamily: 'JetBrains Mono', fontSize: '12px', color: 'rgba(255,219,157,0.7)', letterSpacing: '-0.03em' }}>LNG: 118.2437° W</div>
-          </div>
+          {/* ── NEW DYNAMIC RELATION INTELLIGENCE HUD PANEL ── */}
+          {selectedRelation && (
+            <div className="absolute top-8 right-8 glass-panel p-5 rounded-lg flex flex-col gap-3 z-30 transition-all duration-300 animate-fade-in" 
+                 style={{ border: '1px solid rgba(254,183,0,0.3)', width: '380px', backdropFilter: 'blur(16px)', background: 'rgba(19, 19, 20, 0.9)' }}>
+              <div className="flex justify-between items-center border-b border-[#3f4852]/30 pb-2">
+                <div className="flex items-center gap-2">
+                  <span className="material-symbols-outlined text-[#feb700]" style={{ fontSize: '16px' }}>share_reviews</span>
+                  <span className="uppercase font-bold" style={{ fontFamily: 'JetBrains Mono', fontSize: '12px', color: '#feb700' }}>
+                    Relation Intelligence
+                  </span>
+                </div>
+                <button onClick={() => { setSelectedRelation(null); setRelationDetails(null); }} className="text-[#bec7d4] hover:text-[#feb700] transition-colors material-symbols-outlined text-sm">
+                  close
+                </button>
+              </div>
+              
+              {relationLoading ? (
+                <div className="flex flex-col items-center py-8 gap-2">
+                  <div className="w-6 h-6 rounded-full border-2 border-[#feb700]/30 border-t-[#feb700] animate-spin" />
+                  <span style={{ fontFamily: 'JetBrains Mono', fontSize: '10px', color: '#bec7d4' }} className="uppercase tracking-widest">Reconstructing Connection...</span>
+                </div>
+              ) : relationDetails ? (
+                <div className="space-y-4">
+                  {/* Entity Breadcrumb Header */}
+                  <div>
+                    <div className="flex items-center gap-2 justify-center text-center py-2 px-3 bg-[#353436]/40 rounded mb-2 border border-[#3f4852]/20">
+                      <span className="font-bold text-xs" style={{ color: '#ffdb9d' }}>{relationDetails.source_name}</span>
+                      <span className="material-symbols-outlined text-[#feb700] animate-pulse" style={{ fontSize: '14px' }}>swap_horiz</span>
+                      <span className="font-bold text-xs" style={{ color: '#ffdb9d' }}>{relationDetails.target_name}</span>
+                    </div>
+                    <div style={{ fontFamily: 'JetBrains Mono', fontSize: '11px', color: '#bec7d4' }} className="text-center">
+                      Direct Interactions: <strong className="text-[#feb700]">{relationDetails.interactions_count}</strong>
+                    </div>
+                  </div>
 
-          <div className="absolute top-8 right-8 glass-panel p-3 rounded flex flex-col gap-1 z-10" style={{ border: '1px solid rgba(255,180,171,0.1)' }}>
-            <div className="flex justify-between items-center gap-10">
-              <span className="uppercase" style={{ fontFamily: 'JetBrains Mono', fontSize: '12px', color: '#ffb4ab' }}>Anomaly Detect</span>
-              <span style={{ fontFamily: 'JetBrains Mono', fontSize: '10px', color: '#ffb4ab' }}>ALRT-02</span>
+                  {/* Narrative summary */}
+                  <div className="bg-[#feb700]/5 border border-[#feb700]/15 rounded p-3 text-xs leading-relaxed" style={{ color: '#bec7d4', fontFamily: 'Geist' }}>
+                    <div className="font-bold text-[10px] text-[#feb700] uppercase tracking-wider mb-1" style={{ fontFamily: 'JetBrains Mono' }}>Narrative Summary</div>
+                    {relationDetails.summary}
+                  </div>
+
+                  {/* Chronological events */}
+                  <div className="space-y-2">
+                    <div className="font-bold text-[10px] text-[#bec7d4] uppercase tracking-wider mb-1" style={{ fontFamily: 'JetBrains Mono' }}>Detailed Interacting Signals</div>
+                    <div className="space-y-2 max-h-48 overflow-y-auto custom-scrollbar pr-1">
+                      {relationDetails.relations.map((rel: any, idx: number) => (
+                        <div key={idx} className="border-l-2 border-[#feb700]/30 pl-3 py-1 space-y-1 hover:bg-[#353436]/20 rounded transition-all">
+                          <div className="flex justify-between items-center text-[10px]" style={{ fontFamily: 'JetBrains Mono' }}>
+                            <span className="px-1.5 py-0.5 rounded text-[8px] font-bold" style={{ background: '#feb700', color: '#412d00' }}>
+                              {rel.type}
+                            </span>
+                            <span className="text-[#bec7d4]/60">
+                              {rel.timestamp ? new Date(rel.timestamp).toLocaleString() : 'N/A'}
+                            </span>
+                          </div>
+                          <p className="text-xs text-[#bec7d4]" style={{ fontFamily: 'Geist' }}>{rel.description}</p>
+                          {rel.confidence && (
+                            <div style={{ fontSize: '9px', color: '#feb700' }} className="font-mono">
+                              Confidence: {(rel.confidence * 100).toFixed(0)}%
+                            </div>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <div className="text-xs text-[#bec7d4] py-4 text-center">No connection data available.</div>
+              )}
             </div>
-            <div style={{ fontFamily: 'JetBrains Mono', fontSize: '12px', color: 'rgba(255,180,171,0.7)' }}>CROSS-NODE TRAFFIC SPIKE</div>
-          </div>
+          )}
         </main>
 
         {/* ── RIGHT PANEL: Intelligence & Explainability ── */}
@@ -313,9 +401,9 @@ export default function InvestigationPage() {
                 {/* Selected Node Details or Generic Intelligence Summary */}
                 {selectedEntity ? (
                   <div className="glass-panel p-4 rounded-lg relative overflow-hidden mb-6" style={{ border: '1px solid rgba(254,183,0,0.2)' }}>
-                    <div className="flex items-center gap-2 mb-3">
+                    <div className="flex items-center gap-2 mb-3 border-b border-[#3f4852]/20 pb-2">
                       <span className="material-symbols-outlined text-sm" style={{ color: '#feb700' }}>info</span>
-                      <span className="uppercase" style={{ fontFamily: 'JetBrains Mono', fontSize: '12px', color: '#feb700' }}>Entity Details</span>
+                      <span className="uppercase font-bold" style={{ fontFamily: 'JetBrains Mono', fontSize: '11px', color: '#feb700' }}>Entity Details</span>
                       <span className="ml-auto px-1.5 py-0.5 rounded text-[10px] font-bold" style={{ background: '#feb700', color: '#412d00' }}>
                         {selectedEntity.type}
                       </span>
@@ -325,9 +413,72 @@ export default function InvestigationPage() {
                     </h4>
                     <p style={{ fontFamily: 'JetBrains Mono', fontSize: '11px', color: '#bec7d4', marginBottom: '12px', wordBreak: 'break-all' }}>
                       ID: {selectedEntity.id} <br />
-                      Value: {selectedEntity.val}
+                      Sub-Type: <span className="text-[#feb700]">{selectedEntity.val}</span>
                     </p>
-                    {suspects.find(s => s.master_id === selectedEntity.id) && (
+
+                    {/* Premium Profile Section */}
+                    {selectedProfile ? (
+                      <div className="mt-4 border-t border-[#3f4852]/30 pt-3 space-y-4">
+                        {/* Risk Metric Badge */}
+                        <div className="flex justify-between items-center bg-[#ef4444]/10 border border-[#ef4444]/20 p-2.5 rounded">
+                          <div>
+                            <div style={{ fontFamily: 'JetBrains Mono', fontSize: '10px', color: '#bec7d4' }}>FORENSIC RISK LEVEL</div>
+                            <div style={{ fontFamily: 'JetBrains Mono', fontSize: '16px', fontWeight: 'bold', color: '#ef4444' }}>
+                              {selectedProfile.risk_level}
+                            </div>
+                          </div>
+                          <div className="text-right">
+                            <div style={{ fontFamily: 'JetBrains Mono', fontSize: '10px', color: '#bec7d4' }}>RISK SCORE</div>
+                            <div style={{ fontFamily: 'JetBrains Mono', fontSize: '20px', fontWeight: '900', color: '#ef4444' }}>
+                              {selectedProfile.risk_score.toFixed(0)}%
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Narrative Explanation */}
+                        <div className="space-y-1">
+                          <div style={{ fontFamily: 'JetBrains Mono', fontSize: '10px', color: '#feb700' }} className="uppercase font-bold tracking-wider">Forensic Summary</div>
+                          <p style={{ fontFamily: 'Geist', fontSize: '12px', color: '#bec7d4', lineHeight: '18px' }}>
+                            {selectedProfile.explanation}
+                          </p>
+                        </div>
+
+                        {/* Contributing Risk Factors */}
+                        <div className="space-y-2">
+                          <div style={{ fontFamily: 'JetBrains Mono', fontSize: '10px', color: '#feb700' }} className="uppercase font-bold tracking-wider">Contributing Factors ({selectedProfile.evidence.length})</div>
+                          <div className="space-y-1.5 max-h-40 overflow-y-auto custom-scrollbar pr-1">
+                            {selectedProfile.evidence.map((ev: any, idx: number) => (
+                              <div key={idx} className="bg-[#1c1b1c] border border-[#3f4852]/30 rounded p-2 text-xs space-y-1">
+                                <div className="flex justify-between items-center text-[#ffb4ab] font-bold">
+                                  <span>{ev.rule_name}</span>
+                                  <span>+{ev.weighted_contribution.toFixed(1)}</span>
+                                </div>
+                                {ev.evidence?.text_snippet && (
+                                  <p className="italic text-[#bec7d4]/60">"{ev.evidence.text_snippet}"</p>
+                                )}
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+
+                        {/* Suspicious/Notable Actions Timeline */}
+                        <div className="space-y-2">
+                          <div style={{ fontFamily: 'JetBrains Mono', fontSize: '10px', color: '#feb700' }} className="uppercase font-bold tracking-wider">Notable Suspicious Actions</div>
+                          <div className="space-y-2 max-h-40 overflow-y-auto custom-scrollbar pr-1">
+                            {selectedProfile.timeline.map((act: any, idx: number) => (
+                              <div key={idx} className="border-l border-[#feb700]/30 pl-2.5 py-0.5 space-y-0.5">
+                                <div style={{ fontSize: '9px', color: 'rgba(190,199,212,0.6)' }} className="font-mono">
+                                  {new Date(act.timestamp).toLocaleString()}
+                                </div>
+                                <div className="text-xs font-bold text-[#ffdb9d]">{act.action}</div>
+                                <p className="text-xs text-[#bec7d4]/80">{act.description}</p>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    ) : suspects.find(s => s.master_id === selectedEntity.id) ? (
+                      /* Legacy suspects fallback if not resolved in premium */
                       <div className="mt-4 border-t border-[#3f4852]/30 pt-3">
                         <div style={{ fontFamily: 'JetBrains Mono', fontSize: '12px', color: '#ffb4ab', fontWeight: 'bold', marginBottom: '4px' }}>
                           Risk Score: {suspects.find(s => s.master_id === selectedEntity.id).risk_score}%
@@ -338,8 +489,9 @@ export default function InvestigationPage() {
                           ))}
                         </ul>
                       </div>
-                    )}
-                    {/* ── Investigator Assessment Section ── */}
+                    ) : null}
+
+                    {/* ── Investigator Assessment Section (kept intact) ── */}
                     <div className="mt-4 border-t border-[#3f4852]/30 pt-3 space-y-2">
                       <div style={{ fontFamily: 'JetBrains Mono', fontSize: '11px', color: '#bec7d4', letterSpacing: '0.05em', marginBottom: '6px' }}>INVESTIGATOR ASSESSMENT</div>
                       <select
@@ -375,11 +527,11 @@ export default function InvestigationPage() {
                   <div className="glass-panel p-4 rounded-lg relative overflow-hidden" style={{ border: '1px solid rgba(152,203,255,0.2)' }}>
                     <div className="flex items-center gap-2 mb-3">
                       <span className="material-symbols-outlined text-sm" style={{ color: '#98cbff' }}>psychology</span>
-                      <span className="uppercase" style={{ fontFamily: 'JetBrains Mono', fontSize: '12px', color: '#98cbff' }}>Intelligence Summary</span>
+                      <span className="uppercase font-bold" style={{ fontFamily: 'JetBrains Mono', fontSize: '12px', color: '#98cbff' }}>Intelligence Summary</span>
                       <span className="ml-auto" style={{ fontFamily: 'JetBrains Mono', fontSize: '10px', color: '#bec7d4' }}>MDL-84</span>
                     </div>
                     <p style={{ fontFamily: 'Geist', fontSize: '14px', color: '#bec7d4', lineHeight: '20px' }}>
-                      Select any node in the knowledge graph to query real-time spatial properties, transaction history, centralities, and custom intelligence details.
+                      Select any node in the knowledge graph to query real-time spatial properties, transaction history, centralities, and custom intelligence details. Click on any connection link to reveal real-time Relation Intelligence.
                     </p>
                     <div className="mt-4 flex gap-2">
                       <span className="text-[10px] px-2 py-0.5 rounded" style={{ background: 'rgba(152,203,255,0.1)', border: '1px solid rgba(152,203,255,0.2)', color: '#98cbff' }}>INTERACTIVE</span>
