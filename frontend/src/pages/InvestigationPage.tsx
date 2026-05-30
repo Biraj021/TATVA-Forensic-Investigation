@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 // ====================================================================
@@ -9,6 +9,12 @@ import { useNavigate } from 'react-router-dom'
 // ====================================================================
 
 import ForceGraphKnowledgeGraph from '../components/ForceGraphKnowledgeGraph'
+import {
+  type GraphRenderPayload,
+  type GraphView,
+  GRAPH_FILTERS,
+  filterGraphData,
+} from '../types/graph'
 
 type TabType = 'EXPLAINABILITY' | 'TIMELINE' | 'ASSISTANT'
 
@@ -18,12 +24,44 @@ export default function InvestigationPage() {
   const [suspects, setSuspects] = useState<any[]>([])
   const [selectedEntity, setSelectedEntity] = useState<any>(null)
 
+  // ── Graph data & filter state ───────────────────────────────────────────
+  const [graphView, setGraphView] = useState<GraphView>('FULL')
+  const [fullGraphData, setFullGraphData] = useState<GraphRenderPayload | null>(null)
+  const [graphLoading, setGraphLoading] = useState(true)
+  const [graphError, setGraphError] = useState<string | null>(null)
+
   useEffect(() => {
     fetch('http://localhost:8000/api/insights/suspects')
       .then(res => res.json())
       .then(data => setSuspects(data))
       .catch(err => console.error('Failed to fetch suspects', err))
   }, [])
+
+  // Fetch the full graph payload once on mount — never refetch on filter change
+  useEffect(() => {
+    setGraphLoading(true)
+    setGraphError(null)
+    fetch('http://localhost:8000/graph/render')
+      .then(res => {
+        if (!res.ok) throw new Error(`HTTP ${res.status}: ${res.statusText}`)
+        return res.json()
+      })
+      .then((data: GraphRenderPayload) => {
+        setFullGraphData(data)
+        setGraphLoading(false)
+      })
+      .catch(err => {
+        console.error('[InvestigationPage] Failed to load graph:', err)
+        setGraphError(err.message)
+        setGraphLoading(false)
+      })
+  }, [])
+
+  // Derive filtered subgraph from the full payload — no extra API calls
+  const filteredGraphData = useMemo(
+    () => (fullGraphData ? filterGraphData(fullGraphData, graphView) : null),
+    [fullGraphData, graphView],
+  )
 
   return (
     <div className="scanline-grid overflow-hidden" style={{ background: '#0a0a0b', color: '#e5e2e3', fontFamily: 'Geist, sans-serif', height: '100vh', display: 'flex', flexDirection: 'column' }}>
@@ -97,33 +135,34 @@ export default function InvestigationPage() {
               </div>
             </div>
 
-            {/* Nav Items */}
-            {[
-              { icon: 'hub', label: 'Entity Graph', path: '/investigation', active: true, badge: 'LIVE' },
-              { icon: 'groups', label: 'People', path: '/people', active: false },
-              { icon: 'account_balance', label: 'Accounts', path: '/accounts', active: false },
-              { icon: 'location_on', label: 'Locations', path: '/locations', active: false },
-              { icon: 'devices', label: 'Devices', path: '/devices', active: false },
-            ].map(item => (
-              <a
-                key={item.path}
-                href="#"
-                onClick={(e) => { e.preventDefault(); navigate(item.path) }}
-                className={`flex items-center gap-3 px-6 py-3 transition-all duration-300 ${item.active
-                  ? 'border-r-4 border-[#feb700]'
-                  : 'text-[#bec7d4] hover:text-[#e5e2e3]'
-                }`}
-                style={item.active ? { background: 'rgba(254,183,0,0.1)', color: '#ffdb9d' } : {}}
-              >
-                <span className="material-symbols-outlined">{item.icon}</span>
-                <span className="uppercase tracking-wider" style={{ fontFamily: 'JetBrains Mono', fontSize: '14px', fontWeight: '500' }}>{item.label}</span>
-                {item.badge && (
-                  <span className="ml-auto px-1.5 py-0.5 rounded-sm text-[10px] font-bold" style={{ background: '#feb700', color: '#412d00' }}>
-                    {item.badge}
-                  </span>
-                )}
-              </a>
-            ))}
+            {/* Nav Items — driven by GRAPH_FILTERS, no routing */}
+            {(Object.entries(GRAPH_FILTERS) as [GraphView, typeof GRAPH_FILTERS[GraphView]][]).map(
+              ([view, def]) => {
+                const isActive = view === graphView
+                return (
+                  <button
+                    key={view}
+                    onClick={() => setGraphView(view)}
+                    className={`w-full flex items-center gap-3 px-6 py-3 transition-all duration-300 text-left ${
+                      isActive
+                        ? 'border-r-4 border-[#feb700]'
+                        : 'text-[#bec7d4] hover:text-[#e5e2e3]'
+                    }`}
+                    style={isActive ? { background: 'rgba(254,183,0,0.1)', color: '#ffdb9d' } : {}}
+                  >
+                    <span className="material-symbols-outlined">{def.icon}</span>
+                    <span className="uppercase tracking-wider" style={{ fontFamily: 'JetBrains Mono', fontSize: '14px', fontWeight: '500' }}>
+                      {def.label}
+                    </span>
+                    {def.badge && (
+                      <span className="ml-auto px-1.5 py-0.5 rounded-sm text-[10px] font-bold" style={{ background: '#feb700', color: '#412d00' }}>
+                        {def.badge}
+                      </span>
+                    )}
+                  </button>
+                )
+              }
+            )}
           </div>
 
           {/* Footer links */}
@@ -143,7 +182,12 @@ export default function InvestigationPage() {
         <main className="flex-1 relative overflow-hidden scanline-grid">
           {/* 3D Force Knowledge Graph — data from GET /graph/render */}
           <div className="absolute inset-0 z-0">
-            <ForceGraphKnowledgeGraph onNodeClick={(node) => setSelectedEntity(node)} />
+            <ForceGraphKnowledgeGraph
+              graphData={filteredGraphData}
+              loading={graphLoading}
+              error={graphError}
+              onNodeClick={(node) => setSelectedEntity(node)}
+            />
           </div>
 
           {/* ── Temporal Controls (Bottom) ── */}

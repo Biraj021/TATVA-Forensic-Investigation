@@ -1,37 +1,20 @@
 import { useEffect, useRef, useState, useCallback } from 'react';
 import ForceGraph3D from 'react-force-graph-3d';
 import * as THREE from 'three';
+import type { RenderNode, RenderLink, GraphRenderPayload } from '../types/graph';
+
+// Re-export for any legacy import sites that imported RenderNode from here.
+export type { RenderNode, RenderLink, GraphRenderPayload };
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Types — mirrors the backend GraphRenderPayload schema exactly.
-// No entity resolution logic lives here. The backend sends ready-to-render data.
+// Props
 // ─────────────────────────────────────────────────────────────────────────────
-
-export interface RenderNode {
-  id: string;
-  label: string;
-  type: string;      // master_type: PERSON | PLACE | INFRASTRUCTURE | ENTITY
-  sub_type: string;  // entity_types[0]: ACCOUNT | CELL_TOWER | VEHICLE | …
-  risk_score: number;
-  // Added by react-force-graph-3d at runtime (do not set manually)
-  x?: number;
-  y?: number;
-  z?: number;
-}
-
-export interface RenderLink {
-  source: string | RenderNode;
-  target: string | RenderNode;
-  type: string;
-  confidence: number;
-}
-
-interface GraphRenderPayload {
-  nodes: RenderNode[];
-  links: RenderLink[];
-}
 
 interface ForceGraphKnowledgeGraphProps {
+  /** Pre-filtered graph data from InvestigationPage. May be null while loading. */
+  graphData: GraphRenderPayload | null;
+  loading?: boolean;
+  error?: string | null;
   onNodeClick?: (node: { id: string; name: string; type: string; val: string }) => void;
 }
 
@@ -105,12 +88,14 @@ const LEGEND = [
 // Component
 // ─────────────────────────────────────────────────────────────────────────────
 
-export default function ForceGraphKnowledgeGraph({ onNodeClick }: ForceGraphKnowledgeGraphProps) {
+export default function ForceGraphKnowledgeGraph({
+  graphData,
+  loading = false,
+  error = null,
+  onNodeClick,
+}: ForceGraphKnowledgeGraphProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [dimensions, setDimensions] = useState({ width: 800, height: 600 });
-  const [graphData, setGraphData] = useState<GraphRenderPayload | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
   const [hoveredNode, setHoveredNode] = useState<RenderNode | null>(null);
 
   // Track container size
@@ -130,26 +115,6 @@ export default function ForceGraphKnowledgeGraph({ onNodeClick }: ForceGraphKnow
       height: containerRef.current.clientHeight,
     });
     return () => observer.disconnect();
-  }, []);
-
-  // Fetch clean visualization data from backend
-  useEffect(() => {
-    setLoading(true);
-    setError(null);
-    fetch('http://localhost:8000/graph/render')
-      .then((res) => {
-        if (!res.ok) throw new Error(`HTTP ${res.status}: ${res.statusText}`);
-        return res.json();
-      })
-      .then((data: GraphRenderPayload) => {
-        setGraphData(data);
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.error('[ForceGraphKnowledgeGraph] Failed to load graph:', err);
-        setError(err.message);
-        setLoading(false);
-      });
   }, []);
 
   // Node click handler — maps RenderNode to the shape InvestigationPage expects
@@ -243,7 +208,6 @@ export default function ForceGraphKnowledgeGraph({ onNodeClick }: ForceGraphKnow
           // Physics
           d3AlphaDecay={0.02}
           d3VelocityDecay={0.3}
-          // Lighting is handled by ThreeJS defaults (point light)
           showNavInfo={false}
         />
       )}
