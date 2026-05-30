@@ -89,6 +89,31 @@ class EvidenceFile(Base):
     metadata_json = Column(JSON, default=dict)
 
     case = relationship("Case", back_populates="evidence_files")
+    raw_content = relationship(
+        "RawEvidenceContent",
+        back_populates="evidence",
+        uselist=False,
+        cascade="all, delete-orphan",
+    )
+
+
+class RawEvidenceContent(Base):
+    """Raw user-uploaded evidence content stored in Supabase PostgreSQL."""
+    __tablename__ = "raw_evidence_contents"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    evidence_id = Column(Integer, ForeignKey("evidence_files.id"), nullable=False, unique=True, index=True)
+    case_id = Column(String(64), ForeignKey("cases.case_id"), nullable=False, index=True)
+    filename = Column(String(512), nullable=False)
+    file_type = Column(String(64), default="")
+    content_encoding = Column(String(32), default="utf-8")
+    content_text = Column(Text, nullable=False)
+    file_hash = Column(String(128), default="")
+    size_bytes = Column(Integer, default=0)
+    metadata_json = Column(JSON, default=dict)
+    created_at = Column(DateTime(timezone=True), default=_utcnow)
+
+    evidence = relationship("EvidenceFile", back_populates="raw_content")
 
 
 class QueryLog(Base):
@@ -322,6 +347,67 @@ class PostgresClient:
         finally:
             session.close()
 
+    def add_raw_evidence_content(
+        self,
+        evidence_id: int,
+        case_id: str,
+        filename: str,
+        file_type: str,
+        content_text: str,
+        content_encoding: str,
+        file_hash: str,
+        size_bytes: int,
+        metadata: dict = None,
+    ) -> dict:
+        """Store raw uploaded evidence content in Supabase."""
+        session = self.get_session()
+        try:
+            row = session.query(RawEvidenceContent)\
+                .filter(RawEvidenceContent.evidence_id == evidence_id).first()
+            if not row:
+                row = RawEvidenceContent(
+                    evidence_id=evidence_id,
+                    case_id=case_id,
+                    filename=filename,
+                    file_type=file_type,
+                )
+                session.add(row)
+
+            row.content_encoding = content_encoding
+            row.content_text = content_text
+            row.file_hash = file_hash
+            row.size_bytes = size_bytes
+            row.metadata_json = metadata or {}
+
+            self._audit(
+                session,
+                "raw_evidence_stored",
+                "evidence",
+                str(evidence_id),
+                details={
+                    "case_id": case_id,
+                    "filename": filename,
+                    "file_type": file_type,
+                    "encoding": content_encoding,
+                    "size_bytes": size_bytes,
+                },
+            )
+            session.commit()
+            return {
+                "id": row.id,
+                "evidence_id": evidence_id,
+                "filename": filename,
+                "content_encoding": content_encoding,
+                "size_bytes": size_bytes,
+                "status": "stored",
+            }
+        except Exception as e:
+            session.rollback()
+            print(f"[PostgreSQL] Error storing raw evidence content: {e}")
+            raise
+        finally:
+            session.close()
+
     def get_evidence(self, case_id: str) -> list:
         session = self.get_session()
         try:
@@ -331,6 +417,7 @@ class PostgresClient:
                 {
                     "id": f.id, "filename": f.filename, "file_type": f.file_type,
                     "status": f.status, "record_count": f.record_count,
+                    "raw_stored": f.raw_content is not None,
                     "created_at": f.created_at.isoformat() if f.created_at else None,
                     "processed_at": f.processed_at.isoformat() if f.processed_at else None,
                 }

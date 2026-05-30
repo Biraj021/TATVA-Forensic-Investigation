@@ -3,6 +3,7 @@ import hashlib
 import os
 import shutil
 import aiofiles
+import base64
 from fastapi.middleware.cors import CORSMiddleware
 from typing import List, Optional
 from pydantic import BaseModel
@@ -30,11 +31,18 @@ from insights.insight_schema import (
 )
 from db.postgres_client import PostgresClient
 from db.redis_client import RedisClient
+
 # Import all pipeline runners from modular analysis packages
 from analysis.graph_summary.summarize import run_summary
 from analysis.timeline_reconstruction.reconstruct import run_reconstruction
 from analysis.rule_validation.validate import run_validation_pipeline
 from Gemini_Engine.main import run_engine
+
+from db.artifact_registry import (
+    check_redis_artifacts,
+    sync_redis_artifacts,
+)
+
 
 # ---------------------------------------------------------------------------
 # Helper: legacy raw-graph payload (kept for backward compatibility)
@@ -147,6 +155,16 @@ os.makedirs(UPLOAD_DIR, exist_ok=True)
 
 # Allowed file extensions
 ALLOWED_EXTENSIONS = {"csv", "json", "txt", "pdf", "wav", "jpg", "jpeg", "png", "log"}
+TEXT_EXTENSIONS = {"csv", "json", "txt", "log"}
+
+
+def read_raw_evidence_content(path: str, ext: str) -> tuple[str, str]:
+    """Return upload content as UTF-8 text or base64 text for Supabase storage."""
+    with open(path, "rb") as f:
+        raw = f.read()
+    if ext in TEXT_EXTENSIONS:
+        return raw.decode("utf-8", errors="replace"), "utf-8"
+    return base64.b64encode(raw).decode("ascii"), "base64"
 
 app = FastAPI(title="TATVA Insights & Forensic API", version="1.1.0")
 
@@ -411,12 +429,34 @@ async def upload_evidence_file(case_id: str, file: UploadFile = File(...)):
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Database error: {e}")
 
+    # Store the raw user input in Supabase too.
+    try:
+        raw_content, content_encoding = read_raw_evidence_content(dest_path, ext)
+        raw_record = db.add_raw_evidence_content(
+            evidence_id=record.get("id"),
+            case_id=case_id,
+            filename=safe_filename,
+            file_type=ext,
+            content_text=raw_content,
+            content_encoding=content_encoding,
+            file_hash=file_hash,
+            size_bytes=file_size,
+            metadata={
+                "original_filename": file.filename,
+                "content_type": file.content_type,
+                "local_path": dest_path,
+            },
+        )
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Raw evidence storage error: {e}")
+
     return {
         "id": record.get("id"),
         "filename": safe_filename,
         "file_type": ext,
         "file_hash": file_hash,
         "size_bytes": file_size,
+        "raw_storage": raw_record,
         "status": "uploaded",
     }
 
@@ -439,6 +479,26 @@ def clear_insights_cache():
         count = cache.invalidate_insights()
         return {"status": "success", "invalidated_keys_count": count}
     return {"status": "error", "message": "Redis not connected"}
+
+@app.get("/api/artifacts/status")
+def get_artifacts_status():
+    """Check whether processed inputs and layer caches are stored in Upstash Redis."""
+    if not cache.connected:
+        return {"ok": False, "backend": "upstash_redis", "connected": False}
+    try:
+        return check_redis_artifacts(cache)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.post("/api/artifacts/sync")
+def sync_artifacts_to_redis():
+    """Store/update processed inputs and layer caches in Upstash Redis."""
+    if not cache.connected:
+        raise HTTPException(status_code=503, detail="Redis not connected")
+    try:
+        return sync_redis_artifacts(cache)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 @app.post("/api/case/process")
 def process_case(case_id: str = Body(..., embed=True)):
