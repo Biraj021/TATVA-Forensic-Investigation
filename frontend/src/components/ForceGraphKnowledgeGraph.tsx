@@ -242,6 +242,7 @@ export default function ForceGraphKnowledgeGraph({
       new THREE.Vector3(1, 0, 0),
     ]);
     const line = new THREE.Line(geometry, material);
+    line.userData = { isDashed: true };
     line.computeLineDistances(); // required for dashes to render
     return line;
   }, [assessments]);
@@ -341,7 +342,7 @@ export default function ForceGraphKnowledgeGraph({
           linkThreeObject={getLinkThreeObject}
           linkPositionUpdate={(line, { start, end }) => {
             // Only reposition our custom dashed lines; null objects are handled by default
-            if (!line) return false;
+            if (!line || !line.userData || !line.userData.isDashed) return false;
             const l = line as THREE.Line;
             const positions = new Float32Array([
               start.x, start.y, start.z,
