@@ -10,3 +10,7 @@ python-dotenv
 fastapi
 uvicorn
 neo4j
+sqlalchemy
+psycopg2-binary
+alembic
+upstash-redis
