@@ -1,0 +1,15 @@
+[sample_audio.wav]
+Hello, my name is Arjan Sharma. I am calling from Mumbai. I spoke with Priyameta at CBI headquarters in New Delhi. Please contact us at 987-654-3210. The suspect is linked to an organization called ShadowNet.
+
+[s.wav]
+Listen carefully, if you are avoiding my call and another mode it's not going to be easy for you.
+
+[b.wav]
+This is Kabir from Naah Pura. I am speaking to Priya at the Bhopal headquarters. P5 biscuit or all UK's data goes to public in 24 hours.
+
+[d.wav]
+Your phone is trapped. Your car is trapped. You, your move.
+
+[v.wav]
+Last chance, wake up, no words, just action after 6 p.m.
+

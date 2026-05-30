@@ -1,0 +1,142 @@
+{
+    "entities": [
+        {
+            "temp_id": "ent_a92848cc",
+            "type": "PERSON",
+            "attributes": {
+                "text": "Arjan Sharma"
+            },
+            "confidence": 0.85,
+            "source": "audio"
+        },
+        {
+            "temp_id": "ent_3a563a25",
+            "type": "LOCATION",
+            "attributes": {
+                "text": "Mumbai"
+            },
+            "confidence": 0.85,
+            "source": "audio"
+        },
+        {
+            "temp_id": "ent_a38e9f00",
+            "type": "ORGANIZATION",
+            "attributes": {
+                "text": "Priyameta"
+            },
+            "confidence": 0.85,
+            "source": "audio"
+        },
+        {
+            "temp_id": "ent_df672b8e",
+            "type": "ORGANIZATION",
+            "attributes": {
+                "text": "CBI"
+            },
+            "confidence": 0.85,
+            "source": "audio"
+        },
+        {
+            "temp_id": "ent_e2cc12df",
+            "type": "LOCATION",
+            "attributes": {
+                "text": "New Delhi"
+            },
+            "confidence": 0.85,
+            "source": "audio"
+        },
+        {
+            "temp_id": "ent_6009e35a",
+            "type": "ORGANIZATION",
+            "attributes": {
+                "text": "ShadowNet"
+            },
+            "confidence": 0.85,
+            "source": "audio"
+        },
+        {
+            "temp_id": "ent_8d5e7bd1",
+            "type": "PHONE_NUMBER",
+            "attributes": {
+                "text": "987-654-3210"
+            },
+            "confidence": 0.9,
+            "source": "audio"
+        },
+        {
+            "temp_id": "audio_file_node",
+            "type": "AUDIO_FILE",
+            "attributes": {
+                "filename": "sample_audio.wav",
+                "transcript": "Hello, my name is Arjan Sharma. I am calling from Mumbai. I spoke with Priyameta at CBI headquarters in New Delhi. Please contact us at 987-654-3210. The suspect is linked to an organization called ShadowNet."
+            },
+            "confidence": 1.0,
+            "source": "audio"
+        }
+    ],
+    "relations": [
+        {
+            "source": "ent_a92848cc",
+            "target": "audio_file_node",
+            "relation": "SPOKE_IN",
+            "attributes": {},
+            "timestamp": null,
+            "confidence": 0.85,
+            "source_type": "audio"
+        },
+        {
+            "source": "ent_3a563a25",
+            "target": "audio_file_node",
+            "relation": "REFERENCED",
+            "attributes": {},
+            "timestamp": null,
+            "confidence": 0.85,
+            "source_type": "audio"
+        },
+        {
+            "source": "ent_a38e9f00",
+            "target": "audio_file_node",
+            "relation": "REFERENCED",
+            "attributes": {},
+            "timestamp": null,
+            "confidence": 0.85,
+            "source_type": "audio"
+        },
+        {
+            "source": "ent_df672b8e",
+            "target": "audio_file_node",
+            "relation": "REFERENCED",
+            "attributes": {},
+            "timestamp": null,
+            "confidence": 0.85,
+            "source_type": "audio"
+        },
+        {
+            "source": "ent_e2cc12df",
+            "target": "audio_file_node",
+            "relation": "REFERENCED",
+            "attributes": {},
+            "timestamp": null,
+            "confidence": 0.85,
+            "source_type": "audio"
+        },
+        {
+            "source": "ent_6009e35a",
+            "target": "audio_file_node",
+            "relation": "REFERENCED",
+            "attributes": {},
+            "timestamp": null,
+            "confidence": 0.85,
+            "source_type": "audio"
+        },
+        {
+            "source": "ent_8d5e7bd1",
+            "target": "audio_file_node",
+            "relation": "REFERENCED",
+            "attributes": {},
+            "timestamp": null,
+            "confidence": 0.9,
+            "source_type": "audio"
+        }
+    ]
+}
