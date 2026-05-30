@@ -1,0 +1,2575 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TATVA | Network Analysis & Graph Summary Dashboard</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Custom styling for premium look -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700;900&family=JetBrains+Mono:wght@400;500;700&display=swap');
+        body {
+            font-family: 'Geist', sans-serif;
+            background-color: #0a0a0b;
+            color: #e5e2e3;
+        }
+        .mono {
+            font-family: 'JetBrains Mono', monospace;
+        }
+        .gold-glow {
+            box-shadow: 0 0 20px rgba(254, 183, 0, 0.12);
+        }
+        .panel {
+            background: rgba(28, 27, 28, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(136, 145, 157, 0.2);
+        }
+        .scanline {
+            background: linear-gradient(
+                rgba(18, 16, 16, 0) 50%, 
+                rgba(0, 0, 0, 0.25) 50%
+            ), linear-gradient(
+                90deg, 
+                rgba(255, 0, 0, 0.06), 
+                rgba(0, 255, 0, 0.02), 
+                rgba(0, 0, 255, 0.06)
+            );
+            background-size: 100% 4px, 6px 100%;
+        }
+    </style>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        gold: '#feb700',
+                        darkBg: '#0a0a0b',
+                        surface: '#131314',
+                        outline: '#3f4852',
+                        crimson: '#ff6e68',
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="scanline min-h-screen pb-12">
+    
+    <!-- Top Nav -->
+    <header class="border-b border-outline/30 bg-surface/80 backdrop-blur-xl sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-4">
+                <span class="text-2xl font-black tracking-widest text-gold">TATVA</span>
+                <span class="text-xs bg-gold/10 text-gold border border-gold/30 px-2 py-0.5 rounded uppercase tracking-wider font-semibold mono">Network Summary</span>
+            </div>
+            <div class="text-right text-xs text-gray-400 mono">
+                REPORT_GEN: 2026-05-30T17:36:23.171023
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-6 mt-8">
+        <!-- Summary Stats Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+            <div class="panel p-6 rounded-lg flex items-center justify-between gold-glow">
+                <div>
+                    <p class="text-xs uppercase tracking-widest text-gray-400 mono">Total Nodes (Entities)</p>
+                    <h3 class="text-3xl font-bold text-white mt-1">47</h3>
+                </div>
+                <div class="h-12 w-12 rounded-full bg-gold/10 flex items-center justify-center border border-gold/20 text-gold">
+                    <i class="fa-solid fa-circle text-lg"></i>
+                </div>
+            </div>
+            
+            <div class="panel p-6 rounded-lg flex items-center justify-between">
+                <div>
+                    <p class="text-xs uppercase tracking-widest text-gray-400 mono">Total Edges (Relations)</p>
+                    <h3 class="text-3xl font-bold text-white mt-1">137</h3>
+                </div>
+                <div class="h-12 w-12 rounded-full bg-blue-500/10 flex items-center justify-center border border-blue-500/20 text-blue-400">
+                    <i class="fa-solid fa-share-nodes text-lg"></i>
+                </div>
+            </div>
+
+            <div class="panel p-6 rounded-lg flex items-center justify-between">
+                <div>
+                    <p class="text-xs uppercase tracking-widest text-gray-400 mono">Network Density</p>
+                    <h3 class="text-3xl font-bold text-white mt-1 mono">3.89%</h3>
+                </div>
+                <div class="h-12 w-12 rounded-full bg-purple-500/10 flex items-center justify-center border border-purple-500/20 text-purple-400">
+                    <i class="fa-solid fa-chart-line text-lg"></i>
+                </div>
+            </div>
+
+            <div class="panel p-6 rounded-lg flex items-center justify-between">
+                <div>
+                    <p class="text-xs uppercase tracking-widest text-gray-400 mono">Avg Clustering Coeff</p>
+                    <h3 class="text-3xl font-bold text-white mt-1 mono">0.4176</h3>
+                </div>
+                <div class="h-12 w-12 rounded-full bg-emerald-500/10 flex items-center justify-center border border-emerald-500/20 text-emerald-400">
+                    <i class="fa-solid fa-circle-nodes text-lg"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation Tabs -->
+        <div class="panel p-2 rounded-lg mb-6 flex flex-wrap gap-2 justify-center md:justify-start">
+            <button onclick="showTab('dashboard')" class="tab-btn active px-4 py-2 rounded text-xs tracking-wider uppercase font-bold mono bg-gold text-black">Dashboard</button>
+            <button onclick="showTab('key-actors')" class="tab-btn px-4 py-2 rounded text-xs tracking-wider uppercase font-bold mono bg-surface border border-outline/30 hover:bg-outline/20 text-white">Key Actors</button>
+            <button onclick="showTab('financial-flows')" class="tab-btn px-4 py-2 rounded text-xs tracking-wider uppercase font-bold mono bg-surface border border-outline/30 hover:bg-outline/20 text-white">Financial Summary</button>
+            <button onclick="showTab('entity-profiles')" class="tab-btn px-4 py-2 rounded text-xs tracking-wider uppercase font-bold mono bg-surface border border-outline/30 hover:bg-outline/20 text-white">Entity Directory</button>
+        </div>
+
+        <!-- TABS CONTENT -->
+
+        <!-- TAB: DASHBOARD -->
+        <div id="tab-dashboard" class="tab-content grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Left Panel: Topology Summary -->
+            <div class="panel p-6 rounded-lg">
+                <h4 class="text-lg font-bold text-white border-b border-outline/20 pb-3 mb-4"><i class="fa-solid fa-network-wired text-gold mr-2"></i>Network Topology</h4>
+                <div class="grid grid-cols-2 gap-4 text-sm mb-6">
+                    <div class="p-3 bg-darkBg/60 rounded border border-outline/10">
+                        <span class="text-gray-400 mono text-xs">Weakly Connected:</span>
+                        <p class="text-white font-bold mono mt-1">FALSE</p>
+                    </div>
+                    <div class="p-3 bg-darkBg/60 rounded border border-outline/10">
+                        <span class="text-gray-400 mono text-xs">Components count:</span>
+                        <p class="text-white font-bold mono mt-1">5</p>
+                    </div>
+                    <div class="p-3 bg-darkBg/60 rounded border border-outline/10">
+                        <span class="text-gray-400 mono text-xs">Largest Comp Size:</span>
+                        <p class="text-white font-bold mono mt-1">40 nodes</p>
+                    </div>
+                    <div class="p-3 bg-darkBg/60 rounded border border-outline/10">
+                        <span class="text-gray-400 mono text-xs">Avg Degree:</span>
+                        <p class="text-white font-bold mono mt-1">3.57</p>
+                    </div>
+                </div>
+                
+                <h5 class="text-sm font-bold text-gray-300 mb-3">DATA CHANNELS INGESTED</h5>
+                <div class="flex flex-wrap gap-2">
+                    <span class="bg-surface border border-outline/30 px-2.5 py-1 rounded text-white mono text-xs">asset_tracker</span> <span class="bg-surface border border-outline/30 px-2.5 py-1 rounded text-white mono text-xs">bank_transaction</span> <span class="bg-surface border border-outline/30 px-2.5 py-1 rounded text-white mono text-xs">cdr_record</span> <span class="bg-surface border border-outline/30 px-2.5 py-1 rounded text-white mono text-xs">chat</span> <span class="bg-surface border border-outline/30 px-2.5 py-1 rounded text-white mono text-xs">emails</span> <span class="bg-surface border border-outline/30 px-2.5 py-1 rounded text-white mono text-xs">fir_document</span> <span class="bg-surface border border-outline/30 px-2.5 py-1 rounded text-white mono text-xs">gps_analysis</span> <span class="bg-surface border border-outline/30 px-2.5 py-1 rounded text-white mono text-xs">investigator_annotation</span> <span class="bg-surface border border-outline/30 px-2.5 py-1 rounded text-white mono text-xs">mobile_gps</span> <span class="bg-surface border border-outline/30 px-2.5 py-1 rounded text-white mono text-xs">social</span> <span class="bg-surface border border-outline/30 px-2.5 py-1 rounded text-white mono text-xs">telecom_tower</span> <span class="bg-surface border border-outline/30 px-2.5 py-1 rounded text-white mono text-xs">vehicle_camera</span> <span class="bg-surface border border-outline/30 px-2.5 py-1 rounded text-white mono text-xs">vehicle_tracker</span> <span class="bg-surface border border-outline/30 px-2.5 py-1 rounded text-white mono text-xs">wearable_device</span>
+                </div>
+            </div>
+
+            <!-- Right Panel: Entity breakdown charts -->
+            <div class="panel p-6 rounded-lg">
+                <h4 class="text-lg font-bold text-white border-b border-outline/20 pb-3 mb-4"><i class="fa-solid fa-chart-pie text-gold mr-2"></i>Entity Breakdown</h4>
+                <div class="relative h-64">
+                    <canvas id="entityChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Bottom Left: Relation types charts -->
+            <div class="panel p-6 rounded-lg">
+                <h4 class="text-lg font-bold text-white border-b border-outline/20 pb-3 mb-4"><i class="fa-solid fa-chart-bar text-gold mr-2"></i>Relationship Breakdown</h4>
+                <div class="relative h-64">
+                    <canvas id="relationChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Bottom Right: Comm breakdown charts -->
+            <div class="panel p-6 rounded-lg">
+                <h4 class="text-lg font-bold text-white border-b border-outline/20 pb-3 mb-4"><i class="fa-solid fa-phone-volume text-gold mr-2"></i>Communications Summary</h4>
+                <div class="grid grid-cols-2 gap-4 mb-4 text-xs">
+                    <div class="p-3 bg-darkBg/60 rounded border border-outline/10 text-center">
+                        <span class="text-gray-400 mono block">Total Call Logs</span>
+                        <span class="text-lg font-bold text-sky-400 mono mt-1">33 logs</span>
+                    </div>
+                    <div class="p-3 bg-darkBg/60 rounded border border-outline/10 text-center">
+                        <span class="text-gray-400 mono block">Avg Call Duration</span>
+                        <span class="text-lg font-bold text-sky-400 mono mt-1">158.7 sec</span>
+                    </div>
+                </div>
+                <div class="relative h-48">
+                    <canvas id="commChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB: KEY ACTORS -->
+        <div id="tab-key-actors" class="tab-content hidden panel rounded-lg overflow-hidden">
+            <div class="p-6 border-b border-outline/20">
+                <h4 class="text-lg font-bold text-white"><i class="fa-solid fa-crown text-gold mr-2"></i>Centrality-Scored Key Actors</h4>
+                <p class="text-xs text-gray-400 mt-1">Suspect nodes ranked by network centrality measures and pagerank scores.</p>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-outline/20">
+                    <thead class="bg-surface/50">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-bold text-gray-400 uppercase tracking-wider mono">Rank</th>
+                            <th class="px-6 py-3 text-left text-xs font-bold text-gray-400 uppercase tracking-wider mono">Name</th>
+                            <th class="px-6 py-3 text-left text-xs font-bold text-gray-400 uppercase tracking-wider mono">Master Type</th>
+                            <th class="px-6 py-3 text-left text-xs font-bold text-gray-400 uppercase tracking-wider mono">Composite Score</th>
+                            <th class="px-6 py-3 text-left text-xs font-bold text-gray-400 uppercase tracking-wider mono">Degree Cent</th>
+                            <th class="px-6 py-3 text-left text-xs font-bold text-gray-400 uppercase tracking-wider mono">Betweenness</th>
+                            <th class="px-6 py-3 text-left text-xs font-bold text-gray-400 uppercase tracking-wider mono">PageRank</th>
+                            <th class="px-6 py-3 text-left text-xs font-bold text-gray-400 uppercase tracking-wider mono">Sources In</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-outline/10">
+                        
+        <tr class="border-b border-outline/20 hover:bg-surface/30">
+            <td class="px-6 py-4 text-sm text-gray-400 font-bold mono">1</td>
+            <td class="px-6 py-4 text-sm text-white font-semibold">Rahul Sen</td>
+            <td class="px-6 py-4 text-sm text-gray-300 mono">PERSON</td>
+            <td class="px-6 py-4 text-sm text-gold font-bold mono">0.4104</td>
+            <td class="px-6 py-4 text-sm text-gray-300 mono">0.5217</td>
+            <td class="px-6 py-4 text-sm text-gray-300 mono">0.1074</td>
+            <td class="px-6 py-4 text-sm text-gray-300 mono">0.0340</td>
+            <td class="px-6 py-4 text-sm text-sky-400 font-semibold mono">16</td>
+        </tr>
+        
+        <tr class="border-b border-outline/20 hover:bg-surface/30">
+            <td class="px-6 py-4 text-sm text-gray-400 font-bold mono">2</td>
+            <td class="px-6 py-4 text-sm text-white font-semibold">Vikram Khanna</td>
+            <td class="px-6 py-4 text-sm text-gray-300 mono">PERSON</td>
+            <td class="px-6 py-4 text-sm text-gold font-bold mono">0.2412</td>
+            <td class="px-6 py-4 text-sm text-gray-300 mono">0.3043</td>
+            <td class="px-6 py-4 text-sm text-gray-300 mono">0.0379</td>
+            <td class="px-6 py-4 text-sm text-gray-300 mono">0.0185</td>
+            <td class="px-6 py-4 text-sm text-sky-400 font-semibold mono">12</td>
+        </tr>
+        
+        <tr class="border-b border-outline/20 hover:bg-surface/30">
+            <td class="px-6 py-4 text-sm text-gray-400 font-bold mono">3</td>
+            <td class="px-6 py-4 text-sm text-white font-semibold">Rajan Mehta</td>
+            <td class="px-6 py-4 text-sm text-gray-300 mono">PERSON</td>
+            <td class="px-6 py-4 text-sm text-gold font-bold mono">0.2291</td>
+            <td class="px-6 py-4 text-sm text-gray-300 mono">0.3261</td>
+            <td class="px-6 py-4 text-sm text-gray-300 mono">0.1047</td>
+            <td class="px-6 py-4 text-sm text-gray-300 mono">0.0912</td>
+            <td class="px-6 py-4 text-sm text-sky-400 font-semibold mono">5</td>
+        </tr>
+        
+        <tr class="border-b border-outline/20 hover:bg-surface/30">
+            <td class="px-6 py-4 text-sm text-gray-400 font-bold mono">4</td>
+            <td class="px-6 py-4 text-sm text-white font-semibold">Arjun</td>
+            <td class="px-6 py-4 text-sm text-gray-300 mono">PERSON</td>
+            <td class="px-6 py-4 text-sm text-gold font-bold mono">0.2159</td>
+            <td class="px-6 py-4 text-sm text-gray-300 mono">0.2391</td>
+            <td class="px-6 py-4 text-sm text-gray-300 mono">0.0270</td>
+            <td class="px-6 py-4 text-sm text-gray-300 mono">0.0294</td>
+            <td class="px-6 py-4 text-sm text-sky-400 font-semibold mono">11</td>
+        </tr>
+        
+        <tr class="border-b border-outline/20 hover:bg-surface/30">
+            <td class="px-6 py-4 text-sm text-gray-400 font-bold mono">5</td>
+            <td class="px-6 py-4 text-sm text-white font-semibold">Chatterjee Lane, Bowbazar, Kolkata</td>
+            <td class="px-6 py-4 text-sm text-gray-300 mono">PLACE</td>
+            <td class="px-6 py-4 text-sm text-gold font-bold mono">0.1644</td>
+            <td class="px-6 py-4 text-sm text-gray-300 mono">0.2174</td>
+            <td class="px-6 py-4 text-sm text-gray-300 mono">0.0263</td>
+            <td class="px-6 py-4 text-sm text-gray-300 mono">0.0458</td>
+            <td class="px-6 py-4 text-sm text-sky-400 font-semibold mono">7</td>
+        </tr>
+        
+        <tr class="border-b border-outline/20 hover:bg-surface/30">
+            <td class="px-6 py-4 text-sm text-gray-400 font-bold mono">6</td>
+            <td class="px-6 py-4 text-sm text-white font-semibold">Group_Chat</td>
+            <td class="px-6 py-4 text-sm text-gray-300 mono">INFRASTRUCTURE</td>
+            <td class="px-6 py-4 text-sm text-gold font-bold mono">0.1596</td>
+            <td class="px-6 py-4 text-sm text-gray-300 mono">0.0652</td>
+            <td class="px-6 py-4 text-sm text-gray-300 mono">0.0000</td>
+            <td class="px-6 py-4 text-sm text-gray-300 mono">0.0170</td>
+            <td class="px-6 py-4 text-sm text-sky-400 font-semibold mono">17</td>
+        </tr>
+        
+        <tr class="border-b border-outline/20 hover:bg-surface/30">
+            <td class="px-6 py-4 text-sm text-gray-400 font-bold mono">7</td>
+            <td class="px-6 py-4 text-sm text-white font-semibold">Bow Bazar North, Kolkata</td>
+            <td class="px-6 py-4 text-sm text-gray-300 mono">PLACE</td>
+            <td class="px-6 py-4 text-sm text-gold font-bold mono">0.1274</td>
+            <td class="px-6 py-4 text-sm text-gray-300 mono">0.1957</td>
+            <td class="px-6 py-4 text-sm text-gray-300 mono">0.0093</td>
+            <td class="px-6 py-4 text-sm text-gray-300 mono">0.0576</td>
+            <td class="px-6 py-4 text-sm text-sky-400 font-semibold mono">4</td>
+        </tr>
+        
+        <tr class="border-b border-outline/20 hover:bg-surface/30">
+            <td class="px-6 py-4 text-sm text-gray-400 font-bold mono">8</td>
+            <td class="px-6 py-4 text-sm text-white font-semibold">@Arjung</td>
+            <td class="px-6 py-4 text-sm text-gray-300 mono">PERSON</td>
+            <td class="px-6 py-4 text-sm text-gold font-bold mono">0.0943</td>
+            <td class="px-6 py-4 text-sm text-gray-300 mono">0.1304</td>
+            <td class="px-6 py-4 text-sm text-gray-300 mono">0.0164</td>
+            <td class="px-6 py-4 text-sm text-gray-300 mono">0.0169</td>
+            <td class="px-6 py-4 text-sm text-sky-400 font-semibold mono">4</td>
+        </tr>
+        
+        <tr class="border-b border-outline/20 hover:bg-surface/30">
+            <td class="px-6 py-4 text-sm text-gray-400 font-bold mono">9</td>
+            <td class="px-6 py-4 text-sm text-white font-semibold">Howrah Station</td>
+            <td class="px-6 py-4 text-sm text-gray-300 mono">PLACE</td>
+            <td class="px-6 py-4 text-sm text-gold font-bold mono">0.0897</td>
+            <td class="px-6 py-4 text-sm text-gray-300 mono">0.1087</td>
+            <td class="px-6 py-4 text-sm text-gray-300 mono">0.0000</td>
+            <td class="px-6 py-4 text-sm text-gray-300 mono">0.0229</td>
+            <td class="px-6 py-4 text-sm text-sky-400 font-semibold mono">6</td>
+        </tr>
+        
+        <tr class="border-b border-outline/20 hover:bg-surface/30">
+            <td class="px-6 py-4 text-sm text-gray-400 font-bold mono">10</td>
+            <td class="px-6 py-4 text-sm text-white font-semibold">Howrah Maidan, Haora</td>
+            <td class="px-6 py-4 text-sm text-gray-300 mono">PLACE</td>
+            <td class="px-6 py-4 text-sm text-gold font-bold mono">0.0889</td>
+            <td class="px-6 py-4 text-sm text-gray-300 mono">0.1087</td>
+            <td class="px-6 py-4 text-sm text-gray-300 mono">0.0000</td>
+            <td class="px-6 py-4 text-sm text-gray-300 mono">0.0779</td>
+            <td class="px-6 py-4 text-sm text-sky-400 font-semibold mono">4</td>
+        </tr>
+        
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- TAB: FINANCIAL SUMMARY -->
+        <div id="tab-financial-flows" class="tab-content hidden grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="panel p-6 rounded-lg flex flex-col justify-between">
+                <div>
+                    <h4 class="text-lg font-bold text-white border-b border-outline/20 pb-3 mb-4"><i class="fa-solid fa-wallet text-gold mr-2"></i>Financial Volume</h4>
+                    <div class="grid grid-cols-3 gap-4 text-center mt-4 mb-6">
+                        <div class="p-4 bg-darkBg/60 rounded border border-outline/15">
+                            <span class="text-gray-400 mono text-xs uppercase block">Total Volume</span>
+                            <span class="text-xl font-bold text-emerald-400 mono mt-1">Rs. 193,200</span>
+                        </div>
+                        <div class="p-4 bg-darkBg/60 rounded border border-outline/15">
+                            <span class="text-gray-400 mono text-xs uppercase block">Transfers</span>
+                            <span class="text-xl font-bold text-white mono mt-1">15</span>
+                        </div>
+                        <div class="p-4 bg-darkBg/60 rounded border border-outline/15">
+                            <span class="text-gray-400 mono text-xs uppercase block">Accounts</span>
+                            <span class="text-xl font-bold text-white mono mt-1">10</span>
+                        </div>
+                    </div>
+                    <p class="text-xs text-gray-400 leading-relaxed italic">
+                        Notice: Smurfing transfers consist of rapid payments split under Rs. 10,000 threshold to evade reporting triggers. Re-aggregation occurs at specific intermediary nodes before hawala withdrawal.
+                    </p>
+                </div>
+            </div>
+
+            <div class="panel p-6 rounded-lg">
+                <h4 class="text-lg font-bold text-white border-b border-outline/20 pb-3 mb-4"><i class="fa-solid fa-chart-line text-gold mr-2"></i>Top Transaction Paths</h4>
+                <div class="max-h-96 overflow-y-auto custom-scrollbar pr-2">
+                    
+        <div class="flex items-center justify-between p-4 bg-darkBg/60 rounded border border-outline/20 mb-3 text-sm">
+            <div class="flex items-center gap-3">
+                <div class="h-8 w-8 rounded-full bg-emerald-500/10 flex items-center justify-center border border-emerald-500/20 text-emerald-400">
+                    <i class="fa-solid fa-arrow-right-arrow-left text-xs"></i>
+                </div>
+                <div>
+                    <p class="font-semibold text-white">Rajan Mehta → ACC_HAWALA</p>
+                    <p class="text-xs text-gray-400 mono">Method: NEFT | Count: 1</p>
+                </div>
+            </div>
+            <div class="text-right">
+                <span class="font-bold text-emerald-400 mono">Rs. 64,400</span>
+            </div>
+        </div>
+        
+        <div class="flex items-center justify-between p-4 bg-darkBg/60 rounded border border-outline/20 mb-3 text-sm">
+            <div class="flex items-center gap-3">
+                <div class="h-8 w-8 rounded-full bg-emerald-500/10 flex items-center justify-center border border-emerald-500/20 text-emerald-400">
+                    <i class="fa-solid fa-arrow-right-arrow-left text-xs"></i>
+                </div>
+                <div>
+                    <p class="font-semibold text-white">Rahul Sen → ACC4001</p>
+                    <p class="text-xs text-gray-400 mono">Method: UPI | Count: 1</p>
+                </div>
+            </div>
+            <div class="text-right">
+                <span class="font-bold text-emerald-400 mono">Rs. 9,500</span>
+            </div>
+        </div>
+        
+        <div class="flex items-center justify-between p-4 bg-darkBg/60 rounded border border-outline/20 mb-3 text-sm">
+            <div class="flex items-center gap-3">
+                <div class="h-8 w-8 rounded-full bg-emerald-500/10 flex items-center justify-center border border-emerald-500/20 text-emerald-400">
+                    <i class="fa-solid fa-arrow-right-arrow-left text-xs"></i>
+                </div>
+                <div>
+                    <p class="font-semibold text-white">ACC4001 → Rajan Mehta</p>
+                    <p class="text-xs text-gray-400 mono">Method: IMPS | Count: 1</p>
+                </div>
+            </div>
+            <div class="text-right">
+                <span class="font-bold text-emerald-400 mono">Rs. 9,500</span>
+            </div>
+        </div>
+        
+        <div class="flex items-center justify-between p-4 bg-darkBg/60 rounded border border-outline/20 mb-3 text-sm">
+            <div class="flex items-center gap-3">
+                <div class="h-8 w-8 rounded-full bg-emerald-500/10 flex items-center justify-center border border-emerald-500/20 text-emerald-400">
+                    <i class="fa-solid fa-arrow-right-arrow-left text-xs"></i>
+                </div>
+                <div>
+                    <p class="font-semibold text-white">Rahul Sen → ACC2001</p>
+                    <p class="text-xs text-gray-400 mono">Method: UPI | Count: 1</p>
+                </div>
+            </div>
+            <div class="text-right">
+                <span class="font-bold text-emerald-400 mono">Rs. 9,400</span>
+            </div>
+        </div>
+        
+        <div class="flex items-center justify-between p-4 bg-darkBg/60 rounded border border-outline/20 mb-3 text-sm">
+            <div class="flex items-center gap-3">
+                <div class="h-8 w-8 rounded-full bg-emerald-500/10 flex items-center justify-center border border-emerald-500/20 text-emerald-400">
+                    <i class="fa-solid fa-arrow-right-arrow-left text-xs"></i>
+                </div>
+                <div>
+                    <p class="font-semibold text-white">ACC2001 → Rajan Mehta</p>
+                    <p class="text-xs text-gray-400 mono">Method: IMPS | Count: 1</p>
+                </div>
+            </div>
+            <div class="text-right">
+                <span class="font-bold text-emerald-400 mono">Rs. 9,400</span>
+            </div>
+        </div>
+        
+        <div class="flex items-center justify-between p-4 bg-darkBg/60 rounded border border-outline/20 mb-3 text-sm">
+            <div class="flex items-center gap-3">
+                <div class="h-8 w-8 rounded-full bg-emerald-500/10 flex items-center justify-center border border-emerald-500/20 text-emerald-400">
+                    <i class="fa-solid fa-arrow-right-arrow-left text-xs"></i>
+                </div>
+                <div>
+                    <p class="font-semibold text-white">Rahul Sen → ACC6001</p>
+                    <p class="text-xs text-gray-400 mono">Method: UPI | Count: 1</p>
+                </div>
+            </div>
+            <div class="text-right">
+                <span class="font-bold text-emerald-400 mono">Rs. 9,300</span>
+            </div>
+        </div>
+        
+        <div class="flex items-center justify-between p-4 bg-darkBg/60 rounded border border-outline/20 mb-3 text-sm">
+            <div class="flex items-center gap-3">
+                <div class="h-8 w-8 rounded-full bg-emerald-500/10 flex items-center justify-center border border-emerald-500/20 text-emerald-400">
+                    <i class="fa-solid fa-arrow-right-arrow-left text-xs"></i>
+                </div>
+                <div>
+                    <p class="font-semibold text-white">ACC6001 → Rajan Mehta</p>
+                    <p class="text-xs text-gray-400 mono">Method: IMPS | Count: 1</p>
+                </div>
+            </div>
+            <div class="text-right">
+                <span class="font-bold text-emerald-400 mono">Rs. 9,300</span>
+            </div>
+        </div>
+        
+        <div class="flex items-center justify-between p-4 bg-darkBg/60 rounded border border-outline/20 mb-3 text-sm">
+            <div class="flex items-center gap-3">
+                <div class="h-8 w-8 rounded-full bg-emerald-500/10 flex items-center justify-center border border-emerald-500/20 text-emerald-400">
+                    <i class="fa-solid fa-arrow-right-arrow-left text-xs"></i>
+                </div>
+                <div>
+                    <p class="font-semibold text-white">Rahul Sen → ACC3001</p>
+                    <p class="text-xs text-gray-400 mono">Method: UPI | Count: 1</p>
+                </div>
+            </div>
+            <div class="text-right">
+                <span class="font-bold text-emerald-400 mono">Rs. 9,200</span>
+            </div>
+        </div>
+        
+        <div class="flex items-center justify-between p-4 bg-darkBg/60 rounded border border-outline/20 mb-3 text-sm">
+            <div class="flex items-center gap-3">
+                <div class="h-8 w-8 rounded-full bg-emerald-500/10 flex items-center justify-center border border-emerald-500/20 text-emerald-400">
+                    <i class="fa-solid fa-arrow-right-arrow-left text-xs"></i>
+                </div>
+                <div>
+                    <p class="font-semibold text-white">ACC3001 → Rajan Mehta</p>
+                    <p class="text-xs text-gray-400 mono">Method: IMPS | Count: 1</p>
+                </div>
+            </div>
+            <div class="text-right">
+                <span class="font-bold text-emerald-400 mono">Rs. 9,200</span>
+            </div>
+        </div>
+        
+        <div class="flex items-center justify-between p-4 bg-darkBg/60 rounded border border-outline/20 mb-3 text-sm">
+            <div class="flex items-center gap-3">
+                <div class="h-8 w-8 rounded-full bg-emerald-500/10 flex items-center justify-center border border-emerald-500/20 text-emerald-400">
+                    <i class="fa-solid fa-arrow-right-arrow-left text-xs"></i>
+                </div>
+                <div>
+                    <p class="font-semibold text-white">Rahul Sen → ACC7001</p>
+                    <p class="text-xs text-gray-400 mono">Method: UPI | Count: 1</p>
+                </div>
+            </div>
+            <div class="text-right">
+                <span class="font-bold text-emerald-400 mono">Rs. 9,100</span>
+            </div>
+        </div>
+        
+        <div class="flex items-center justify-between p-4 bg-darkBg/60 rounded border border-outline/20 mb-3 text-sm">
+            <div class="flex items-center gap-3">
+                <div class="h-8 w-8 rounded-full bg-emerald-500/10 flex items-center justify-center border border-emerald-500/20 text-emerald-400">
+                    <i class="fa-solid fa-arrow-right-arrow-left text-xs"></i>
+                </div>
+                <div>
+                    <p class="font-semibold text-white">ACC7001 → Rajan Mehta</p>
+                    <p class="text-xs text-gray-400 mono">Method: IMPS | Count: 1</p>
+                </div>
+            </div>
+            <div class="text-right">
+                <span class="font-bold text-emerald-400 mono">Rs. 9,100</span>
+            </div>
+        </div>
+        
+        <div class="flex items-center justify-between p-4 bg-darkBg/60 rounded border border-outline/20 mb-3 text-sm">
+            <div class="flex items-center gap-3">
+                <div class="h-8 w-8 rounded-full bg-emerald-500/10 flex items-center justify-center border border-emerald-500/20 text-emerald-400">
+                    <i class="fa-solid fa-arrow-right-arrow-left text-xs"></i>
+                </div>
+                <div>
+                    <p class="font-semibold text-white">Rahul Sen → ACC8001</p>
+                    <p class="text-xs text-gray-400 mono">Method: UPI | Count: 1</p>
+                </div>
+            </div>
+            <div class="text-right">
+                <span class="font-bold text-emerald-400 mono">Rs. 9,000</span>
+            </div>
+        </div>
+        
+        <div class="flex items-center justify-between p-4 bg-darkBg/60 rounded border border-outline/20 mb-3 text-sm">
+            <div class="flex items-center gap-3">
+                <div class="h-8 w-8 rounded-full bg-emerald-500/10 flex items-center justify-center border border-emerald-500/20 text-emerald-400">
+                    <i class="fa-solid fa-arrow-right-arrow-left text-xs"></i>
+                </div>
+                <div>
+                    <p class="font-semibold text-white">ACC8001 → Rajan Mehta</p>
+                    <p class="text-xs text-gray-400 mono">Method: IMPS | Count: 1</p>
+                </div>
+            </div>
+            <div class="text-right">
+                <span class="font-bold text-emerald-400 mono">Rs. 9,000</span>
+            </div>
+        </div>
+        
+        <div class="flex items-center justify-between p-4 bg-darkBg/60 rounded border border-outline/20 mb-3 text-sm">
+            <div class="flex items-center gap-3">
+                <div class="h-8 w-8 rounded-full bg-emerald-500/10 flex items-center justify-center border border-emerald-500/20 text-emerald-400">
+                    <i class="fa-solid fa-arrow-right-arrow-left text-xs"></i>
+                </div>
+                <div>
+                    <p class="font-semibold text-white">Rahul Sen → ACC5001</p>
+                    <p class="text-xs text-gray-400 mono">Method: UPI | Count: 1</p>
+                </div>
+            </div>
+            <div class="text-right">
+                <span class="font-bold text-emerald-400 mono">Rs. 8,900</span>
+            </div>
+        </div>
+        
+        <div class="flex items-center justify-between p-4 bg-darkBg/60 rounded border border-outline/20 mb-3 text-sm">
+            <div class="flex items-center gap-3">
+                <div class="h-8 w-8 rounded-full bg-emerald-500/10 flex items-center justify-center border border-emerald-500/20 text-emerald-400">
+                    <i class="fa-solid fa-arrow-right-arrow-left text-xs"></i>
+                </div>
+                <div>
+                    <p class="font-semibold text-white">ACC5001 → Rajan Mehta</p>
+                    <p class="text-xs text-gray-400 mono">Method: IMPS | Count: 1</p>
+                </div>
+            </div>
+            <div class="text-right">
+                <span class="font-bold text-emerald-400 mono">Rs. 8,900</span>
+            </div>
+        </div>
+        
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB: ENTITY DIRECTORY -->
+        <div id="tab-entity-profiles" class="tab-content hidden">
+            <div class="panel p-4 rounded-lg mb-6 flex justify-between items-center">
+                <div class="relative w-full md:w-96">
+                    <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"><i class="fa-solid fa-search"></i></span>
+                    <input type="text" id="directorySearch" onkeyup="filterDirectory()" placeholder="SEARCH MASTER DIRECTORY..." 
+                        class="w-full bg-darkBg border border-outline/40 rounded py-2 pl-10 pr-4 text-white placeholder-gray-500 focus:outline-none focus:border-gold text-sm mono">
+                </div>
+            </div>
+            <div id="directoryGrid" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                
+        <div class="profile-card panel p-6 rounded-lg border border-outline/20" data-name="rahul sen master_b41353c7 person">
+            <div class="flex justify-between items-start mb-3">
+                <div>
+                    <span class="text-[10px] bg-gold/10 text-gold border border-gold/30 px-2 py-0.5 rounded font-bold mono uppercase">PERSON</span>
+                    <h4 class="text-lg font-semibold mt-2 text-white">Rahul Sen</h4>
+                </div>
+                <span class="text-xs text-gray-500 mono">MASTER_b41353c7</span>
+            </div>
+            
+            <div class="text-xs text-gray-400 mb-4">
+                <span class="font-bold mono block mb-1">RESOLVED ALIASES:</span>
+                <p class="text-gray-300 italic">"rahul sen, 9876543210, acc1001, android_001, rahul"</p>
+            </div>
+
+            <div class="grid grid-cols-3 gap-2 text-center text-xs bg-darkBg/60 p-3 rounded border border-outline/20 mb-4">
+                <div>
+                    <p class="text-gray-500 font-bold mono uppercase">Degree</p>
+                    <p class="text-white font-bold mono mt-0.5">0.5217</p>
+                </div>
+                <div>
+                    <p class="text-gray-500 font-bold mono uppercase">Betweenness</p>
+                    <p class="text-white font-bold mono mt-0.5">0.1074</p>
+                </div>
+                <div>
+                    <p class="text-gray-500 font-bold mono uppercase">PageRank</p>
+                    <p class="text-white font-bold mono mt-0.5">0.0340</p>
+                </div>
+            </div>
+
+            <div class="text-xs text-gray-400">
+                <div class="flex justify-between mb-1.5">
+                    <span>Relations: <strong class="text-white mono">51</strong></span>
+                    <span>Sources: <strong class="text-white mono">16</strong></span>
+                </div>
+                <span class="font-bold mono block mb-1">RELATION PATTERNS:</span>
+                <p class="text-gray-300 mono text-[10px]">CALLED, CONNECTED_TO_TOWER, EMAILED, LOCATED_AT, MENTIONED, MESSAGED, TRANSFERRED_MONEY, TRANSFERRED_TO</p>
+            </div>
+        </div>
+        
+        <div class="profile-card panel p-6 rounded-lg border border-outline/20" data-name="rajan mehta master_ee1fa35b person">
+            <div class="flex justify-between items-start mb-3">
+                <div>
+                    <span class="text-[10px] bg-gold/10 text-gold border border-gold/30 px-2 py-0.5 rounded font-bold mono uppercase">PERSON</span>
+                    <h4 class="text-lg font-semibold mt-2 text-white">Rajan Mehta</h4>
+                </div>
+                <span class="text-xs text-gray-500 mono">MASTER_ee1fa35b</span>
+            </div>
+            
+            <div class="text-xs text-gray-400 mb-4">
+                <span class="font-bold mono block mb-1">RESOLVED ALIASES:</span>
+                <p class="text-gray-300 italic">"rajan mehta, 8877665544, rajan, acc9001"</p>
+            </div>
+
+            <div class="grid grid-cols-3 gap-2 text-center text-xs bg-darkBg/60 p-3 rounded border border-outline/20 mb-4">
+                <div>
+                    <p class="text-gray-500 font-bold mono uppercase">Degree</p>
+                    <p class="text-white font-bold mono mt-0.5">0.3261</p>
+                </div>
+                <div>
+                    <p class="text-gray-500 font-bold mono uppercase">Betweenness</p>
+                    <p class="text-white font-bold mono mt-0.5">0.1047</p>
+                </div>
+                <div>
+                    <p class="text-gray-500 font-bold mono uppercase">PageRank</p>
+                    <p class="text-white font-bold mono mt-0.5">0.0912</p>
+                </div>
+            </div>
+
+            <div class="text-xs text-gray-400">
+                <div class="flex justify-between mb-1.5">
+                    <span>Relations: <strong class="text-white mono">21</strong></span>
+                    <span>Sources: <strong class="text-white mono">5</strong></span>
+                </div>
+                <span class="font-bold mono block mb-1">RELATION PATTERNS:</span>
+                <p class="text-gray-300 mono text-[10px]">CALLED, CONNECTED_TO_TOWER, MENTIONED, TRANSFERRED_TO</p>
+            </div>
+        </div>
+        
+        <div class="profile-card panel p-6 rounded-lg border border-outline/20" data-name="vikram khanna master_f24caf16 person">
+            <div class="flex justify-between items-start mb-3">
+                <div>
+                    <span class="text-[10px] bg-gold/10 text-gold border border-gold/30 px-2 py-0.5 rounded font-bold mono uppercase">PERSON</span>
+                    <h4 class="text-lg font-semibold mt-2 text-white">Vikram Khanna</h4>
+                </div>
+                <span class="text-xs text-gray-500 mono">MASTER_f24caf16</span>
+            </div>
+            
+            <div class="text-xs text-gray-400 mb-4">
+                <span class="font-bold mono block mb-1">RESOLVED ALIASES:</span>
+                <p class="text-gray-300 italic">"watch_abc, vikram khanna, vikram, 9988776655"</p>
+            </div>
+
+            <div class="grid grid-cols-3 gap-2 text-center text-xs bg-darkBg/60 p-3 rounded border border-outline/20 mb-4">
+                <div>
+                    <p class="text-gray-500 font-bold mono uppercase">Degree</p>
+                    <p class="text-white font-bold mono mt-0.5">0.3043</p>
+                </div>
+                <div>
+                    <p class="text-gray-500 font-bold mono uppercase">Betweenness</p>
+                    <p class="text-white font-bold mono mt-0.5">0.0379</p>
+                </div>
+                <div>
+                    <p class="text-gray-500 font-bold mono uppercase">PageRank</p>
+                    <p class="text-white font-bold mono mt-0.5">0.0185</p>
+                </div>
+            </div>
+
+            <div class="text-xs text-gray-400">
+                <div class="flex justify-between mb-1.5">
+                    <span>Relations: <strong class="text-white mono">26</strong></span>
+                    <span>Sources: <strong class="text-white mono">12</strong></span>
+                </div>
+                <span class="font-bold mono block mb-1">RELATION PATTERNS:</span>
+                <p class="text-gray-300 mono text-[10px]">CALLED, CONNECTED_TO_TOWER, LOCATED_AT, MENTIONED, MESSAGED</p>
+            </div>
+        </div>
+        
+        <div class="profile-card panel p-6 rounded-lg border border-outline/20" data-name="arjun master_6137f90b person">
+            <div class="flex justify-between items-start mb-3">
+                <div>
+                    <span class="text-[10px] bg-gold/10 text-gold border border-gold/30 px-2 py-0.5 rounded font-bold mono uppercase">PERSON</span>
+                    <h4 class="text-lg font-semibold mt-2 text-white">Arjun</h4>
+                </div>
+                <span class="text-xs text-gray-500 mono">MASTER_6137f90b</span>
+            </div>
+            
+            <div class="text-xs text-gray-400 mb-4">
+                <span class="font-bold mono block mb-1">RESOLVED ALIASES:</span>
+                <p class="text-gray-300 italic">"9123456780, arjun, arjun ghosh"</p>
+            </div>
+
+            <div class="grid grid-cols-3 gap-2 text-center text-xs bg-darkBg/60 p-3 rounded border border-outline/20 mb-4">
+                <div>
+                    <p class="text-gray-500 font-bold mono uppercase">Degree</p>
+                    <p class="text-white font-bold mono mt-0.5">0.2391</p>
+                </div>
+                <div>
+                    <p class="text-gray-500 font-bold mono uppercase">Betweenness</p>
+                    <p class="text-white font-bold mono mt-0.5">0.0270</p>
+                </div>
+                <div>
+                    <p class="text-gray-500 font-bold mono uppercase">PageRank</p>
+                    <p class="text-white font-bold mono mt-0.5">0.0294</p>
+                </div>
+            </div>
+
+            <div class="text-xs text-gray-400">
+                <div class="flex justify-between mb-1.5">
+                    <span>Relations: <strong class="text-white mono">28</strong></span>
+                    <span>Sources: <strong class="text-white mono">11</strong></span>
+                </div>
+                <span class="font-bold mono block mb-1">RELATION PATTERNS:</span>
+                <p class="text-gray-300 mono text-[10px]">CALLED, CONNECTED_TO_TOWER, EMAILED, LOCATED_AT, MENTIONED, MESSAGED, TRANSFERRED_MONEY</p>
+            </div>
+        </div>
+        
+        <div class="profile-card panel p-6 rounded-lg border border-outline/20" data-name="chatterjee lane, bowbazar, kolkata master_ad6e0d66 place">
+            <div class="flex justify-between items-start mb-3">
+                <div>
+                    <span class="text-[10px] bg-gold/10 text-gold border border-gold/30 px-2 py-0.5 rounded font-bold mono uppercase">PLACE</span>
+                    <h4 class="text-lg font-semibold mt-2 text-white">Chatterjee Lane, Bowbazar, Kolkata</h4>
+                </div>
+                <span class="text-xs text-gray-500 mono">MASTER_ad6e0d66</span>
+            </div>
+            
+            <div class="text-xs text-gray-400 mb-4">
+                <span class="font-bold mono block mb-1">RESOLVED ALIASES:</span>
+                <p class="text-gray-300 italic">"chatterjee lane, bowbazar, kolkata"</p>
+            </div>
+
+            <div class="grid grid-cols-3 gap-2 text-center text-xs bg-darkBg/60 p-3 rounded border border-outline/20 mb-4">
+                <div>
+                    <p class="text-gray-500 font-bold mono uppercase">Degree</p>
+                    <p class="text-white font-bold mono mt-0.5">0.2174</p>
+                </div>
+                <div>
+                    <p class="text-gray-500 font-bold mono uppercase">Betweenness</p>
+                    <p class="text-white font-bold mono mt-0.5">0.0263</p>
+                </div>
+                <div>
+                    <p class="text-gray-500 font-bold mono uppercase">PageRank</p>
+                    <p class="text-white font-bold mono mt-0.5">0.0458</p>
+                </div>
+            </div>
+
+            <div class="text-xs text-gray-400">
+                <div class="flex justify-between mb-1.5">
+                    <span>Relations: <strong class="text-white mono">16</strong></span>
+                    <span>Sources: <strong class="text-white mono">7</strong></span>
+                </div>
+                <span class="font-bold mono block mb-1">RELATION PATTERNS:</span>
+                <p class="text-gray-300 mono text-[10px]">LOCATED_AT, MOVED_TO</p>
+            </div>
+        </div>
+        
+        <div class="profile-card panel p-6 rounded-lg border border-outline/20" data-name="bow bazar north, kolkata master_59760bb7 place">
+            <div class="flex justify-between items-start mb-3">
+                <div>
+                    <span class="text-[10px] bg-gold/10 text-gold border border-gold/30 px-2 py-0.5 rounded font-bold mono uppercase">PLACE</span>
+                    <h4 class="text-lg font-semibold mt-2 text-white">Bow Bazar North, Kolkata</h4>
+                </div>
+                <span class="text-xs text-gray-500 mono">MASTER_59760bb7</span>
+            </div>
+            
+            <div class="text-xs text-gray-400 mb-4">
+                <span class="font-bold mono block mb-1">RESOLVED ALIASES:</span>
+                <p class="text-gray-300 italic">"bow bazar north, kolkata"</p>
+            </div>
+
+            <div class="grid grid-cols-3 gap-2 text-center text-xs bg-darkBg/60 p-3 rounded border border-outline/20 mb-4">
+                <div>
+                    <p class="text-gray-500 font-bold mono uppercase">Degree</p>
+                    <p class="text-white font-bold mono mt-0.5">0.1957</p>
+                </div>
+                <div>
+                    <p class="text-gray-500 font-bold mono uppercase">Betweenness</p>
+                    <p class="text-white font-bold mono mt-0.5">0.0093</p>
+                </div>
+                <div>
+                    <p class="text-gray-500 font-bold mono uppercase">PageRank</p>
+                    <p class="text-white font-bold mono mt-0.5">0.0576</p>
+                </div>
+            </div>
+
+            <div class="text-xs text-gray-400">
+                <div class="flex justify-between mb-1.5">
+                    <span>Relations: <strong class="text-white mono">11</strong></span>
+                    <span>Sources: <strong class="text-white mono">4</strong></span>
+                </div>
+                <span class="font-bold mono block mb-1">RELATION PATTERNS:</span>
+                <p class="text-gray-300 mono text-[10px]">LOCATED_AT, MOVED_TO</p>
+            </div>
+        </div>
+        
+        <div class="profile-card panel p-6 rounded-lg border border-outline/20" data-name="@arjung master_425adff9 person">
+            <div class="flex justify-between items-start mb-3">
+                <div>
+                    <span class="text-[10px] bg-gold/10 text-gold border border-gold/30 px-2 py-0.5 rounded font-bold mono uppercase">PERSON</span>
+                    <h4 class="text-lg font-semibold mt-2 text-white">@Arjung</h4>
+                </div>
+                <span class="text-xs text-gray-500 mono">MASTER_425adff9</span>
+            </div>
+            
+            <div class="text-xs text-gray-400 mb-4">
+                <span class="font-bold mono block mb-1">RESOLVED ALIASES:</span>
+                <p class="text-gray-300 italic">"@arjung"</p>
+            </div>
+
+            <div class="grid grid-cols-3 gap-2 text-center text-xs bg-darkBg/60 p-3 rounded border border-outline/20 mb-4">
+                <div>
+                    <p class="text-gray-500 font-bold mono uppercase">Degree</p>
+                    <p class="text-white font-bold mono mt-0.5">0.1304</p>
+                </div>
+                <div>
+                    <p class="text-gray-500 font-bold mono uppercase">Betweenness</p>
+                    <p class="text-white font-bold mono mt-0.5">0.0164</p>
+                </div>
+                <div>
+                    <p class="text-gray-500 font-bold mono uppercase">PageRank</p>
+                    <p class="text-white font-bold mono mt-0.5">0.0169</p>
+                </div>
+            </div>
+
+            <div class="text-xs text-gray-400">
+                <div class="flex justify-between mb-1.5">
+                    <span>Relations: <strong class="text-white mono">9</strong></span>
+                    <span>Sources: <strong class="text-white mono">4</strong></span>
+                </div>
+                <span class="font-bold mono block mb-1">RELATION PATTERNS:</span>
+                <p class="text-gray-300 mono text-[10px]">MENTIONED, MENTIONED_USER, POSTED_ON</p>
+            </div>
+        </div>
+        
+        <div class="profile-card panel p-6 rounded-lg border border-outline/20" data-name="howrah station master_e32ebe48 place">
+            <div class="flex justify-between items-start mb-3">
+                <div>
+                    <span class="text-[10px] bg-gold/10 text-gold border border-gold/30 px-2 py-0.5 rounded font-bold mono uppercase">PLACE</span>
+                    <h4 class="text-lg font-semibold mt-2 text-white">Howrah Station</h4>
+                </div>
+                <span class="text-xs text-gray-500 mono">MASTER_e32ebe48</span>
+            </div>
+            
+            <div class="text-xs text-gray-400 mb-4">
+                <span class="font-bold mono block mb-1">RESOLVED ALIASES:</span>
+                <p class="text-gray-300 italic">"howrah station, howrah, reached howrah station"</p>
+            </div>
+
+            <div class="grid grid-cols-3 gap-2 text-center text-xs bg-darkBg/60 p-3 rounded border border-outline/20 mb-4">
+                <div>
+                    <p class="text-gray-500 font-bold mono uppercase">Degree</p>
+                    <p class="text-white font-bold mono mt-0.5">0.1087</p>
+                </div>
+                <div>
+                    <p class="text-gray-500 font-bold mono uppercase">Betweenness</p>
+                    <p class="text-white font-bold mono mt-0.5">0.0000</p>
+                </div>
+                <div>
+                    <p class="text-gray-500 font-bold mono uppercase">PageRank</p>
+                    <p class="text-white font-bold mono mt-0.5">0.0229</p>
+                </div>
+            </div>
+
+            <div class="text-xs text-gray-400">
+                <div class="flex justify-between mb-1.5">
+                    <span>Relations: <strong class="text-white mono">6</strong></span>
+                    <span>Sources: <strong class="text-white mono">6</strong></span>
+                </div>
+                <span class="font-bold mono block mb-1">RELATION PATTERNS:</span>
+                <p class="text-gray-300 mono text-[10px]">MENTIONED</p>
+            </div>
+        </div>
+        
+        <div class="profile-card panel p-6 rounded-lg border border-outline/20" data-name="biplabi pulin das street, city college, kolkata master_10d0d169 place">
+            <div class="flex justify-between items-start mb-3">
+                <div>
+                    <span class="text-[10px] bg-gold/10 text-gold border border-gold/30 px-2 py-0.5 rounded font-bold mono uppercase">PLACE</span>
+                    <h4 class="text-lg font-semibold mt-2 text-white">Biplabi Pulin Das Street, City College, Kolkata</h4>
+                </div>
+                <span class="text-xs text-gray-500 mono">MASTER_10d0d169</span>
+            </div>
+            
+            <div class="text-xs text-gray-400 mb-4">
+                <span class="font-bold mono block mb-1">RESOLVED ALIASES:</span>
+                <p class="text-gray-300 italic">"biplabi pulin das street, city college, kolkata"</p>
+            </div>
+
+            <div class="grid grid-cols-3 gap-2 text-center text-xs bg-darkBg/60 p-3 rounded border border-outline/20 mb-4">
+                <div>
+                    <p class="text-gray-500 font-bold mono uppercase">Degree</p>
+                    <p class="text-white font-bold mono mt-0.5">0.1087</p>
+                </div>
+                <div>
+                    <p class="text-gray-500 font-bold mono uppercase">Betweenness</p>
+                    <p class="text-white font-bold mono mt-0.5">0.0018</p>
+                </div>
+                <div>
+                    <p class="text-gray-500 font-bold mono uppercase">PageRank</p>
+                    <p class="text-white font-bold mono mt-0.5">0.0417</p>
+                </div>
+            </div>
+
+            <div class="text-xs text-gray-400">
+                <div class="flex justify-between mb-1.5">
+                    <span>Relations: <strong class="text-white mono">5</strong></span>
+                    <span>Sources: <strong class="text-white mono">3</strong></span>
+                </div>
+                <span class="font-bold mono block mb-1">RELATION PATTERNS:</span>
+                <p class="text-gray-300 mono text-[10px]">LOCATED_AT, MOVED_TO</p>
+            </div>
+        </div>
+        
+        <div class="profile-card panel p-6 rounded-lg border border-outline/20" data-name="howrah maidan, haora master_9e7d3007 place">
+            <div class="flex justify-between items-start mb-3">
+                <div>
+                    <span class="text-[10px] bg-gold/10 text-gold border border-gold/30 px-2 py-0.5 rounded font-bold mono uppercase">PLACE</span>
+                    <h4 class="text-lg font-semibold mt-2 text-white">Howrah Maidan, Haora</h4>
+                </div>
+                <span class="text-xs text-gray-500 mono">MASTER_9e7d3007</span>
+            </div>
+            
+            <div class="text-xs text-gray-400 mb-4">
+                <span class="font-bold mono block mb-1">RESOLVED ALIASES:</span>
+                <p class="text-gray-300 italic">"howrah maidan, haora"</p>
+            </div>
+
+            <div class="grid grid-cols-3 gap-2 text-center text-xs bg-darkBg/60 p-3 rounded border border-outline/20 mb-4">
+                <div>
+                    <p class="text-gray-500 font-bold mono uppercase">Degree</p>
+                    <p class="text-white font-bold mono mt-0.5">0.1087</p>
+                </div>
+                <div>
+                    <p class="text-gray-500 font-bold mono uppercase">Betweenness</p>
+                    <p class="text-white font-bold mono mt-0.5">0.0000</p>
+                </div>
+                <div>
+                    <p class="text-gray-500 font-bold mono uppercase">PageRank</p>
+                    <p class="text-white font-bold mono mt-0.5">0.0779</p>
+                </div>
+            </div>
+
+            <div class="text-xs text-gray-400">
+                <div class="flex justify-between mb-1.5">
+                    <span>Relations: <strong class="text-white mono">6</strong></span>
+                    <span>Sources: <strong class="text-white mono">4</strong></span>
+                </div>
+                <span class="font-bold mono block mb-1">RELATION PATTERNS:</span>
+                <p class="text-gray-300 mono text-[10px]">LOCATED_AT, MOVED_TO</p>
+            </div>
+        </div>
+        
+        <div class="profile-card panel p-6 rounded-lg border border-outline/20" data-name="@vikramk master_4f3dc74c person">
+            <div class="flex justify-between items-start mb-3">
+                <div>
+                    <span class="text-[10px] bg-gold/10 text-gold border border-gold/30 px-2 py-0.5 rounded font-bold mono uppercase">PERSON</span>
+                    <h4 class="text-lg font-semibold mt-2 text-white">@Vikramk</h4>
+                </div>
+                <span class="text-xs text-gray-500 mono">MASTER_4f3dc74c</span>
+            </div>
+            
+            <div class="text-xs text-gray-400 mb-4">
+                <span class="font-bold mono block mb-1">RESOLVED ALIASES:</span>
+                <p class="text-gray-300 italic">"@vikramk"</p>
+            </div>
+
+            <div class="grid grid-cols-3 gap-2 text-center text-xs bg-darkBg/60 p-3 rounded border border-outline/20 mb-4">
+                <div>
+                    <p class="text-gray-500 font-bold mono uppercase">Degree</p>
+                    <p class="text-white font-bold mono mt-0.5">0.1087</p>
+                </div>
+                <div>
+                    <p class="text-gray-500 font-bold mono uppercase">Betweenness</p>
+                    <p class="text-white font-bold mono mt-0.5">0.0078</p>
+                </div>
+                <div>
+                    <p class="text-gray-500 font-bold mono uppercase">PageRank</p>
+                    <p class="text-white font-bold mono mt-0.5">0.0139</p>
+                </div>
+            </div>
+
+            <div class="text-xs text-gray-400">
+                <div class="flex justify-between mb-1.5">
+                    <span>Relations: <strong class="text-white mono">7</strong></span>
+                    <span>Sources: <strong class="text-white mono">3</strong></span>
+                </div>
+                <span class="font-bold mono block mb-1">RELATION PATTERNS:</span>
+                <p class="text-gray-300 mono text-[10px]">MENTIONED, MENTIONED_USER, POSTED_ON</p>
+            </div>
+        </div>
+        
+        <div class="profile-card panel p-6 rounded-lg border border-outline/20" data-name="cab_102 master_472a3eae entity">
+            <div class="flex justify-between items-start mb-3">
+                <div>
+                    <span class="text-[10px] bg-gold/10 text-gold border border-gold/30 px-2 py-0.5 rounded font-bold mono uppercase">ENTITY</span>
+                    <h4 class="text-lg font-semibold mt-2 text-white">Cab_102</h4>
+                </div>
+                <span class="text-xs text-gray-500 mono">MASTER_472a3eae</span>
+            </div>
+            
+            <div class="text-xs text-gray-400 mb-4">
+                <span class="font-bold mono block mb-1">RESOLVED ALIASES:</span>
+                <p class="text-gray-300 italic">"cab_102"</p>
+            </div>
+
+            <div class="grid grid-cols-3 gap-2 text-center text-xs bg-darkBg/60 p-3 rounded border border-outline/20 mb-4">
+                <div>
+                    <p class="text-gray-500 font-bold mono uppercase">Degree</p>
+                    <p class="text-white font-bold mono mt-0.5">0.0652</p>
+                </div>
+                <div>
+                    <p class="text-gray-500 font-bold mono uppercase">Betweenness</p>
+                    <p class="text-white font-bold mono mt-0.5">0.0000</p>
+                </div>
+                <div>
+                    <p class="text-gray-500 font-bold mono uppercase">PageRank</p>
+                    <p class="text-white font-bold mono mt-0.5">0.0110</p>
+                </div>
+            </div>
+
+            <div class="text-xs text-gray-400">
+                <div class="flex justify-between mb-1.5">
+                    <span>Relations: <strong class="text-white mono">3</strong></span>
+                    <span>Sources: <strong class="text-white mono">1</strong></span>
+                </div>
+                <span class="font-bold mono block mb-1">RELATION PATTERNS:</span>
+                <p class="text-gray-300 mono text-[10px]">LOCATED_AT</p>
+            </div>
+        </div>
+        
+        <div class="profile-card panel p-6 rounded-lg border border-outline/20" data-name="sri gopal mullick ln, bowbazar, kolkata master_d11a8cf5 place">
+            <div class="flex justify-between items-start mb-3">
+                <div>
+                    <span class="text-[10px] bg-gold/10 text-gold border border-gold/30 px-2 py-0.5 rounded font-bold mono uppercase">PLACE</span>
+                    <h4 class="text-lg font-semibold mt-2 text-white">Sri Gopal Mullick Ln, Bowbazar, Kolkata</h4>
+                </div>
+                <span class="text-xs text-gray-500 mono">MASTER_d11a8cf5</span>
+            </div>
+            
+            <div class="text-xs text-gray-400 mb-4">
+                <span class="font-bold mono block mb-1">RESOLVED ALIASES:</span>
+                <p class="text-gray-300 italic">"sri gopal mullick ln, bowbazar, kolkata"</p>
+            </div>
+
+            <div class="grid grid-cols-3 gap-2 text-center text-xs bg-darkBg/60 p-3 rounded border border-outline/20 mb-4">
+                <div>
+                    <p class="text-gray-500 font-bold mono uppercase">Degree</p>
+                    <p class="text-white font-bold mono mt-0.5">0.0652</p>
+                </div>
+                <div>
+                    <p class="text-gray-500 font-bold mono uppercase">Betweenness</p>
+                    <p class="text-white font-bold mono mt-0.5">0.0000</p>
+                </div>
+                <div>
+                    <p class="text-gray-500 font-bold mono uppercase">PageRank</p>
+                    <p class="text-white font-bold mono mt-0.5">0.0222</p>
+                </div>
+            </div>
+
+            <div class="text-xs text-gray-400">
+                <div class="flex justify-between mb-1.5">
+                    <span>Relations: <strong class="text-white mono">3</strong></span>
+                    <span>Sources: <strong class="text-white mono">2</strong></span>
+                </div>
+                <span class="font-bold mono block mb-1">RELATION PATTERNS:</span>
+                <p class="text-gray-300 mono text-[10px]">LOCATED_AT, MOVED_TO</p>
+            </div>
+        </div>
+        
+        <div class="profile-card panel p-6 rounded-lg border border-outline/20" data-name="tracker_001 master_90d56781 entity">
+            <div class="flex justify-between items-start mb-3">
+                <div>
+                    <span class="text-[10px] bg-gold/10 text-gold border border-gold/30 px-2 py-0.5 rounded font-bold mono uppercase">ENTITY</span>
+                    <h4 class="text-lg font-semibold mt-2 text-white">Tracker_001</h4>
+                </div>
+                <span class="text-xs text-gray-500 mono">MASTER_90d56781</span>
+            </div>
+            
+            <div class="text-xs text-gray-400 mb-4">
+                <span class="font-bold mono block mb-1">RESOLVED ALIASES:</span>
+                <p class="text-gray-300 italic">"tracker_001"</p>
+            </div>
+
+            <div class="grid grid-cols-3 gap-2 text-center text-xs bg-darkBg/60 p-3 rounded border border-outline/20 mb-4">
+                <div>
+                    <p class="text-gray-500 font-bold mono uppercase">Degree</p>
+                    <p class="text-white font-bold mono mt-0.5">0.0652</p>
+                </div>
+                <div>
+                    <p class="text-gray-500 font-bold mono uppercase">Betweenness</p>
+                    <p class="text-white font-bold mono mt-0.5">0.0000</p>
+                </div>
+                <div>
+                    <p class="text-gray-500 font-bold mono uppercase">PageRank</p>
+                    <p class="text-white font-bold mono mt-0.5">0.0110</p>
+                </div>
+            </div>
+
+            <div class="text-xs text-gray-400">
+                <div class="flex justify-between mb-1.5">
+                    <span>Relations: <strong class="text-white mono">3</strong></span>
+                    <span>Sources: <strong class="text-white mono">1</strong></span>
+                </div>
+                <span class="font-bold mono block mb-1">RELATION PATTERNS:</span>
+                <p class="text-gray-300 mono text-[10px]">LOCATED_AT</p>
+            </div>
+        </div>
+        
+        <div class="profile-card panel p-6 rounded-lg border border-outline/20" data-name="maniktala, kolkata master_afcbc112 place">
+            <div class="flex justify-between items-start mb-3">
+                <div>
+                    <span class="text-[10px] bg-gold/10 text-gold border border-gold/30 px-2 py-0.5 rounded font-bold mono uppercase">PLACE</span>
+                    <h4 class="text-lg font-semibold mt-2 text-white">Maniktala, Kolkata</h4>
+                </div>
+                <span class="text-xs text-gray-500 mono">MASTER_afcbc112</span>
+            </div>
+            
+            <div class="text-xs text-gray-400 mb-4">
+                <span class="font-bold mono block mb-1">RESOLVED ALIASES:</span>
+                <p class="text-gray-300 italic">"maniktala, kolkata"</p>
+            </div>
+
+            <div class="grid grid-cols-3 gap-2 text-center text-xs bg-darkBg/60 p-3 rounded border border-outline/20 mb-4">
+                <div>
+                    <p class="text-gray-500 font-bold mono uppercase">Degree</p>
+                    <p class="text-white font-bold mono mt-0.5">0.0652</p>
+                </div>
+                <div>
+                    <p class="text-gray-500 font-bold mono uppercase">Betweenness</p>
+                    <p class="text-white font-bold mono mt-0.5">0.0097</p>
+                </div>
+                <div>
+                    <p class="text-gray-500 font-bold mono uppercase">PageRank</p>
+                    <p class="text-white font-bold mono mt-0.5">0.0239</p>
+                </div>
+            </div>
+
+            <div class="text-xs text-gray-400">
+                <div class="flex justify-between mb-1.5">
+                    <span>Relations: <strong class="text-white mono">3</strong></span>
+                    <span>Sources: <strong class="text-white mono">2</strong></span>
+                </div>
+                <span class="font-bold mono block mb-1">RELATION PATTERNS:</span>
+                <p class="text-gray-300 mono text-[10px]">LOCATED_AT, MOVED_TO</p>
+            </div>
+        </div>
+        
+        <div class="profile-card panel p-6 rounded-lg border border-outline/20" data-name="group_chat master_cc9e76cc infrastructure">
+            <div class="flex justify-between items-start mb-3">
+                <div>
+                    <span class="text-[10px] bg-gold/10 text-gold border border-gold/30 px-2 py-0.5 rounded font-bold mono uppercase">INFRASTRUCTURE</span>
+                    <h4 class="text-lg font-semibold mt-2 text-white">Group_Chat</h4>
+                </div>
+                <span class="text-xs text-gray-500 mono">MASTER_cc9e76cc</span>
+            </div>
+            
+            <div class="text-xs text-gray-400 mb-4">
+                <span class="font-bold mono block mb-1">RESOLVED ALIASES:</span>
+                <p class="text-gray-300 italic">"group_chat"</p>
+            </div>
+
+            <div class="grid grid-cols-3 gap-2 text-center text-xs bg-darkBg/60 p-3 rounded border border-outline/20 mb-4">
+                <div>
+                    <p class="text-gray-500 font-bold mono uppercase">Degree</p>
+                    <p class="text-white font-bold mono mt-0.5">0.0652</p>
+                </div>
+                <div>
+                    <p class="text-gray-500 font-bold mono uppercase">Betweenness</p>
+                    <p class="text-white font-bold mono mt-0.5">0.0000</p>
+                </div>
+                <div>
+                    <p class="text-gray-500 font-bold mono uppercase">PageRank</p>
+                    <p class="text-white font-bold mono mt-0.5">0.0170</p>
+                </div>
+            </div>
+
+            <div class="text-xs text-gray-400">
+                <div class="flex justify-between mb-1.5">
+                    <span>Relations: <strong class="text-white mono">17</strong></span>
+                    <span>Sources: <strong class="text-white mono">17</strong></span>
+                </div>
+                <span class="font-bold mono block mb-1">RELATION PATTERNS:</span>
+                <p class="text-gray-300 mono text-[10px]">MESSAGED</p>
+            </div>
+        </div>
+        
+        <div class="profile-card panel p-6 rounded-lg border border-outline/20" data-name="@rahulsen master_656f09cf person">
+            <div class="flex justify-between items-start mb-3">
+                <div>
+                    <span class="text-[10px] bg-gold/10 text-gold border border-gold/30 px-2 py-0.5 rounded font-bold mono uppercase">PERSON</span>
+                    <h4 class="text-lg font-semibold mt-2 text-white">@Rahulsen</h4>
+                </div>
+                <span class="text-xs text-gray-500 mono">MASTER_656f09cf</span>
+            </div>
+            
+            <div class="text-xs text-gray-400 mb-4">
+                <span class="font-bold mono block mb-1">RESOLVED ALIASES:</span>
+                <p class="text-gray-300 italic">"@rahulsen"</p>
+            </div>
+
+            <div class="grid grid-cols-3 gap-2 text-center text-xs bg-darkBg/60 p-3 rounded border border-outline/20 mb-4">
+                <div>
+                    <p class="text-gray-500 font-bold mono uppercase">Degree</p>
+                    <p class="text-white font-bold mono mt-0.5">0.0652</p>
+                </div>
+                <div>
+                    <p class="text-gray-500 font-bold mono uppercase">Betweenness</p>
+                    <p class="text-white font-bold mono mt-0.5">0.0005</p>
+                </div>
+                <div>
+                    <p class="text-gray-500 font-bold mono uppercase">PageRank</p>
+                    <p class="text-white font-bold mono mt-0.5">0.0139</p>
+                </div>
+            </div>
+
+            <div class="text-xs text-gray-400">
+                <div class="flex justify-between mb-1.5">
+                    <span>Relations: <strong class="text-white mono">5</strong></span>
+                    <span>Sources: <strong class="text-white mono">3</strong></span>
+                </div>
+                <span class="font-bold mono block mb-1">RELATION PATTERNS:</span>
+                <p class="text-gray-300 mono text-[10px]">MENTIONED_USER, POSTED_ON</p>
+            </div>
+        </div>
+        
+        <div class="profile-card panel p-6 rounded-lg border border-outline/20" data-name="cctv camera at traffic signal master_69b137e7 infrastructure">
+            <div class="flex justify-between items-start mb-3">
+                <div>
+                    <span class="text-[10px] bg-gold/10 text-gold border border-gold/30 px-2 py-0.5 rounded font-bold mono uppercase">INFRASTRUCTURE</span>
+                    <h4 class="text-lg font-semibold mt-2 text-white">Cctv Camera At Traffic Signal</h4>
+                </div>
+                <span class="text-xs text-gray-500 mono">MASTER_69b137e7</span>
+            </div>
+            
+            <div class="text-xs text-gray-400 mb-4">
+                <span class="font-bold mono block mb-1">RESOLVED ALIASES:</span>
+                <p class="text-gray-300 italic">"cctv camera at traffic signal"</p>
+            </div>
+
+            <div class="grid grid-cols-3 gap-2 text-center text-xs bg-darkBg/60 p-3 rounded border border-outline/20 mb-4">
+                <div>
+                    <p class="text-gray-500 font-bold mono uppercase">Degree</p>
+                    <p class="text-white font-bold mono mt-0.5">0.0652</p>
+                </div>
+                <div>
+                    <p class="text-gray-500 font-bold mono uppercase">Betweenness</p>
+                    <p class="text-white font-bold mono mt-0.5">0.0000</p>
+                </div>
+                <div>
+                    <p class="text-gray-500 font-bold mono uppercase">PageRank</p>
+                    <p class="text-white font-bold mono mt-0.5">0.0110</p>
+                </div>
+            </div>
+
+            <div class="text-xs text-gray-400">
+                <div class="flex justify-between mb-1.5">
+                    <span>Relations: <strong class="text-white mono">3</strong></span>
+                    <span>Sources: <strong class="text-white mono">1</strong></span>
+                </div>
+                <span class="font-bold mono block mb-1">RELATION PATTERNS:</span>
+                <p class="text-gray-300 mono text-[10px]">DETECTED</p>
+            </div>
+        </div>
+        
+        <div class="profile-card panel p-6 rounded-lg border border-outline/20" data-name="cell tower (twr_kol_102) master_4df7510c infrastructure">
+            <div class="flex justify-between items-start mb-3">
+                <div>
+                    <span class="text-[10px] bg-gold/10 text-gold border border-gold/30 px-2 py-0.5 rounded font-bold mono uppercase">INFRASTRUCTURE</span>
+                    <h4 class="text-lg font-semibold mt-2 text-white">Cell Tower (Twr_Kol_102)</h4>
+                </div>
+                <span class="text-xs text-gray-500 mono">MASTER_4df7510c</span>
+            </div>
+            
+            <div class="text-xs text-gray-400 mb-4">
+                <span class="font-bold mono block mb-1">RESOLVED ALIASES:</span>
+                <p class="text-gray-300 italic">"cell tower (twr_kol_102)"</p>
+            </div>
+
+            <div class="grid grid-cols-3 gap-2 text-center text-xs bg-darkBg/60 p-3 rounded border border-outline/20 mb-4">
+                <div>
+                    <p class="text-gray-500 font-bold mono uppercase">Degree</p>
+                    <p class="text-white font-bold mono mt-0.5">0.0435</p>
+                </div>
+                <div>
+                    <p class="text-gray-500 font-bold mono uppercase">Betweenness</p>
+                    <p class="text-white font-bold mono mt-0.5">0.0000</p>
+                </div>
+                <div>
+                    <p class="text-gray-500 font-bold mono uppercase">PageRank</p>
+                    <p class="text-white font-bold mono mt-0.5">0.0280</p>
+                </div>
+            </div>
+
+            <div class="text-xs text-gray-400">
+                <div class="flex justify-between mb-1.5">
+                    <span>Relations: <strong class="text-white mono">7</strong></span>
+                    <span>Sources: <strong class="text-white mono">1</strong></span>
+                </div>
+                <span class="font-bold mono block mb-1">RELATION PATTERNS:</span>
+                <p class="text-gray-300 mono text-[10px]">CONNECTED_TO_TOWER</p>
+            </div>
+        </div>
+        
+        <div class="profile-card panel p-6 rounded-lg border border-outline/20" data-name="surya sen street, baithakkhana, kolkata master_08924bd8 place">
+            <div class="flex justify-between items-start mb-3">
+                <div>
+                    <span class="text-[10px] bg-gold/10 text-gold border border-gold/30 px-2 py-0.5 rounded font-bold mono uppercase">PLACE</span>
+                    <h4 class="text-lg font-semibold mt-2 text-white">Surya Sen Street, Baithakkhana, Kolkata</h4>
+                </div>
+                <span class="text-xs text-gray-500 mono">MASTER_08924bd8</span>
+            </div>
+            
+            <div class="text-xs text-gray-400 mb-4">
+                <span class="font-bold mono block mb-1">RESOLVED ALIASES:</span>
+                <p class="text-gray-300 italic">"surya sen street, baithakkhana, kolkata"</p>
+            </div>
+
+            <div class="grid grid-cols-3 gap-2 text-center text-xs bg-darkBg/60 p-3 rounded border border-outline/20 mb-4">
+                <div>
+                    <p class="text-gray-500 font-bold mono uppercase">Degree</p>
+                    <p class="text-white font-bold mono mt-0.5">0.0435</p>
+                </div>
+                <div>
+                    <p class="text-gray-500 font-bold mono uppercase">Betweenness</p>
+                    <p class="text-white font-bold mono mt-0.5">0.0000</p>
+                </div>
+                <div>
+                    <p class="text-gray-500 font-bold mono uppercase">PageRank</p>
+                    <p class="text-white font-bold mono mt-0.5">0.0141</p>
+                </div>
+            </div>
+
+            <div class="text-xs text-gray-400">
+                <div class="flex justify-between mb-1.5">
+                    <span>Relations: <strong class="text-white mono">2</strong></span>
+                    <span>Sources: <strong class="text-white mono">2</strong></span>
+                </div>
+                <span class="font-bold mono block mb-1">RELATION PATTERNS:</span>
+                <p class="text-gray-300 mono text-[10px]">LOCATED_AT, MOVED_TO</p>
+            </div>
+        </div>
+        
+        <div class="profile-card panel p-6 rounded-lg border border-outline/20" data-name="bowbazar, kolkata master_a09d56fd place">
+            <div class="flex justify-between items-start mb-3">
+                <div>
+                    <span class="text-[10px] bg-gold/10 text-gold border border-gold/30 px-2 py-0.5 rounded font-bold mono uppercase">PLACE</span>
+                    <h4 class="text-lg font-semibold mt-2 text-white">Bowbazar, Kolkata</h4>
+                </div>
+                <span class="text-xs text-gray-500 mono">MASTER_a09d56fd</span>
+            </div>
+            
+            <div class="text-xs text-gray-400 mb-4">
+                <span class="font-bold mono block mb-1">RESOLVED ALIASES:</span>
+                <p class="text-gray-300 italic">"bowbazar, kolkata"</p>
+            </div>
+
+            <div class="grid grid-cols-3 gap-2 text-center text-xs bg-darkBg/60 p-3 rounded border border-outline/20 mb-4">
+                <div>
+                    <p class="text-gray-500 font-bold mono uppercase">Degree</p>
+                    <p class="text-white font-bold mono mt-0.5">0.0435</p>
+                </div>
+                <div>
+                    <p class="text-gray-500 font-bold mono uppercase">Betweenness</p>
+                    <p class="text-white font-bold mono mt-0.5">0.0000</p>
+                </div>
+                <div>
+                    <p class="text-gray-500 font-bold mono uppercase">PageRank</p>
+                    <p class="text-white font-bold mono mt-0.5">0.0124</p>
+                </div>
+            </div>
+
+            <div class="text-xs text-gray-400">
+                <div class="flex justify-between mb-1.5">
+                    <span>Relations: <strong class="text-white mono">2</strong></span>
+                    <span>Sources: <strong class="text-white mono">2</strong></span>
+                </div>
+                <span class="font-bold mono block mb-1">RELATION PATTERNS:</span>
+                <p class="text-gray-300 mono text-[10px]">LOCATED_AT, MOVED_TO</p>
+            </div>
+        </div>
+        
+        <div class="profile-card panel p-6 rounded-lg border border-outline/20" data-name="bidhannagar master_8c5f6b57 place">
+            <div class="flex justify-between items-start mb-3">
+                <div>
+                    <span class="text-[10px] bg-gold/10 text-gold border border-gold/30 px-2 py-0.5 rounded font-bold mono uppercase">PLACE</span>
+                    <h4 class="text-lg font-semibold mt-2 text-white">Bidhannagar</h4>
+                </div>
+                <span class="text-xs text-gray-500 mono">MASTER_8c5f6b57</span>
+            </div>
+            
+            <div class="text-xs text-gray-400 mb-4">
+                <span class="font-bold mono block mb-1">RESOLVED ALIASES:</span>
+                <p class="text-gray-300 italic">"bidhannagar"</p>
+            </div>
+
+            <div class="grid grid-cols-3 gap-2 text-center text-xs bg-darkBg/60 p-3 rounded border border-outline/20 mb-4">
+                <div>
+                    <p class="text-gray-500 font-bold mono uppercase">Degree</p>
+                    <p class="text-white font-bold mono mt-0.5">0.0435</p>
+                </div>
+                <div>
+                    <p class="text-gray-500 font-bold mono uppercase">Betweenness</p>
+                    <p class="text-white font-bold mono mt-0.5">0.0000</p>
+                </div>
+                <div>
+                    <p class="text-gray-500 font-bold mono uppercase">PageRank</p>
+                    <p class="text-white font-bold mono mt-0.5">0.0344</p>
+                </div>
+            </div>
+
+            <div class="text-xs text-gray-400">
+                <div class="flex justify-between mb-1.5">
+                    <span>Relations: <strong class="text-white mono">2</strong></span>
+                    <span>Sources: <strong class="text-white mono">2</strong></span>
+                </div>
+                <span class="font-bold mono block mb-1">RELATION PATTERNS:</span>
+                <p class="text-gray-300 mono text-[10px]">LOCATED_AT, MOVED_TO</p>
+            </div>
+        </div>
+        
+        <div class="profile-card panel p-6 rounded-lg border border-outline/20" data-name="hyundai master_359a9c21 person">
+            <div class="flex justify-between items-start mb-3">
+                <div>
+                    <span class="text-[10px] bg-gold/10 text-gold border border-gold/30 px-2 py-0.5 rounded font-bold mono uppercase">PERSON</span>
+                    <h4 class="text-lg font-semibold mt-2 text-white">Hyundai</h4>
+                </div>
+                <span class="text-xs text-gray-500 mono">MASTER_359a9c21</span>
+            </div>
+            
+            <div class="text-xs text-gray-400 mb-4">
+                <span class="font-bold mono block mb-1">RESOLVED ALIASES:</span>
+                <p class="text-gray-300 italic">"hyundai"</p>
+            </div>
+
+            <div class="grid grid-cols-3 gap-2 text-center text-xs bg-darkBg/60 p-3 rounded border border-outline/20 mb-4">
+                <div>
+                    <p class="text-gray-500 font-bold mono uppercase">Degree</p>
+                    <p class="text-white font-bold mono mt-0.5">0.0435</p>
+                </div>
+                <div>
+                    <p class="text-gray-500 font-bold mono uppercase">Betweenness</p>
+                    <p class="text-white font-bold mono mt-0.5">0.0000</p>
+                </div>
+                <div>
+                    <p class="text-gray-500 font-bold mono uppercase">PageRank</p>
+                    <p class="text-white font-bold mono mt-0.5">0.0154</p>
+                </div>
+            </div>
+
+            <div class="text-xs text-gray-400">
+                <div class="flex justify-between mb-1.5">
+                    <span>Relations: <strong class="text-white mono">2</strong></span>
+                    <span>Sources: <strong class="text-white mono">2</strong></span>
+                </div>
+                <span class="font-bold mono block mb-1">RELATION PATTERNS:</span>
+                <p class="text-gray-300 mono text-[10px]">MENTIONED</p>
+            </div>
+        </div>
+        
+        <div class="profile-card panel p-6 rounded-lg border border-outline/20" data-name="acc8001 master_9c967250 entity">
+            <div class="flex justify-between items-start mb-3">
+                <div>
+                    <span class="text-[10px] bg-gold/10 text-gold border border-gold/30 px-2 py-0.5 rounded font-bold mono uppercase">ENTITY</span>
+                    <h4 class="text-lg font-semibold mt-2 text-white">ACC8001</h4>
+                </div>
+                <span class="text-xs text-gray-500 mono">MASTER_9c967250</span>
+            </div>
+            
+            <div class="text-xs text-gray-400 mb-4">
+                <span class="font-bold mono block mb-1">RESOLVED ALIASES:</span>
+                <p class="text-gray-300 italic">"acc8001"</p>
+            </div>
+
+            <div class="grid grid-cols-3 gap-2 text-center text-xs bg-darkBg/60 p-3 rounded border border-outline/20 mb-4">
+                <div>
+                    <p class="text-gray-500 font-bold mono uppercase">Degree</p>
+                    <p class="text-white font-bold mono mt-0.5">0.0435</p>
+                </div>
+                <div>
+                    <p class="text-gray-500 font-bold mono uppercase">Betweenness</p>
+                    <p class="text-white font-bold mono mt-0.5">0.0000</p>
+                </div>
+                <div>
+                    <p class="text-gray-500 font-bold mono uppercase">PageRank</p>
+                    <p class="text-white font-bold mono mt-0.5">0.0125</p>
+                </div>
+            </div>
+
+            <div class="text-xs text-gray-400">
+                <div class="flex justify-between mb-1.5">
+                    <span>Relations: <strong class="text-white mono">2</strong></span>
+                    <span>Sources: <strong class="text-white mono">1</strong></span>
+                </div>
+                <span class="font-bold mono block mb-1">RELATION PATTERNS:</span>
+                <p class="text-gray-300 mono text-[10px]">TRANSFERRED_TO</p>
+            </div>
+        </div>
+        
+        <div class="profile-card panel p-6 rounded-lg border border-outline/20" data-name="acc3001 master_0435e1b0 entity">
+            <div class="flex justify-between items-start mb-3">
+                <div>
+                    <span class="text-[10px] bg-gold/10 text-gold border border-gold/30 px-2 py-0.5 rounded font-bold mono uppercase">ENTITY</span>
+                    <h4 class="text-lg font-semibold mt-2 text-white">ACC3001</h4>
+                </div>
+                <span class="text-xs text-gray-500 mono">MASTER_0435e1b0</span>
+            </div>
+            
+            <div class="text-xs text-gray-400 mb-4">
+                <span class="font-bold mono block mb-1">RESOLVED ALIASES:</span>
+                <p class="text-gray-300 italic">"acc3001"</p>
+            </div>
+
+            <div class="grid grid-cols-3 gap-2 text-center text-xs bg-darkBg/60 p-3 rounded border border-outline/20 mb-4">
+                <div>
+                    <p class="text-gray-500 font-bold mono uppercase">Degree</p>
+                    <p class="text-white font-bold mono mt-0.5">0.0435</p>
+                </div>
+                <div>
+                    <p class="text-gray-500 font-bold mono uppercase">Betweenness</p>
+                    <p class="text-white font-bold mono mt-0.5">0.0000</p>
+                </div>
+                <div>
+                    <p class="text-gray-500 font-bold mono uppercase">PageRank</p>
+                    <p class="text-white font-bold mono mt-0.5">0.0125</p>
+                </div>
+            </div>
+
+            <div class="text-xs text-gray-400">
+                <div class="flex justify-between mb-1.5">
+                    <span>Relations: <strong class="text-white mono">2</strong></span>
+                    <span>Sources: <strong class="text-white mono">1</strong></span>
+                </div>
+                <span class="font-bold mono block mb-1">RELATION PATTERNS:</span>
+                <p class="text-gray-300 mono text-[10px]">TRANSFERRED_TO</p>
+            </div>
+        </div>
+        
+        <div class="profile-card panel p-6 rounded-lg border border-outline/20" data-name="acc2001 master_d7c86824 entity">
+            <div class="flex justify-between items-start mb-3">
+                <div>
+                    <span class="text-[10px] bg-gold/10 text-gold border border-gold/30 px-2 py-0.5 rounded font-bold mono uppercase">ENTITY</span>
+                    <h4 class="text-lg font-semibold mt-2 text-white">ACC2001</h4>
+                </div>
+                <span class="text-xs text-gray-500 mono">MASTER_d7c86824</span>
+            </div>
+            
+            <div class="text-xs text-gray-400 mb-4">
+                <span class="font-bold mono block mb-1">RESOLVED ALIASES:</span>
+                <p class="text-gray-300 italic">"acc2001"</p>
+            </div>
+
+            <div class="grid grid-cols-3 gap-2 text-center text-xs bg-darkBg/60 p-3 rounded border border-outline/20 mb-4">
+                <div>
+                    <p class="text-gray-500 font-bold mono uppercase">Degree</p>
+                    <p class="text-white font-bold mono mt-0.5">0.0435</p>
+                </div>
+                <div>
+                    <p class="text-gray-500 font-bold mono uppercase">Betweenness</p>
+                    <p class="text-white font-bold mono mt-0.5">0.0000</p>
+                </div>
+                <div>
+                    <p class="text-gray-500 font-bold mono uppercase">PageRank</p>
+                    <p class="text-white font-bold mono mt-0.5">0.0125</p>
+                </div>
+            </div>
+
+            <div class="text-xs text-gray-400">
+                <div class="flex justify-between mb-1.5">
+                    <span>Relations: <strong class="text-white mono">2</strong></span>
+                    <span>Sources: <strong class="text-white mono">1</strong></span>
+                </div>
+                <span class="font-bold mono block mb-1">RELATION PATTERNS:</span>
+                <p class="text-gray-300 mono text-[10px]">TRANSFERRED_TO</p>
+            </div>
+        </div>
+        
+        <div class="profile-card panel p-6 rounded-lg border border-outline/20" data-name="acc4001 master_03b528ae entity">
+            <div class="flex justify-between items-start mb-3">
+                <div>
+                    <span class="text-[10px] bg-gold/10 text-gold border border-gold/30 px-2 py-0.5 rounded font-bold mono uppercase">ENTITY</span>
+                    <h4 class="text-lg font-semibold mt-2 text-white">ACC4001</h4>
+                </div>
+                <span class="text-xs text-gray-500 mono">MASTER_03b528ae</span>
+            </div>
+            
+            <div class="text-xs text-gray-400 mb-4">
+                <span class="font-bold mono block mb-1">RESOLVED ALIASES:</span>
+                <p class="text-gray-300 italic">"acc4001"</p>
+            </div>
+
+            <div class="grid grid-cols-3 gap-2 text-center text-xs bg-darkBg/60 p-3 rounded border border-outline/20 mb-4">
+                <div>
+                    <p class="text-gray-500 font-bold mono uppercase">Degree</p>
+                    <p class="text-white font-bold mono mt-0.5">0.0435</p>
+                </div>
+                <div>
+                    <p class="text-gray-500 font-bold mono uppercase">Betweenness</p>
+                    <p class="text-white font-bold mono mt-0.5">0.0000</p>
+                </div>
+                <div>
+                    <p class="text-gray-500 font-bold mono uppercase">PageRank</p>
+                    <p class="text-white font-bold mono mt-0.5">0.0125</p>
+                </div>
+            </div>
+
+            <div class="text-xs text-gray-400">
+                <div class="flex justify-between mb-1.5">
+                    <span>Relations: <strong class="text-white mono">2</strong></span>
+                    <span>Sources: <strong class="text-white mono">1</strong></span>
+                </div>
+                <span class="font-bold mono block mb-1">RELATION PATTERNS:</span>
+                <p class="text-gray-300 mono text-[10px]">TRANSFERRED_TO</p>
+            </div>
+        </div>
+        
+        <div class="profile-card panel p-6 rounded-lg border border-outline/20" data-name="acc6001 master_f3d6d2a8 entity">
+            <div class="flex justify-between items-start mb-3">
+                <div>
+                    <span class="text-[10px] bg-gold/10 text-gold border border-gold/30 px-2 py-0.5 rounded font-bold mono uppercase">ENTITY</span>
+                    <h4 class="text-lg font-semibold mt-2 text-white">ACC6001</h4>
+                </div>
+                <span class="text-xs text-gray-500 mono">MASTER_f3d6d2a8</span>
+            </div>
+            
+            <div class="text-xs text-gray-400 mb-4">
+                <span class="font-bold mono block mb-1">RESOLVED ALIASES:</span>
+                <p class="text-gray-300 italic">"acc6001"</p>
+            </div>
+
+            <div class="grid grid-cols-3 gap-2 text-center text-xs bg-darkBg/60 p-3 rounded border border-outline/20 mb-4">
+                <div>
+                    <p class="text-gray-500 font-bold mono uppercase">Degree</p>
+                    <p class="text-white font-bold mono mt-0.5">0.0435</p>
+                </div>
+                <div>
+                    <p class="text-gray-500 font-bold mono uppercase">Betweenness</p>
+                    <p class="text-white font-bold mono mt-0.5">0.0000</p>
+                </div>
+                <div>
+                    <p class="text-gray-500 font-bold mono uppercase">PageRank</p>
+                    <p class="text-white font-bold mono mt-0.5">0.0125</p>
+                </div>
+            </div>
+
+            <div class="text-xs text-gray-400">
+                <div class="flex justify-between mb-1.5">
+                    <span>Relations: <strong class="text-white mono">2</strong></span>
+                    <span>Sources: <strong class="text-white mono">1</strong></span>
+                </div>
+                <span class="font-bold mono block mb-1">RELATION PATTERNS:</span>
+                <p class="text-gray-300 mono text-[10px]">TRANSFERRED_TO</p>
+            </div>
+        </div>
+        
+        <div class="profile-card panel p-6 rounded-lg border border-outline/20" data-name="acc7001 master_5945757a entity">
+            <div class="flex justify-between items-start mb-3">
+                <div>
+                    <span class="text-[10px] bg-gold/10 text-gold border border-gold/30 px-2 py-0.5 rounded font-bold mono uppercase">ENTITY</span>
+                    <h4 class="text-lg font-semibold mt-2 text-white">ACC7001</h4>
+                </div>
+                <span class="text-xs text-gray-500 mono">MASTER_5945757a</span>
+            </div>
+            
+            <div class="text-xs text-gray-400 mb-4">
+                <span class="font-bold mono block mb-1">RESOLVED ALIASES:</span>
+                <p class="text-gray-300 italic">"acc7001"</p>
+            </div>
+
+            <div class="grid grid-cols-3 gap-2 text-center text-xs bg-darkBg/60 p-3 rounded border border-outline/20 mb-4">
+                <div>
+                    <p class="text-gray-500 font-bold mono uppercase">Degree</p>
+                    <p class="text-white font-bold mono mt-0.5">0.0435</p>
+                </div>
+                <div>
+                    <p class="text-gray-500 font-bold mono uppercase">Betweenness</p>
+                    <p class="text-white font-bold mono mt-0.5">0.0000</p>
+                </div>
+                <div>
+                    <p class="text-gray-500 font-bold mono uppercase">PageRank</p>
+                    <p class="text-white font-bold mono mt-0.5">0.0125</p>
+                </div>
+            </div>
+
+            <div class="text-xs text-gray-400">
+                <div class="flex justify-between mb-1.5">
+                    <span>Relations: <strong class="text-white mono">2</strong></span>
+                    <span>Sources: <strong class="text-white mono">1</strong></span>
+                </div>
+                <span class="font-bold mono block mb-1">RELATION PATTERNS:</span>
+                <p class="text-gray-300 mono text-[10px]">TRANSFERRED_TO</p>
+            </div>
+        </div>
+        
+        <div class="profile-card panel p-6 rounded-lg border border-outline/20" data-name="acc5001 master_2eb1ee24 entity">
+            <div class="flex justify-between items-start mb-3">
+                <div>
+                    <span class="text-[10px] bg-gold/10 text-gold border border-gold/30 px-2 py-0.5 rounded font-bold mono uppercase">ENTITY</span>
+                    <h4 class="text-lg font-semibold mt-2 text-white">ACC5001</h4>
+                </div>
+                <span class="text-xs text-gray-500 mono">MASTER_2eb1ee24</span>
+            </div>
+            
+            <div class="text-xs text-gray-400 mb-4">
+                <span class="font-bold mono block mb-1">RESOLVED ALIASES:</span>
+                <p class="text-gray-300 italic">"acc5001"</p>
+            </div>
+
+            <div class="grid grid-cols-3 gap-2 text-center text-xs bg-darkBg/60 p-3 rounded border border-outline/20 mb-4">
+                <div>
+                    <p class="text-gray-500 font-bold mono uppercase">Degree</p>
+                    <p class="text-white font-bold mono mt-0.5">0.0435</p>
+                </div>
+                <div>
+                    <p class="text-gray-500 font-bold mono uppercase">Betweenness</p>
+                    <p class="text-white font-bold mono mt-0.5">0.0000</p>
+                </div>
+                <div>
+                    <p class="text-gray-500 font-bold mono uppercase">PageRank</p>
+                    <p class="text-white font-bold mono mt-0.5">0.0125</p>
+                </div>
+            </div>
+
+            <div class="text-xs text-gray-400">
+                <div class="flex justify-between mb-1.5">
+                    <span>Relations: <strong class="text-white mono">2</strong></span>
+                    <span>Sources: <strong class="text-white mono">1</strong></span>
+                </div>
+                <span class="font-bold mono block mb-1">RELATION PATTERNS:</span>
+                <p class="text-gray-300 mono text-[10px]">TRANSFERRED_TO</p>
+            </div>
+        </div>
+        
+        <div class="profile-card panel p-6 rounded-lg border border-outline/20" data-name="park street master_a8a8a6cf place">
+            <div class="flex justify-between items-start mb-3">
+                <div>
+                    <span class="text-[10px] bg-gold/10 text-gold border border-gold/30 px-2 py-0.5 rounded font-bold mono uppercase">PLACE</span>
+                    <h4 class="text-lg font-semibold mt-2 text-white">Park Street</h4>
+                </div>
+                <span class="text-xs text-gray-500 mono">MASTER_a8a8a6cf</span>
+            </div>
+            
+            <div class="text-xs text-gray-400 mb-4">
+                <span class="font-bold mono block mb-1">RESOLVED ALIASES:</span>
+                <p class="text-gray-300 italic">"park street"</p>
+            </div>
+
+            <div class="grid grid-cols-3 gap-2 text-center text-xs bg-darkBg/60 p-3 rounded border border-outline/20 mb-4">
+                <div>
+                    <p class="text-gray-500 font-bold mono uppercase">Degree</p>
+                    <p class="text-white font-bold mono mt-0.5">0.0217</p>
+                </div>
+                <div>
+                    <p class="text-gray-500 font-bold mono uppercase">Betweenness</p>
+                    <p class="text-white font-bold mono mt-0.5">0.0000</p>
+                </div>
+                <div>
+                    <p class="text-gray-500 font-bold mono uppercase">PageRank</p>
+                    <p class="text-white font-bold mono mt-0.5">0.0110</p>
+                </div>
+            </div>
+
+            <div class="text-xs text-gray-400">
+                <div class="flex justify-between mb-1.5">
+                    <span>Relations: <strong class="text-white mono">1</strong></span>
+                    <span>Sources: <strong class="text-white mono">1</strong></span>
+                </div>
+                <span class="font-bold mono block mb-1">RELATION PATTERNS:</span>
+                <p class="text-gray-300 mono text-[10px]">LOCATED_AT</p>
+            </div>
+        </div>
+        
+        <div class="profile-card panel p-6 rounded-lg border border-outline/20" data-name="cell tower (twr_kol_105) master_c3de5e12 infrastructure">
+            <div class="flex justify-between items-start mb-3">
+                <div>
+                    <span class="text-[10px] bg-gold/10 text-gold border border-gold/30 px-2 py-0.5 rounded font-bold mono uppercase">INFRASTRUCTURE</span>
+                    <h4 class="text-lg font-semibold mt-2 text-white">Cell Tower (Twr_Kol_105)</h4>
+                </div>
+                <span class="text-xs text-gray-500 mono">MASTER_c3de5e12</span>
+            </div>
+            
+            <div class="text-xs text-gray-400 mb-4">
+                <span class="font-bold mono block mb-1">RESOLVED ALIASES:</span>
+                <p class="text-gray-300 italic">"cell tower (twr_kol_105)"</p>
+            </div>
+
+            <div class="grid grid-cols-3 gap-2 text-center text-xs bg-darkBg/60 p-3 rounded border border-outline/20 mb-4">
+                <div>
+                    <p class="text-gray-500 font-bold mono uppercase">Degree</p>
+                    <p class="text-white font-bold mono mt-0.5">0.0217</p>
+                </div>
+                <div>
+                    <p class="text-gray-500 font-bold mono uppercase">Betweenness</p>
+                    <p class="text-white font-bold mono mt-0.5">0.0000</p>
+                </div>
+                <div>
+                    <p class="text-gray-500 font-bold mono uppercase">PageRank</p>
+                    <p class="text-white font-bold mono mt-0.5">0.0141</p>
+                </div>
+            </div>
+
+            <div class="text-xs text-gray-400">
+                <div class="flex justify-between mb-1.5">
+                    <span>Relations: <strong class="text-white mono">3</strong></span>
+                    <span>Sources: <strong class="text-white mono">1</strong></span>
+                </div>
+                <span class="font-bold mono block mb-1">RELATION PATTERNS:</span>
+                <p class="text-gray-300 mono text-[10px]">CONNECTED_TO_TOWER</p>
+            </div>
+        </div>
+        
+        <div class="profile-card panel p-6 rounded-lg border border-outline/20" data-name="cell tower (twr_kol_210) master_0df9e8ff infrastructure">
+            <div class="flex justify-between items-start mb-3">
+                <div>
+                    <span class="text-[10px] bg-gold/10 text-gold border border-gold/30 px-2 py-0.5 rounded font-bold mono uppercase">INFRASTRUCTURE</span>
+                    <h4 class="text-lg font-semibold mt-2 text-white">Cell Tower (Twr_Kol_210)</h4>
+                </div>
+                <span class="text-xs text-gray-500 mono">MASTER_0df9e8ff</span>
+            </div>
+            
+            <div class="text-xs text-gray-400 mb-4">
+                <span class="font-bold mono block mb-1">RESOLVED ALIASES:</span>
+                <p class="text-gray-300 italic">"cell tower (twr_kol_210)"</p>
+            </div>
+
+            <div class="grid grid-cols-3 gap-2 text-center text-xs bg-darkBg/60 p-3 rounded border border-outline/20 mb-4">
+                <div>
+                    <p class="text-gray-500 font-bold mono uppercase">Degree</p>
+                    <p class="text-white font-bold mono mt-0.5">0.0217</p>
+                </div>
+                <div>
+                    <p class="text-gray-500 font-bold mono uppercase">Betweenness</p>
+                    <p class="text-white font-bold mono mt-0.5">0.0000</p>
+                </div>
+                <div>
+                    <p class="text-gray-500 font-bold mono uppercase">PageRank</p>
+                    <p class="text-white font-bold mono mt-0.5">0.0124</p>
+                </div>
+            </div>
+
+            <div class="text-xs text-gray-400">
+                <div class="flex justify-between mb-1.5">
+                    <span>Relations: <strong class="text-white mono">3</strong></span>
+                    <span>Sources: <strong class="text-white mono">1</strong></span>
+                </div>
+                <span class="font-bold mono block mb-1">RELATION PATTERNS:</span>
+                <p class="text-gray-300 mono text-[10px]">CONNECTED_TO_TOWER</p>
+            </div>
+        </div>
+        
+        <div class="profile-card panel p-6 rounded-lg border border-outline/20" data-name="cell tower (twr_kol_315) master_2660ab98 infrastructure">
+            <div class="flex justify-between items-start mb-3">
+                <div>
+                    <span class="text-[10px] bg-gold/10 text-gold border border-gold/30 px-2 py-0.5 rounded font-bold mono uppercase">INFRASTRUCTURE</span>
+                    <h4 class="text-lg font-semibold mt-2 text-white">Cell Tower (Twr_Kol_315)</h4>
+                </div>
+                <span class="text-xs text-gray-500 mono">MASTER_2660ab98</span>
+            </div>
+            
+            <div class="text-xs text-gray-400 mb-4">
+                <span class="font-bold mono block mb-1">RESOLVED ALIASES:</span>
+                <p class="text-gray-300 italic">"cell tower (twr_kol_315)"</p>
+            </div>
+
+            <div class="grid grid-cols-3 gap-2 text-center text-xs bg-darkBg/60 p-3 rounded border border-outline/20 mb-4">
+                <div>
+                    <p class="text-gray-500 font-bold mono uppercase">Degree</p>
+                    <p class="text-white font-bold mono mt-0.5">0.0217</p>
+                </div>
+                <div>
+                    <p class="text-gray-500 font-bold mono uppercase">Betweenness</p>
+                    <p class="text-white font-bold mono mt-0.5">0.0000</p>
+                </div>
+                <div>
+                    <p class="text-gray-500 font-bold mono uppercase">PageRank</p>
+                    <p class="text-white font-bold mono mt-0.5">0.0265</p>
+                </div>
+            </div>
+
+            <div class="text-xs text-gray-400">
+                <div class="flex justify-between mb-1.5">
+                    <span>Relations: <strong class="text-white mono">2</strong></span>
+                    <span>Sources: <strong class="text-white mono">1</strong></span>
+                </div>
+                <span class="font-bold mono block mb-1">RELATION PATTERNS:</span>
+                <p class="text-gray-300 mono text-[10px]">CONNECTED_TO_TOWER</p>
+            </div>
+        </div>
+        
+        <div class="profile-card panel p-6 rounded-lg border border-outline/20" data-name="master_e6f4f60a master_e6f4f60a person">
+            <div class="flex justify-between items-start mb-3">
+                <div>
+                    <span class="text-[10px] bg-gold/10 text-gold border border-gold/30 px-2 py-0.5 rounded font-bold mono uppercase">PERSON</span>
+                    <h4 class="text-lg font-semibold mt-2 text-white">MASTER_e6f4f60a</h4>
+                </div>
+                <span class="text-xs text-gray-500 mono">MASTER_e6f4f60a</span>
+            </div>
+            
+            <div class="text-xs text-gray-400 mb-4">
+                <span class="font-bold mono block mb-1">RESOLVED ALIASES:</span>
+                <p class="text-gray-300 italic">""</p>
+            </div>
+
+            <div class="grid grid-cols-3 gap-2 text-center text-xs bg-darkBg/60 p-3 rounded border border-outline/20 mb-4">
+                <div>
+                    <p class="text-gray-500 font-bold mono uppercase">Degree</p>
+                    <p class="text-white font-bold mono mt-0.5">0.0217</p>
+                </div>
+                <div>
+                    <p class="text-gray-500 font-bold mono uppercase">Betweenness</p>
+                    <p class="text-white font-bold mono mt-0.5">0.0000</p>
+                </div>
+                <div>
+                    <p class="text-gray-500 font-bold mono uppercase">PageRank</p>
+                    <p class="text-white font-bold mono mt-0.5">0.0125</p>
+                </div>
+            </div>
+
+            <div class="text-xs text-gray-400">
+                <div class="flex justify-between mb-1.5">
+                    <span>Relations: <strong class="text-white mono">1</strong></span>
+                    <span>Sources: <strong class="text-white mono">1</strong></span>
+                </div>
+                <span class="font-bold mono block mb-1">RELATION PATTERNS:</span>
+                <p class="text-gray-300 mono text-[10px]">MENTIONED</p>
+            </div>
+        </div>
+        
+        <div class="profile-card panel p-6 rounded-lg border border-outline/20" data-name="email_address_cc44d0c6 master_c824d68e entity">
+            <div class="flex justify-between items-start mb-3">
+                <div>
+                    <span class="text-[10px] bg-gold/10 text-gold border border-gold/30 px-2 py-0.5 rounded font-bold mono uppercase">ENTITY</span>
+                    <h4 class="text-lg font-semibold mt-2 text-white">Email_Address_Cc44D0C6</h4>
+                </div>
+                <span class="text-xs text-gray-500 mono">MASTER_c824d68e</span>
+            </div>
+            
+            <div class="text-xs text-gray-400 mb-4">
+                <span class="font-bold mono block mb-1">RESOLVED ALIASES:</span>
+                <p class="text-gray-300 italic">"email_address_cc44d0c6"</p>
+            </div>
+
+            <div class="grid grid-cols-3 gap-2 text-center text-xs bg-darkBg/60 p-3 rounded border border-outline/20 mb-4">
+                <div>
+                    <p class="text-gray-500 font-bold mono uppercase">Degree</p>
+                    <p class="text-white font-bold mono mt-0.5">0.0217</p>
+                </div>
+                <div>
+                    <p class="text-gray-500 font-bold mono uppercase">Betweenness</p>
+                    <p class="text-white font-bold mono mt-0.5">0.0000</p>
+                </div>
+                <div>
+                    <p class="text-gray-500 font-bold mono uppercase">PageRank</p>
+                    <p class="text-white font-bold mono mt-0.5">0.0125</p>
+                </div>
+            </div>
+
+            <div class="text-xs text-gray-400">
+                <div class="flex justify-between mb-1.5">
+                    <span>Relations: <strong class="text-white mono">1</strong></span>
+                    <span>Sources: <strong class="text-white mono">1</strong></span>
+                </div>
+                <span class="font-bold mono block mb-1">RELATION PATTERNS:</span>
+                <p class="text-gray-300 mono text-[10px]">MENTIONED</p>
+            </div>
+        </div>
+        
+        <div class="profile-card panel p-6 rounded-lg border border-outline/20" data-name="email_address_5029504c master_277d526f entity">
+            <div class="flex justify-between items-start mb-3">
+                <div>
+                    <span class="text-[10px] bg-gold/10 text-gold border border-gold/30 px-2 py-0.5 rounded font-bold mono uppercase">ENTITY</span>
+                    <h4 class="text-lg font-semibold mt-2 text-white">Email_Address_5029504C</h4>
+                </div>
+                <span class="text-xs text-gray-500 mono">MASTER_277d526f</span>
+            </div>
+            
+            <div class="text-xs text-gray-400 mb-4">
+                <span class="font-bold mono block mb-1">RESOLVED ALIASES:</span>
+                <p class="text-gray-300 italic">"email_address_5029504c"</p>
+            </div>
+
+            <div class="grid grid-cols-3 gap-2 text-center text-xs bg-darkBg/60 p-3 rounded border border-outline/20 mb-4">
+                <div>
+                    <p class="text-gray-500 font-bold mono uppercase">Degree</p>
+                    <p class="text-white font-bold mono mt-0.5">0.0217</p>
+                </div>
+                <div>
+                    <p class="text-gray-500 font-bold mono uppercase">Betweenness</p>
+                    <p class="text-white font-bold mono mt-0.5">0.0000</p>
+                </div>
+                <div>
+                    <p class="text-gray-500 font-bold mono uppercase">PageRank</p>
+                    <p class="text-white font-bold mono mt-0.5">0.0125</p>
+                </div>
+            </div>
+
+            <div class="text-xs text-gray-400">
+                <div class="flex justify-between mb-1.5">
+                    <span>Relations: <strong class="text-white mono">1</strong></span>
+                    <span>Sources: <strong class="text-white mono">1</strong></span>
+                </div>
+                <span class="font-bold mono block mb-1">RELATION PATTERNS:</span>
+                <p class="text-gray-300 mono text-[10px]">MENTIONED</p>
+            </div>
+        </div>
+        
+        <div class="profile-card panel p-6 rounded-lg border border-outline/20" data-name="twitter master_bc85a6b2 infrastructure">
+            <div class="flex justify-between items-start mb-3">
+                <div>
+                    <span class="text-[10px] bg-gold/10 text-gold border border-gold/30 px-2 py-0.5 rounded font-bold mono uppercase">INFRASTRUCTURE</span>
+                    <h4 class="text-lg font-semibold mt-2 text-white">Twitter</h4>
+                </div>
+                <span class="text-xs text-gray-500 mono">MASTER_bc85a6b2</span>
+            </div>
+            
+            <div class="text-xs text-gray-400 mb-4">
+                <span class="font-bold mono block mb-1">RESOLVED ALIASES:</span>
+                <p class="text-gray-300 italic">"twitter"</p>
+            </div>
+
+            <div class="grid grid-cols-3 gap-2 text-center text-xs bg-darkBg/60 p-3 rounded border border-outline/20 mb-4">
+                <div>
+                    <p class="text-gray-500 font-bold mono uppercase">Degree</p>
+                    <p class="text-white font-bold mono mt-0.5">0.0217</p>
+                </div>
+                <div>
+                    <p class="text-gray-500 font-bold mono uppercase">Betweenness</p>
+                    <p class="text-white font-bold mono mt-0.5">0.0000</p>
+                </div>
+                <div>
+                    <p class="text-gray-500 font-bold mono uppercase">PageRank</p>
+                    <p class="text-white font-bold mono mt-0.5">0.0169</p>
+                </div>
+            </div>
+
+            <div class="text-xs text-gray-400">
+                <div class="flex justify-between mb-1.5">
+                    <span>Relations: <strong class="text-white mono">2</strong></span>
+                    <span>Sources: <strong class="text-white mono">2</strong></span>
+                </div>
+                <span class="font-bold mono block mb-1">RELATION PATTERNS:</span>
+                <p class="text-gray-300 mono text-[10px]">POSTED_ON</p>
+            </div>
+        </div>
+        
+        <div class="profile-card panel p-6 rounded-lg border border-outline/20" data-name="instagram master_a811d74e infrastructure">
+            <div class="flex justify-between items-start mb-3">
+                <div>
+                    <span class="text-[10px] bg-gold/10 text-gold border border-gold/30 px-2 py-0.5 rounded font-bold mono uppercase">INFRASTRUCTURE</span>
+                    <h4 class="text-lg font-semibold mt-2 text-white">Instagram</h4>
+                </div>
+                <span class="text-xs text-gray-500 mono">MASTER_a811d74e</span>
+            </div>
+            
+            <div class="text-xs text-gray-400 mb-4">
+                <span class="font-bold mono block mb-1">RESOLVED ALIASES:</span>
+                <p class="text-gray-300 italic">"instagram"</p>
+            </div>
+
+            <div class="grid grid-cols-3 gap-2 text-center text-xs bg-darkBg/60 p-3 rounded border border-outline/20 mb-4">
+                <div>
+                    <p class="text-gray-500 font-bold mono uppercase">Degree</p>
+                    <p class="text-white font-bold mono mt-0.5">0.0217</p>
+                </div>
+                <div>
+                    <p class="text-gray-500 font-bold mono uppercase">Betweenness</p>
+                    <p class="text-white font-bold mono mt-0.5">0.0000</p>
+                </div>
+                <div>
+                    <p class="text-gray-500 font-bold mono uppercase">PageRank</p>
+                    <p class="text-white font-bold mono mt-0.5">0.0139</p>
+                </div>
+            </div>
+
+            <div class="text-xs text-gray-400">
+                <div class="flex justify-between mb-1.5">
+                    <span>Relations: <strong class="text-white mono">2</strong></span>
+                    <span>Sources: <strong class="text-white mono">2</strong></span>
+                </div>
+                <span class="font-bold mono block mb-1">RELATION PATTERNS:</span>
+                <p class="text-gray-300 mono text-[10px]">POSTED_ON</p>
+            </div>
+        </div>
+        
+        <div class="profile-card panel p-6 rounded-lg border border-outline/20" data-name="facebook master_ed885df3 infrastructure">
+            <div class="flex justify-between items-start mb-3">
+                <div>
+                    <span class="text-[10px] bg-gold/10 text-gold border border-gold/30 px-2 py-0.5 rounded font-bold mono uppercase">INFRASTRUCTURE</span>
+                    <h4 class="text-lg font-semibold mt-2 text-white">Facebook</h4>
+                </div>
+                <span class="text-xs text-gray-500 mono">MASTER_ed885df3</span>
+            </div>
+            
+            <div class="text-xs text-gray-400 mb-4">
+                <span class="font-bold mono block mb-1">RESOLVED ALIASES:</span>
+                <p class="text-gray-300 italic">"facebook"</p>
+            </div>
+
+            <div class="grid grid-cols-3 gap-2 text-center text-xs bg-darkBg/60 p-3 rounded border border-outline/20 mb-4">
+                <div>
+                    <p class="text-gray-500 font-bold mono uppercase">Degree</p>
+                    <p class="text-white font-bold mono mt-0.5">0.0217</p>
+                </div>
+                <div>
+                    <p class="text-gray-500 font-bold mono uppercase">Betweenness</p>
+                    <p class="text-white font-bold mono mt-0.5">0.0000</p>
+                </div>
+                <div>
+                    <p class="text-gray-500 font-bold mono uppercase">PageRank</p>
+                    <p class="text-white font-bold mono mt-0.5">0.0140</p>
+                </div>
+            </div>
+
+            <div class="text-xs text-gray-400">
+                <div class="flex justify-between mb-1.5">
+                    <span>Relations: <strong class="text-white mono">2</strong></span>
+                    <span>Sources: <strong class="text-white mono">2</strong></span>
+                </div>
+                <span class="font-bold mono block mb-1">RELATION PATTERNS:</span>
+                <p class="text-gray-300 mono text-[10px]">POSTED_ON</p>
+            </div>
+        </div>
+        
+        <div class="profile-card panel p-6 rounded-lg border border-outline/20" data-name="acc_hawala master_d551104f entity">
+            <div class="flex justify-between items-start mb-3">
+                <div>
+                    <span class="text-[10px] bg-gold/10 text-gold border border-gold/30 px-2 py-0.5 rounded font-bold mono uppercase">ENTITY</span>
+                    <h4 class="text-lg font-semibold mt-2 text-white">ACC_HAWALA</h4>
+                </div>
+                <span class="text-xs text-gray-500 mono">MASTER_d551104f</span>
+            </div>
+            
+            <div class="text-xs text-gray-400 mb-4">
+                <span class="font-bold mono block mb-1">RESOLVED ALIASES:</span>
+                <p class="text-gray-300 italic">"acc_hawala"</p>
+            </div>
+
+            <div class="grid grid-cols-3 gap-2 text-center text-xs bg-darkBg/60 p-3 rounded border border-outline/20 mb-4">
+                <div>
+                    <p class="text-gray-500 font-bold mono uppercase">Degree</p>
+                    <p class="text-white font-bold mono mt-0.5">0.0217</p>
+                </div>
+                <div>
+                    <p class="text-gray-500 font-bold mono uppercase">Betweenness</p>
+                    <p class="text-white font-bold mono mt-0.5">0.0000</p>
+                </div>
+                <div>
+                    <p class="text-gray-500 font-bold mono uppercase">PageRank</p>
+                    <p class="text-white font-bold mono mt-0.5">0.0265</p>
+                </div>
+            </div>
+
+            <div class="text-xs text-gray-400">
+                <div class="flex justify-between mb-1.5">
+                    <span>Relations: <strong class="text-white mono">1</strong></span>
+                    <span>Sources: <strong class="text-white mono">1</strong></span>
+                </div>
+                <span class="font-bold mono block mb-1">RELATION PATTERNS:</span>
+                <p class="text-gray-300 mono text-[10px]">TRANSFERRED_TO</p>
+            </div>
+        </div>
+        
+        <div class="profile-card panel p-6 rounded-lg border border-outline/20" data-name="master_1f959ec0 master_1f959ec0 entity">
+            <div class="flex justify-between items-start mb-3">
+                <div>
+                    <span class="text-[10px] bg-gold/10 text-gold border border-gold/30 px-2 py-0.5 rounded font-bold mono uppercase">ENTITY</span>
+                    <h4 class="text-lg font-semibold mt-2 text-white">MASTER_1f959ec0</h4>
+                </div>
+                <span class="text-xs text-gray-500 mono">MASTER_1f959ec0</span>
+            </div>
+            
+            <div class="text-xs text-gray-400 mb-4">
+                <span class="font-bold mono block mb-1">RESOLVED ALIASES:</span>
+                <p class="text-gray-300 italic">""</p>
+            </div>
+
+            <div class="grid grid-cols-3 gap-2 text-center text-xs bg-darkBg/60 p-3 rounded border border-outline/20 mb-4">
+                <div>
+                    <p class="text-gray-500 font-bold mono uppercase">Degree</p>
+                    <p class="text-white font-bold mono mt-0.5">0.0217</p>
+                </div>
+                <div>
+                    <p class="text-gray-500 font-bold mono uppercase">Betweenness</p>
+                    <p class="text-white font-bold mono mt-0.5">0.0000</p>
+                </div>
+                <div>
+                    <p class="text-gray-500 font-bold mono uppercase">PageRank</p>
+                    <p class="text-white font-bold mono mt-0.5">0.0141</p>
+                </div>
+            </div>
+
+            <div class="text-xs text-gray-400">
+                <div class="flex justify-between mb-1.5">
+                    <span>Relations: <strong class="text-white mono">1</strong></span>
+                    <span>Sources: <strong class="text-white mono">1</strong></span>
+                </div>
+                <span class="font-bold mono block mb-1">RELATION PATTERNS:</span>
+                <p class="text-gray-300 mono text-[10px]">DETECTED</p>
+            </div>
+        </div>
+        
+        <div class="profile-card panel p-6 rounded-lg border border-outline/20" data-name="master_31445d32 master_31445d32 entity">
+            <div class="flex justify-between items-start mb-3">
+                <div>
+                    <span class="text-[10px] bg-gold/10 text-gold border border-gold/30 px-2 py-0.5 rounded font-bold mono uppercase">ENTITY</span>
+                    <h4 class="text-lg font-semibold mt-2 text-white">MASTER_31445d32</h4>
+                </div>
+                <span class="text-xs text-gray-500 mono">MASTER_31445d32</span>
+            </div>
+            
+            <div class="text-xs text-gray-400 mb-4">
+                <span class="font-bold mono block mb-1">RESOLVED ALIASES:</span>
+                <p class="text-gray-300 italic">""</p>
+            </div>
+
+            <div class="grid grid-cols-3 gap-2 text-center text-xs bg-darkBg/60 p-3 rounded border border-outline/20 mb-4">
+                <div>
+                    <p class="text-gray-500 font-bold mono uppercase">Degree</p>
+                    <p class="text-white font-bold mono mt-0.5">0.0217</p>
+                </div>
+                <div>
+                    <p class="text-gray-500 font-bold mono uppercase">Betweenness</p>
+                    <p class="text-white font-bold mono mt-0.5">0.0000</p>
+                </div>
+                <div>
+                    <p class="text-gray-500 font-bold mono uppercase">PageRank</p>
+                    <p class="text-white font-bold mono mt-0.5">0.0141</p>
+                </div>
+            </div>
+
+            <div class="text-xs text-gray-400">
+                <div class="flex justify-between mb-1.5">
+                    <span>Relations: <strong class="text-white mono">1</strong></span>
+                    <span>Sources: <strong class="text-white mono">1</strong></span>
+                </div>
+                <span class="font-bold mono block mb-1">RELATION PATTERNS:</span>
+                <p class="text-gray-300 mono text-[10px]">DETECTED</p>
+            </div>
+        </div>
+        
+        <div class="profile-card panel p-6 rounded-lg border border-outline/20" data-name="master_a9dc4b8d master_a9dc4b8d entity">
+            <div class="flex justify-between items-start mb-3">
+                <div>
+                    <span class="text-[10px] bg-gold/10 text-gold border border-gold/30 px-2 py-0.5 rounded font-bold mono uppercase">ENTITY</span>
+                    <h4 class="text-lg font-semibold mt-2 text-white">MASTER_a9dc4b8d</h4>
+                </div>
+                <span class="text-xs text-gray-500 mono">MASTER_a9dc4b8d</span>
+            </div>
+            
+            <div class="text-xs text-gray-400 mb-4">
+                <span class="font-bold mono block mb-1">RESOLVED ALIASES:</span>
+                <p class="text-gray-300 italic">""</p>
+            </div>
+
+            <div class="grid grid-cols-3 gap-2 text-center text-xs bg-darkBg/60 p-3 rounded border border-outline/20 mb-4">
+                <div>
+                    <p class="text-gray-500 font-bold mono uppercase">Degree</p>
+                    <p class="text-white font-bold mono mt-0.5">0.0217</p>
+                </div>
+                <div>
+                    <p class="text-gray-500 font-bold mono uppercase">Betweenness</p>
+                    <p class="text-white font-bold mono mt-0.5">0.0000</p>
+                </div>
+                <div>
+                    <p class="text-gray-500 font-bold mono uppercase">PageRank</p>
+                    <p class="text-white font-bold mono mt-0.5">0.0141</p>
+                </div>
+            </div>
+
+            <div class="text-xs text-gray-400">
+                <div class="flex justify-between mb-1.5">
+                    <span>Relations: <strong class="text-white mono">1</strong></span>
+                    <span>Sources: <strong class="text-white mono">1</strong></span>
+                </div>
+                <span class="font-bold mono block mb-1">RELATION PATTERNS:</span>
+                <p class="text-gray-300 mono text-[10px]">DETECTED</p>
+            </div>
+        </div>
+        
+        <div class="profile-card panel p-6 rounded-lg border border-outline/20" data-name="kolkata master_5a11fc81 place">
+            <div class="flex justify-between items-start mb-3">
+                <div>
+                    <span class="text-[10px] bg-gold/10 text-gold border border-gold/30 px-2 py-0.5 rounded font-bold mono uppercase">PLACE</span>
+                    <h4 class="text-lg font-semibold mt-2 text-white">Kolkata</h4>
+                </div>
+                <span class="text-xs text-gray-500 mono">MASTER_5a11fc81</span>
+            </div>
+            
+            <div class="text-xs text-gray-400 mb-4">
+                <span class="font-bold mono block mb-1">RESOLVED ALIASES:</span>
+                <p class="text-gray-300 italic">"kolkata"</p>
+            </div>
+
+            <div class="grid grid-cols-3 gap-2 text-center text-xs bg-darkBg/60 p-3 rounded border border-outline/20 mb-4">
+                <div>
+                    <p class="text-gray-500 font-bold mono uppercase">Degree</p>
+                    <p class="text-white font-bold mono mt-0.5">0.0000</p>
+                </div>
+                <div>
+                    <p class="text-gray-500 font-bold mono uppercase">Betweenness</p>
+                    <p class="text-white font-bold mono mt-0.5">0.0000</p>
+                </div>
+                <div>
+                    <p class="text-gray-500 font-bold mono uppercase">PageRank</p>
+                    <p class="text-white font-bold mono mt-0.5">0.0110</p>
+                </div>
+            </div>
+
+            <div class="text-xs text-gray-400">
+                <div class="flex justify-between mb-1.5">
+                    <span>Relations: <strong class="text-white mono">0</strong></span>
+                    <span>Sources: <strong class="text-white mono">0</strong></span>
+                </div>
+                <span class="font-bold mono block mb-1">RELATION PATTERNS:</span>
+                <p class="text-gray-300 mono text-[10px]"></p>
+            </div>
+        </div>
+        
+        <div class="profile-card panel p-6 rounded-lg border border-outline/20" data-name="delhi master_08915f79 place">
+            <div class="flex justify-between items-start mb-3">
+                <div>
+                    <span class="text-[10px] bg-gold/10 text-gold border border-gold/30 px-2 py-0.5 rounded font-bold mono uppercase">PLACE</span>
+                    <h4 class="text-lg font-semibold mt-2 text-white">Delhi</h4>
+                </div>
+                <span class="text-xs text-gray-500 mono">MASTER_08915f79</span>
+            </div>
+            
+            <div class="text-xs text-gray-400 mb-4">
+                <span class="font-bold mono block mb-1">RESOLVED ALIASES:</span>
+                <p class="text-gray-300 italic">"delhi"</p>
+            </div>
+
+            <div class="grid grid-cols-3 gap-2 text-center text-xs bg-darkBg/60 p-3 rounded border border-outline/20 mb-4">
+                <div>
+                    <p class="text-gray-500 font-bold mono uppercase">Degree</p>
+                    <p class="text-white font-bold mono mt-0.5">0.0000</p>
+                </div>
+                <div>
+                    <p class="text-gray-500 font-bold mono uppercase">Betweenness</p>
+                    <p class="text-white font-bold mono mt-0.5">0.0000</p>
+                </div>
+                <div>
+                    <p class="text-gray-500 font-bold mono uppercase">PageRank</p>
+                    <p class="text-white font-bold mono mt-0.5">0.0110</p>
+                </div>
+            </div>
+
+            <div class="text-xs text-gray-400">
+                <div class="flex justify-between mb-1.5">
+                    <span>Relations: <strong class="text-white mono">0</strong></span>
+                    <span>Sources: <strong class="text-white mono">0</strong></span>
+                </div>
+                <span class="font-bold mono block mb-1">RELATION PATTERNS:</span>
+                <p class="text-gray-300 mono text-[10px]"></p>
+            </div>
+        </div>
+        
+        <div class="profile-card panel p-6 rounded-lg border border-outline/20" data-name="mumbai master_17f6b404 place">
+            <div class="flex justify-between items-start mb-3">
+                <div>
+                    <span class="text-[10px] bg-gold/10 text-gold border border-gold/30 px-2 py-0.5 rounded font-bold mono uppercase">PLACE</span>
+                    <h4 class="text-lg font-semibold mt-2 text-white">Mumbai</h4>
+                </div>
+                <span class="text-xs text-gray-500 mono">MASTER_17f6b404</span>
+            </div>
+            
+            <div class="text-xs text-gray-400 mb-4">
+                <span class="font-bold mono block mb-1">RESOLVED ALIASES:</span>
+                <p class="text-gray-300 italic">"mumbai"</p>
+            </div>
+
+            <div class="grid grid-cols-3 gap-2 text-center text-xs bg-darkBg/60 p-3 rounded border border-outline/20 mb-4">
+                <div>
+                    <p class="text-gray-500 font-bold mono uppercase">Degree</p>
+                    <p class="text-white font-bold mono mt-0.5">0.0000</p>
+                </div>
+                <div>
+                    <p class="text-gray-500 font-bold mono uppercase">Betweenness</p>
+                    <p class="text-white font-bold mono mt-0.5">0.0000</p>
+                </div>
+                <div>
+                    <p class="text-gray-500 font-bold mono uppercase">PageRank</p>
+                    <p class="text-white font-bold mono mt-0.5">0.0110</p>
+                </div>
+            </div>
+
+            <div class="text-xs text-gray-400">
+                <div class="flex justify-between mb-1.5">
+                    <span>Relations: <strong class="text-white mono">0</strong></span>
+                    <span>Sources: <strong class="text-white mono">0</strong></span>
+                </div>
+                <span class="font-bold mono block mb-1">RELATION PATTERNS:</span>
+                <p class="text-gray-300 mono text-[10px]"></p>
+            </div>
+        </div>
+        
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        // Tab switching logic
+        function showTab(tabId) {
+            const contents = document.querySelectorAll('.tab-content');
+            contents.forEach(content => {
+                content.classList.add('hidden');
+            });
+
+            const targetTab = document.getElementById('tab-' + tabId);
+            if (targetTab) {
+                if (tabId === 'financial-flows' || tabId === 'dashboard') {
+                    targetTab.classList.remove('hidden');
+                    targetTab.classList.add('grid');
+                } else {
+                    targetTab.classList.remove('hidden');
+                }
+            }
+
+            // Highlight active button
+            const buttons = document.querySelectorAll('.tab-btn');
+            buttons.forEach(btn => {
+                btn.className = "tab-btn px-4 py-2 rounded text-xs tracking-wider uppercase font-bold mono bg-surface border border-outline/30 hover:bg-outline/20 text-white";
+            });
+
+            const eventTarget = window.event ? window.event.target : null;
+            if (eventTarget) {
+                eventTarget.className = "tab-btn active px-4 py-2 rounded text-xs tracking-wider uppercase font-bold mono bg-gold text-black";
+            }
+        }
+
+        // Directory filtering
+        function filterDirectory() {
+            const val = document.getElementById('directorySearch').value.toLowerCase();
+            const cards = document.querySelectorAll('.profile-card');
+            
+            cards.forEach(card => {
+                const searchName = card.getAttribute('data-name');
+                if (searchName.includes(val)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        // Render Charts using CDN Chart.js
+        window.addEventListener('load', () => {
+            // Chart 1: Entity Types
+            const ctxEntity = document.getElementById('entityChart').getContext('2d');
+            new Chart(ctxEntity, {
+                type: 'bar',
+                data: {
+                    labels: ['ENTITY', 'PLACE', 'PERSON', 'INFRASTRUCTURE'],
+                    datasets: [{
+                        label: 'Entity Count',
+                        data: [15, 14, 9, 9],
+                        backgroundColor: 'rgba(254, 183, 0, 0.6)',
+                        borderColor: '#feb700',
+                        borderWidth: 1.5,
+                        borderRadius: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: { beginAtZero: true, grid: { color: 'rgba(136, 145, 157, 0.15)' }, ticks: { color: '#bec7d4' } },
+                        x: { grid: { display: false }, ticks: { color: '#bec7d4' } }
+                    },
+                    plugins: {
+                        legend: { display: false }
+                    }
+                }
+            });
+
+            // Chart 2: Relation Types
+            const ctxRelation = document.getElementById('relationChart').getContext('2d');
+            new Chart(ctxRelation, {
+                type: 'bar',
+                data: {
+                    labels: ['LOCATED_AT', 'MENTIONED', 'MESSAGED', 'CALLED', 'CONNECTED_TO_TOWER', 'TRANSFERRED_TO', 'MOVED_TO', 'POSTED_ON', 'MENTIONED_USER', 'DETECTED', 'TRANSFERRED_MONEY', 'EMAILED'],
+                    datasets: [{
+                        label: 'Relations',
+                        data: [24, 23, 17, 15, 15, 15, 13, 6, 4, 3, 1, 1],
+                        backgroundColor: 'rgba(56, 189, 248, 0.6)',
+                        borderColor: '#38bdf8',
+                        borderWidth: 1.5,
+                        borderRadius: 4
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: { beginAtZero: true, grid: { color: 'rgba(136, 145, 157, 0.15)' }, ticks: { color: '#bec7d4' } },
+                        y: { grid: { display: false }, ticks: { color: '#bec7d4' } }
+                    },
+                    plugins: {
+                        legend: { display: false }
+                    }
+                }
+            });
+
+            // Chart 3: Communication Types
+            const ctxComm = document.getElementById('commChart').getContext('2d');
+            new Chart(ctxComm, {
+                type: 'doughnut',
+                data: {
+                    labels: ['MESSAGED', 'CALLED', 'EMAILED'],
+                    datasets: [{
+                        data: [17, 15, 1],
+                        backgroundColor: [
+                            'rgba(14, 165, 233, 0.7)',
+                            'rgba(245, 158, 11, 0.7)',
+                            'rgba(239, 68, 68, 0.7)'
+                        ],
+                        borderColor: '#131314',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'right',
+                            labels: { color: '#bec7d4', font: { family: 'JetBrains Mono', size: 10 } }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>

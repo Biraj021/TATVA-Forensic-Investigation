@@ -22,7 +22,9 @@ from collections import Counter, defaultdict
 
 # Neo4j integration (optional — falls back to JSON if unavailable)
 try:
-    from neo4j_layer.queries import get_graph_data, is_neo4j_available
+    import sys
+    sys.path.insert(0, str(Path(__file__).parent.parent))
+    from db_helper.dp_helper import get_graph_data_from_neo4j, is_neo4j_available
     _NEO4J_IMPORTED = True
 except ImportError:
     _NEO4J_IMPORTED = False
@@ -56,7 +58,7 @@ def load_graph() -> dict:
     if _NEO4J_IMPORTED and is_neo4j_available():
         try:
             print("[timeline_reconstruction] Using Neo4j as data source.")
-            return get_graph_data()
+            return get_graph_data_from_neo4j()
         except Exception as e:
             print(f"[timeline_reconstruction] Neo4j failed ({e}), falling back to JSON.")
     print("[timeline_reconstruction] Using unified_graph.json (fallback).")

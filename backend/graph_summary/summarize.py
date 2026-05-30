@@ -17,7 +17,9 @@ from collections import Counter
 
 # Neo4j integration (optional — falls back to JSON if unavailable)
 try:
-    from neo4j_layer.queries import get_graph_data, is_neo4j_available
+    import sys
+    sys.path.insert(0, str(Path(__file__).parent.parent))
+    from db_helper.dp_helper import get_graph_data_from_neo4j, is_neo4j_available
     _NEO4J_IMPORTED = True
 except ImportError:
     _NEO4J_IMPORTED = False
@@ -56,13 +58,14 @@ def load_graph() -> dict:
     if _NEO4J_IMPORTED and is_neo4j_available():
         try:
             print("[graph_summary] Using Neo4j as data source.")
-            return get_graph_data()
+            return get_graph_data_from_neo4j()
         except Exception as e:
             print(f"[graph_summary] Neo4j failed ({e}), falling back to JSON.")
     # JSON fallback
     print("[graph_summary] Using unified_graph.json (fallback).")
     with open(GRAPH_PATH, "r", encoding="utf-8") as f:
         return json.load(f)
+
 
 
 # ---------------------------------------------------------------------------
