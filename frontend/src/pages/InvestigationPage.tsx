@@ -12,10 +12,24 @@ import ForceGraphKnowledgeGraph from '../components/ForceGraphKnowledgeGraph'
 import {
   type GraphRenderPayload,
   type GraphView,
+  type AssessmentsMap,
+  type EntityStatus,
   GRAPH_FILTERS,
   filterGraphData,
 } from '../types/graph'
 import type { ReconstructedTimeline, ReconstructedEvent } from '../types/timeline'
+
+// Hackathon scope: active case is hardcoded. Replace with routing state in production.
+const ACTIVE_CASE_ID = 'CASE001';
+
+const STATUS_OPTIONS: EntityStatus[] = ['ACTIVE', 'CLEARED', 'PERSON_OF_INTEREST', 'PRIORITY_TARGET'];
+
+const STATUS_COLORS: Record<EntityStatus, string> = {
+  ACTIVE:             '#ffdb9d',
+  CLEARED:            '#9ca3af',
+  PERSON_OF_INTEREST: '#f97316',
+  PRIORITY_TARGET:    '#ef4444',
+};
 
 type TabType = 'EXPLAINABILITY' | 'TIMELINE' | 'ASSISTANT'
 
@@ -31,12 +45,54 @@ export default function InvestigationPage() {
   const [graphLoading, setGraphLoading] = useState(true)
   const [graphError, setGraphError] = useState<string | null>(null)
 
+  // ── Assessment state ────────────────────────────────────────────────────
+  const [assessments, setAssessments] = useState<AssessmentsMap>({})
+  const [showCleared, setShowCleared] = useState(true)
+  // Entity detail panel: assessment edit state
+  const [detailStatus, setDetailStatus] = useState<EntityStatus>('ACTIVE')
+  const [detailReason, setDetailReason] = useState('')
+  const [savingAssessment, setSavingAssessment] = useState(false)
+
   useEffect(() => {
     fetch('http://localhost:8000/api/insights/suspects')
       .then(res => res.json())
       .then(data => setSuspects(data))
       .catch(err => console.error('Failed to fetch suspects', err))
   }, [])
+
+  // Fetch assessments on mount
+  useEffect(() => {
+    fetch(`http://localhost:8000/api/entity-assessments/${ACTIVE_CASE_ID}`)
+      .then(res => res.json())
+      .then((data: AssessmentsMap) => setAssessments(data))
+      .catch(err => console.error('Failed to fetch assessments', err))
+  }, [])
+
+  // Sync entity detail panel status when selection changes
+  useEffect(() => {
+    if (selectedEntity) {
+      const existing = assessments[selectedEntity.id]
+      setDetailStatus((existing?.status as EntityStatus) ?? 'ACTIVE')
+      setDetailReason(existing?.reason ?? '')
+    }
+  }, [selectedEntity, assessments])
+
+  // ── Assessment save helper ────────────────────────────────────────────
+  const saveAssessment = async (entityId: string, status: EntityStatus, reason?: string) => {
+    setSavingAssessment(true)
+    try {
+      await fetch('http://localhost:8000/api/entity-assessments', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ case_id: ACTIVE_CASE_ID, entity_id: entityId, status, reason: reason || null }),
+      })
+      setAssessments(prev => ({ ...prev, [entityId]: { status, reason } }))
+    } catch (err) {
+      console.error('Failed to save assessment', err)
+    } finally {
+      setSavingAssessment(false)
+    }
+  }
 
   // Fetch the full graph payload once on mount — never refetch on filter change
   useEffect(() => {
@@ -185,6 +241,9 @@ export default function InvestigationPage() {
               loading={graphLoading}
               error={graphError}
               onNodeClick={(node) => setSelectedEntity(node)}
+              assessments={assessments}
+              showCleared={showCleared}
+              onToggleCleared={setShowCleared}
             />
           </div>
 
@@ -280,6 +339,37 @@ export default function InvestigationPage() {
                         </ul>
                       </div>
                     )}
+                    {/* ── Investigator Assessment Section ── */}
+                    <div className="mt-4 border-t border-[#3f4852]/30 pt-3 space-y-2">
+                      <div style={{ fontFamily: 'JetBrains Mono', fontSize: '11px', color: '#bec7d4', letterSpacing: '0.05em', marginBottom: '6px' }}>INVESTIGATOR ASSESSMENT</div>
+                      <select
+                        value={detailStatus}
+                        onChange={e => setDetailStatus(e.target.value as EntityStatus)}
+                        className="w-full rounded px-2 py-1.5 text-xs outline-none border border-[#3f4852]/50 focus:border-[#feb700] transition-colors"
+                        style={{ background: '#1c1b1c', color: STATUS_COLORS[detailStatus], fontFamily: 'JetBrains Mono', fontWeight: 'bold' }}
+                      >
+                        {STATUS_OPTIONS.map(s => (
+                          <option key={s} value={s} style={{ color: STATUS_COLORS[s] }}>{s.replace(/_/g, ' ')}</option>
+                        ))}
+                      </select>
+                      <textarea
+                        value={detailReason}
+                        onChange={e => setDetailReason(e.target.value)}
+                        placeholder="Reason (optional)..."
+                        rows={2}
+                        className="w-full rounded px-2 py-1.5 text-xs outline-none border border-[#3f4852]/50 focus:border-[#feb700] transition-colors resize-none"
+                        style={{ background: '#1c1b1c', color: '#e5e2e3', fontFamily: 'Geist', fontSize: '12px' }}
+                      />
+                      <button
+                        onClick={() => saveAssessment(selectedEntity.id, detailStatus, detailReason)}
+                        disabled={savingAssessment}
+                        className="w-full py-2 rounded flex items-center justify-center gap-2 font-bold uppercase tracking-wider hover:brightness-110 active:scale-[0.98] transition-all disabled:opacity-50"
+                        style={{ background: '#feb700', color: '#412d00', fontFamily: 'JetBrains Mono', fontSize: '11px' }}
+                      >
+                        <span className="material-symbols-outlined" style={{ fontSize: '14px' }}>save</span>
+                        {savingAssessment ? 'Saving...' : 'Save Assessment'}
+                      </button>
+                    </div>
                   </div>
                 ) : (
                   <div className="glass-panel p-4 rounded-lg relative overflow-hidden" style={{ border: '1px solid rgba(152,203,255,0.2)' }}>
@@ -337,12 +427,12 @@ export default function InvestigationPage() {
                     <h3 className="uppercase tracking-widest border-b border-[#3f4852]/20 pb-2 mb-4" style={{ fontFamily: 'JetBrains Mono', fontSize: '12px', color: '#bec7d4' }}>Suspect Profiles</h3>
                     <div className="space-y-3">
                       {suspects.map((s, i) => (
-                        <div 
-                          key={i} 
+                        <div
+                          key={i}
                           onClick={() => setSelectedEntity({ id: s.master_id, name: s.name, type: 'PERSON', val: s.identifiers[0] })}
                           className={`p-3 rounded border transition-all cursor-pointer ${
-                            selectedEntity?.id === s.master_id 
-                              ? 'bg-[#feb700]/10 border-[#feb700]' 
+                            selectedEntity?.id === s.master_id
+                              ? 'bg-[#feb700]/10 border-[#feb700]'
                               : 'bg-[#201f20]/40 border-[#3f4852]/30 hover:border-[#feb700]/50'
                           }`}
                         >
@@ -350,7 +440,25 @@ export default function InvestigationPage() {
                             <span style={{ fontFamily: 'Geist', fontSize: '14px', fontWeight: '600', color: '#e5e2e3' }}>{s.name}</span>
                             <span style={{ fontFamily: 'JetBrains Mono', fontSize: '12px', color: '#ffb4ab', fontWeight: 'bold' }}>{s.risk_score}% RISK</span>
                           </div>
-                          <p style={{ fontFamily: 'JetBrains Mono', fontSize: '10px', color: '#bec7d4' }}>Centrality: {s.degree_centrality}</p>
+                          <p style={{ fontFamily: 'JetBrains Mono', fontSize: '10px', color: '#bec7d4', marginBottom: '6px' }}>Centrality: {s.degree_centrality}</p>
+                          {/* Status dropdown */}
+                          <div onClick={e => e.stopPropagation()}>
+                            <select
+                              value={assessments[s.master_id]?.status ?? 'ACTIVE'}
+                              onChange={e => saveAssessment(s.master_id, e.target.value as EntityStatus)}
+                              className="w-full rounded px-2 py-1 text-[10px] outline-none border border-[#3f4852]/40 focus:border-[#feb700] transition-colors"
+                              style={{
+                                background: '#1c1b1c',
+                                color: STATUS_COLORS[(assessments[s.master_id]?.status as EntityStatus) ?? 'ACTIVE'],
+                                fontFamily: 'JetBrains Mono',
+                                fontWeight: 'bold',
+                              }}
+                            >
+                              {STATUS_OPTIONS.map(st => (
+                                <option key={st} value={st} style={{ color: STATUS_COLORS[st] }}>{st.replace(/_/g, ' ')}</option>
+                              ))}
+                            </select>
+                          </div>
                         </div>
                       ))}
                     </div>

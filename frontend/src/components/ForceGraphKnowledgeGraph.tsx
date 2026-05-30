@@ -1,7 +1,7 @@
-import { useEffect, useRef, useState, useCallback } from 'react';
+import { useEffect, useRef, useState, useCallback, useMemo } from 'react';
 import ForceGraph3D from 'react-force-graph-3d';
 import * as THREE from 'three';
-import type { RenderNode, RenderLink, GraphRenderPayload } from '../types/graph';
+import type { RenderNode, RenderLink, GraphRenderPayload, AssessmentsMap, EntityStatus } from '../types/graph';
 
 // Re-export for any legacy import sites that imported RenderNode from here.
 export type { RenderNode, RenderLink, GraphRenderPayload };
@@ -16,30 +16,59 @@ interface ForceGraphKnowledgeGraphProps {
   loading?: boolean;
   error?: string | null;
   onNodeClick?: (node: { id: string; name: string; type: string; val: string }) => void;
+  /** Investigator assessments map — keyed by entity_id */
+  assessments?: AssessmentsMap;
+  /** Whether to render CLEARED nodes. Default: true */
+  showCleared?: boolean;
+  /** Called when the Show Cleared toggle is flipped inside the component */
+  onToggleCleared?: (show: boolean) => void;
 }
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Status → visual configuration
+// ─────────────────────────────────────────────────────────────────────────────
+
+interface StatusVisual {
+  color: string;
+  emissiveIntensity: number;
+  opacity: number;
+  sizeMod: number; // added to base + risk-bonus
+}
+
+const STATUS_VISUALS: Record<EntityStatus, StatusVisual> = {
+  ACTIVE:             { color: '',       emissiveIntensity: -1,   opacity: 0.92, sizeMod: 0  },  // '' = use type-based color
+  CLEARED:            { color: '#6b7280', emissiveIntensity: 0.05, opacity: 0.30, sizeMod: -2 },
+  PERSON_OF_INTEREST: { color: '#f97316', emissiveIntensity: 0.70, opacity: 0.95, sizeMod: 4  },
+  PRIORITY_TARGET:    { color: '#ef4444', emissiveIntensity: 1.0,  opacity: 1.0,  sizeMod: 8  },
+};
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Colour mappings — covers every master_type / sub_type combo in unified_graph
 // ─────────────────────────────────────────────────────────────────────────────
 
-function nodeColor(node: RenderNode): string {
-  if (node.type === 'PERSON')         return '#feb700';   // Amber  — persons / suspects
-  if (node.type === 'PLACE')          return '#98ff8f';   // Green  — locations
+function typeColor(node: RenderNode): string {
+  if (node.type === 'PERSON')         return '#feb700';
+  if (node.type === 'PLACE')          return '#98ff8f';
   if (node.type === 'INFRASTRUCTURE') {
-    if (node.sub_type === 'CELL_TOWER') return '#98cbff'; // Light Blue — towers
-    if (node.sub_type === 'CAMERA')     return '#ff6b6b'; // Red    — cameras
-    if (node.sub_type === 'PLATFORM')   return '#c084fc'; // Purple — platforms
+    if (node.sub_type === 'CELL_TOWER') return '#98cbff';
+    if (node.sub_type === 'CAMERA')     return '#ff6b6b';
+    if (node.sub_type === 'PLATFORM')   return '#c084fc';
     return '#98cbff';
   }
   if (node.type === 'ENTITY') {
-    if (node.sub_type === 'ACCOUNT')        return '#00a3ff'; // Blue   — bank accounts
-    if (node.sub_type === 'VEHICLE')        return '#ffb4ab'; // Pink   — vehicles
-    if (node.sub_type === 'TRACKER')        return '#e879f9'; // Fuchsia— trackers
-    if (node.sub_type === 'EMAIL_ADDRESS')  return '#6ee7b7'; // Teal   — emails
-    if (node.sub_type === 'WEARABLE_DEVICE') return '#fcd34d'; // Yellow — wearables
+    if (node.sub_type === 'ACCOUNT')         return '#00a3ff';
+    if (node.sub_type === 'VEHICLE')         return '#ffb4ab';
+    if (node.sub_type === 'TRACKER')         return '#e879f9';
+    if (node.sub_type === 'EMAIL_ADDRESS')   return '#6ee7b7';
+    if (node.sub_type === 'WEARABLE_DEVICE') return '#fcd34d';
     return '#bec7d4';
   }
-  return '#bec7d4'; // Default grey
+  return '#bec7d4';
+}
+
+function nodeColor(node: RenderNode, status: EntityStatus): string {
+  const vis = STATUS_VISUALS[status];
+  return vis.color || typeColor(node);
 }
 
 function linkColor(link: RenderLink): string {
@@ -60,17 +89,26 @@ function linkColor(link: RenderLink): string {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Node size — risk_score-driven (0 → 4, 99 → 12)
+// Node size — risk_score-driven + status modifier
 // ─────────────────────────────────────────────────────────────────────────────
 
-function nodeSize(node: RenderNode): number {
+function nodeSize(node: RenderNode, status: EntityStatus): number {
   const base = 4;
-  const bonus = (node.risk_score / 100) * 8;
-  return base + bonus;
+  const riskBonus = (node.risk_score / 100) * 8;
+  const statusMod = STATUS_VISUALS[status].sizeMod;
+  return Math.max(2, base + riskBonus + statusMod);
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Legend items derived from the colour map
+// Helper: get entity status from assessments map
+// ─────────────────────────────────────────────────────────────────────────────
+
+function getStatus(node: RenderNode, assessments: AssessmentsMap): EntityStatus {
+  return (assessments[node.id]?.status as EntityStatus) ?? 'ACTIVE';
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Legend items
 // ─────────────────────────────────────────────────────────────────────────────
 
 const LEGEND = [
@@ -93,6 +131,9 @@ export default function ForceGraphKnowledgeGraph({
   loading = false,
   error = null,
   onNodeClick,
+  assessments = {},
+  showCleared = true,
+  onToggleCleared,
 }: ForceGraphKnowledgeGraphProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [dimensions, setDimensions] = useState({ width: 800, height: 600 });
@@ -117,36 +158,68 @@ export default function ForceGraphKnowledgeGraph({
     return () => observer.disconnect();
   }, []);
 
-  // Node click handler — maps RenderNode to the shape InvestigationPage expects
+  // Apply showCleared filter — purely presentational, graphData prop is never mutated
+  const visibleGraphData = useMemo(() => {
+    if (!graphData) return null;
+    if (showCleared) return graphData;
+
+    const clearedIds = new Set(
+      Object.entries(assessments)
+        .filter(([, a]) => a.status === 'CLEARED')
+        .map(([id]) => id)
+    );
+    if (clearedIds.size === 0) return graphData;
+
+    const nodes = graphData.nodes.filter(n => !clearedIds.has(n.id));
+    const visibleIds = new Set(nodes.map(n => n.id));
+    const links = graphData.links.filter(l => {
+      const src = typeof l.source === 'string' ? l.source : l.source.id;
+      const tgt = typeof l.target === 'string' ? l.target : l.target.id;
+      return visibleIds.has(src) && visibleIds.has(tgt);
+    });
+    return { nodes, links };
+  }, [graphData, showCleared, assessments]);
+
+  // Node click handler
   const handleNodeClick = useCallback((node: object) => {
     const n = node as RenderNode;
     if (onNodeClick) {
-      onNodeClick({
-        id: n.id,
-        name: n.label,
-        type: n.type,
-        val: n.sub_type,
-      });
+      onNodeClick({ id: n.id, name: n.label, type: n.type, val: n.sub_type });
     }
   }, [onNodeClick]);
 
-  // Custom node 3D object — sphere with glow
+  // Custom node 3D object — sphere with assessment-aware glow
   const nodeThreeObject = useCallback((node: object) => {
     const n = node as RenderNode;
-    const radius = nodeSize(n);
-    const color = nodeColor(n);
+    const status = getStatus(n, assessments);
+    const vis = STATUS_VISUALS[status];
+    const radius = nodeSize(n, status);
+    const color = nodeColor(n, status);
 
     const geometry = new THREE.SphereGeometry(radius, 16, 16);
     const material = new THREE.MeshPhongMaterial({
       color: new THREE.Color(color),
       emissive: new THREE.Color(color),
-      emissiveIntensity: n.risk_score > 50 ? 0.6 : 0.25,
-      shininess: 80,
+      emissiveIntensity: vis.emissiveIntensity < 0
+        ? (n.risk_score > 50 ? 0.6 : 0.25)  // ACTIVE: use risk-score default
+        : vis.emissiveIntensity,
+      shininess: status === 'PRIORITY_TARGET' ? 120 : 80,
       transparent: true,
-      opacity: 0.92,
+      opacity: vis.opacity,
     });
     return new THREE.Mesh(geometry, material);
-  }, []);
+  }, [assessments]);
+
+  // Link directional particles — stop for CLEARED links
+  const getLinkParticleSpeed = useCallback((link: object) => {
+    const l = link as RenderLink;
+    const src = typeof l.source === 'string' ? l.source : l.source.id;
+    const tgt = typeof l.target === 'string' ? l.target : l.target.id;
+    if (assessments[src]?.status === 'CLEARED' || assessments[tgt]?.status === 'CLEARED') return 0;
+    return 0.004;
+  }, [assessments]);
+
+  const clearedCount = Object.values(assessments).filter(a => a.status === 'CLEARED').length;
 
   return (
     <div
@@ -154,12 +227,43 @@ export default function ForceGraphKnowledgeGraph({
       className="w-full h-full relative"
       style={{ background: '#0a0a0b' }}
     >
+      {/* Show Cleared Toggle — top center */}
+      <div
+        className="absolute top-4 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2 glass-panel rounded-full px-3 py-1.5 border border-[#3f4852]/40"
+        style={{ backdropFilter: 'blur(12px)' }}
+      >
+        <button
+          onClick={() => onToggleCleared?.(!showCleared)}
+          className="flex items-center gap-2"
+          title={showCleared ? 'Click to hide cleared entities' : 'Click to show cleared entities'}
+        >
+          <span
+            className="w-3.5 h-3.5 rounded-sm border flex items-center justify-center flex-shrink-0 transition-all"
+            style={{
+              borderColor: showCleared ? '#feb700' : '#3f4852',
+              background: showCleared ? '#feb700' : 'transparent',
+            }}
+          >
+            {showCleared && <span className="material-symbols-outlined" style={{ fontSize: '10px', color: '#412d00', fontWeight: 900 }}>check</span>}
+          </span>
+          <span style={{ fontFamily: 'JetBrains Mono', fontSize: '10px', color: showCleared ? '#ffdb9d' : '#bec7d4', letterSpacing: '0.05em' }}>
+            SHOW CLEARED
+          </span>
+        </button>
+        {clearedCount > 0 && (
+          <span
+            className="px-1.5 py-0.5 rounded text-[9px] font-bold"
+            style={{ background: 'rgba(107,114,128,0.3)', color: '#9ca3af', fontFamily: 'JetBrains Mono' }}
+          >
+            {clearedCount}
+          </span>
+        )}
+      </div>
+
       {/* Loading state */}
       {loading && (
         <div className="absolute inset-0 flex flex-col items-center justify-center z-20">
-          <div
-            className="w-12 h-12 rounded-full border-2 border-[#feb700]/30 border-t-[#feb700] animate-spin mb-4"
-          />
+          <div className="w-12 h-12 rounded-full border-2 border-[#feb700]/30 border-t-[#feb700] animate-spin mb-4" />
           <span style={{ fontFamily: 'JetBrains Mono', fontSize: '12px', color: '#bec7d4' }}>
             LOADING KNOWLEDGE GRAPH…
           </span>
@@ -183,11 +287,11 @@ export default function ForceGraphKnowledgeGraph({
       )}
 
       {/* Force Graph */}
-      {graphData && !loading && (
+      {visibleGraphData && !loading && (
         <ForceGraph3D
           width={dimensions.width}
           height={dimensions.height}
-          graphData={graphData}
+          graphData={visibleGraphData}
           backgroundColor="#0a0a0b"
           // Nodes
           nodeThreeObject={nodeThreeObject}
@@ -204,7 +308,7 @@ export default function ForceGraphKnowledgeGraph({
             return l.type === 'TRANSFERRED_TO' || l.type === 'TRANSFERRED_MONEY' ? 2.5 : 1.5;
           }}
           linkDirectionalParticleColor={(link) => linkColor(link as RenderLink)}
-          linkDirectionalParticleSpeed={0.004}
+          linkDirectionalParticleSpeed={getLinkParticleSpeed}
           // Physics
           d3AlphaDecay={0.02}
           d3VelocityDecay={0.3}
@@ -235,6 +339,14 @@ export default function ForceGraphKnowledgeGraph({
               RISK: {hoveredNode.risk_score.toFixed(1)}%
             </div>
           )}
+          {assessments[hoveredNode.id] && assessments[hoveredNode.id].status !== 'ACTIVE' && (
+            <div style={{ fontFamily: 'JetBrains Mono', fontSize: '10px', marginTop: '4px', fontWeight: 'bold', color:
+              assessments[hoveredNode.id].status === 'CLEARED' ? '#9ca3af' :
+              assessments[hoveredNode.id].status === 'PERSON_OF_INTEREST' ? '#f97316' : '#ef4444'
+            }}>
+              ● {assessments[hoveredNode.id].status?.replace(/_/g, ' ')}
+            </div>
+          )}
         </div>
       )}
 
@@ -257,16 +369,32 @@ export default function ForceGraphKnowledgeGraph({
             </div>
           ))}
         </div>
+        {/* Status legend */}
+        <div style={{ fontFamily: 'JetBrains Mono', fontSize: '9px', color: '#bec7d4', marginTop: '8px', marginBottom: '4px', letterSpacing: '0.1em' }}>
+          ASSESSMENT STATUS
+        </div>
+        <div className="space-y-1">
+          {[
+            { color: '#6b7280', label: 'Cleared' },
+            { color: '#f97316', label: 'Person of Interest' },
+            { color: '#ef4444', label: 'Priority Target' },
+          ].map(({ color, label }) => (
+            <div key={label} className="flex items-center gap-1.5">
+              <span className="flex-shrink-0 rounded-full" style={{ width: 8, height: 8, background: color, boxShadow: `0 0 4px ${color}80` }} />
+              <span style={{ fontFamily: 'JetBrains Mono', fontSize: '9px', color: '#bec7d4' }}>{label}</span>
+            </div>
+          ))}
+        </div>
       </div>
 
       {/* Node count overlay */}
-      {graphData && (
+      {visibleGraphData && (
         <div
           className="absolute top-4 left-4 glass-panel rounded px-2 py-1 z-10"
           style={{ backdropFilter: 'blur(8px)', border: '1px solid rgba(254,183,0,0.15)' }}
         >
           <span style={{ fontFamily: 'JetBrains Mono', fontSize: '10px', color: '#ffdb9d' }}>
-            {graphData.nodes.length} ENTITIES · {graphData.links.length} LINKS
+            {visibleGraphData.nodes.length} ENTITIES · {visibleGraphData.links.length} LINKS
           </span>
         </div>
       )}

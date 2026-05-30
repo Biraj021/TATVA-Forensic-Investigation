@@ -15,7 +15,7 @@ from datetime import datetime, timezone
 
 from sqlalchemy import (
     create_engine, Column, String, Text, Float, DateTime,
-    Integer, JSON, Boolean, ForeignKey, text
+    Integer, JSON, Boolean, ForeignKey, UniqueConstraint, text
 )
 from sqlalchemy.orm import sessionmaker, declarative_base, relationship
 from dotenv import load_dotenv
@@ -143,6 +143,26 @@ class AuditLog(Base):
     user = Column(String(128), default="system")
     details = Column(JSON, default=dict)
     created_at = Column(DateTime(timezone=True), default=_utcnow)
+
+
+class EntityAssessment(Base):
+    """
+    Investigator assessment of a graph entity.
+    Stored ONLY in PostgreSQL — Neo4j data is never modified.
+    Supports: ACTIVE | CLEARED | PERSON_OF_INTEREST | PRIORITY_TARGET
+    """
+    __tablename__ = "entity_assessments"
+    __table_args__ = (
+        UniqueConstraint("case_id", "entity_id", name="uq_entity_assessment"),
+    )
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    case_id = Column(String(64), nullable=False, index=True)
+    entity_id = Column(String(128), nullable=False, index=True)
+    status = Column(String(32), nullable=False, default="ACTIVE")  # ACTIVE | CLEARED | PERSON_OF_INTEREST | PRIORITY_TARGET
+    reason = Column(Text, default=None)
+    created_at = Column(DateTime(timezone=True), default=_utcnow)
+    updated_at = Column(DateTime(timezone=True), default=_utcnow, onupdate=_utcnow)
 
 
 # ── Client Class ──────────────────────────────────────────────
@@ -490,6 +510,75 @@ class PostgresClient:
                 }
                 for l in logs
             ]
+        finally:
+            session.close()
+
+    # ── Entity Assessment Operations ──────────────────────────
+
+    def upsert_entity_assessment(self, case_id: str, entity_id: str,
+                                  status: str, reason: str = None) -> dict:
+        """
+        Insert or update an investigator assessment for a graph entity.
+        Upserts by (case_id, entity_id) — one assessment per entity per case.
+        Does NOT touch Neo4j or master_entities.
+        """
+        session = self.get_session()
+        try:
+            existing = (
+                session.query(EntityAssessment)
+                .filter(
+                    EntityAssessment.case_id == case_id,
+                    EntityAssessment.entity_id == entity_id,
+                )
+                .first()
+            )
+            if existing:
+                existing.status = status
+                existing.reason = reason
+                existing.updated_at = _utcnow()
+            else:
+                existing = EntityAssessment(
+                    case_id=case_id,
+                    entity_id=entity_id,
+                    status=status,
+                    reason=reason,
+                )
+                session.add(existing)
+            session.commit()
+            return {
+                "case_id": case_id,
+                "entity_id": entity_id,
+                "status": status,
+                "reason": reason,
+                "updated_at": existing.updated_at.isoformat() if existing.updated_at else None,
+            }
+        except Exception as e:
+            session.rollback()
+            print(f"[PostgreSQL] Error upserting entity assessment: {e}")
+            raise
+        finally:
+            session.close()
+
+    def get_entity_assessments(self, case_id: str) -> dict:
+        """
+        Return all assessments for a case as a dict keyed by entity_id.
+        Example: { "P001": { "status": "CLEARED", "reason": "Verified alibi" } }
+        """
+        session = self.get_session()
+        try:
+            rows = (
+                session.query(EntityAssessment)
+                .filter(EntityAssessment.case_id == case_id)
+                .all()
+            )
+            return {
+                r.entity_id: {
+                    "status": r.status,
+                    "reason": r.reason,
+                    "updated_at": r.updated_at.isoformat() if r.updated_at else None,
+                }
+                for r in rows
+            }
         finally:
             session.close()
 

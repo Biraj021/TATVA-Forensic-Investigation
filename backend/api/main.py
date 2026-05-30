@@ -220,6 +220,12 @@ class EvidenceCreate(BaseModel):
     record_count: Optional[int] = 0
     metadata: Optional[dict] = None
 
+class EntityAssessmentCreate(BaseModel):
+    case_id: str
+    entity_id: str
+    status: str  # ACTIVE | CLEARED | PERSON_OF_INTEREST | PRIORITY_TARGET
+    reason: Optional[str] = None
+
 # ── ORIGINAL GRAPH & INSIGHTS ENDPOINTS ──────────────────────
 
 @app.get("/api/graph", response_model=GraphPayload)
@@ -459,6 +465,43 @@ async def upload_evidence_file(case_id: str, file: UploadFile = File(...)):
         "raw_storage": raw_record,
         "status": "uploaded",
     }
+
+# ── ENTITY ASSESSMENT ENDPOINTS ──────────────────────────────
+
+VALID_STATUSES = {"ACTIVE", "CLEARED", "PERSON_OF_INTEREST", "PRIORITY_TARGET"}
+
+@app.post("/api/entity-assessments")
+def upsert_entity_assessment(assessment: EntityAssessmentCreate):
+    """
+    Create or update an investigator's assessment of a graph entity.
+    Upserts by (case_id, entity_id). Does NOT modify Neo4j or master_entities.
+    """
+    if assessment.status not in VALID_STATUSES:
+        raise HTTPException(
+            status_code=400,
+            detail=f"Invalid status '{assessment.status}'. Must be one of: {', '.join(sorted(VALID_STATUSES))}"
+        )
+    try:
+        result = db.upsert_entity_assessment(
+            case_id=assessment.case_id,
+            entity_id=assessment.entity_id,
+            status=assessment.status,
+            reason=assessment.reason,
+        )
+        return result
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.get("/api/entity-assessments/{case_id}")
+def get_entity_assessments(case_id: str):
+    """
+    Return all investigator assessments for a case, keyed by entity_id.
+    Example: { "P001": { "status": "CLEARED", "reason": "Verified alibi" } }
+    """
+    try:
+        return db.get_entity_assessments(case_id=case_id)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 # ── AUDIT & SYSTEM STATUS ENDPOINTS ─────────────────────────
 

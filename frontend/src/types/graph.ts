@@ -4,6 +4,24 @@
 // Do NOT re-declare these in individual components.
 // ─────────────────────────────────────────────────────────────────────────────
 
+// ─────────────────────────────────────────────────────────────────────────────
+// Entity status — set by investigator, stored in PostgreSQL (not Neo4j)
+// ─────────────────────────────────────────────────────────────────────────────
+
+export type EntityStatus = 'ACTIVE' | 'CLEARED' | 'PERSON_OF_INTEREST' | 'PRIORITY_TARGET';
+
+export interface AssessmentRecord {
+  status: EntityStatus;
+  reason?: string;
+  updated_at?: string;
+}
+
+export type AssessmentsMap = Record<string, AssessmentRecord>;
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Graph node / link shapes — mirror backend GraphRenderPayload exactly.
+// ─────────────────────────────────────────────────────────────────────────────
+
 export interface RenderNode {
   id: string;
   label: string;
