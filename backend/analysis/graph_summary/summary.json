@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-05-30T17:36:23.171023",
+  "generated_at": "2026-05-31T10:20:00.790081",
   "overview": {
     "total_entities": 47,
-    "total_relations": 137,
+    "total_relations": 93,
     "entity_type_counts": {
       "ENTITY": 15,
       "PLACE": 14,
@@ -10,15 +10,15 @@
       "INFRASTRUCTURE": 9
     },
     "relation_type_counts": {
-      "LOCATED_AT": 24,
-      "MENTIONED": 23,
-      "MESSAGED": 17,
-      "CALLED": 15,
-      "CONNECTED_TO_TOWER": 15,
+      "MENTIONED": 19,
+      "LOCATED_AT": 17,
       "TRANSFERRED_TO": 15,
-      "MOVED_TO": 13,
-      "POSTED_ON": 6,
-      "MENTIONED_USER": 4,
+      "MOVED_TO": 12,
+      "CALLED": 11,
+      "CONNECTED_TO_TOWER": 5,
+      "MESSAGED": 3,
+      "POSTED_ON": 3,
+      "MENTIONED_USER": 3,
       "DETECTED": 3,
       "TRANSFERRED_MONEY": 1,
       "EMAILED": 1
@@ -32,13 +32,10 @@
       "asset_tracker",
       "bank_transaction",
       "cdr_record",
-      "chat",
-      "emails",
       "fir_document",
       "gps_analysis",
       "investigator_annotation",
       "mobile_gps",
-      "social",
       "telecom_tower",
       "vehicle_camera",
       "vehicle_tracker",
@@ -62,110 +59,110 @@
       "master_id": "MASTER_b41353c7",
       "name": "Rahul Sen",
       "master_type": "PERSON",
-      "composite_score": 0.4104,
+      "composite_score": 0.4162,
       "degree_centrality": 0.5217,
       "betweenness_centrality": 0.1074,
       "pagerank": 0.034,
-      "source_count": 16,
-      "relation_count": 51
-    },
-    {
-      "master_id": "MASTER_f24caf16",
-      "name": "Vikram Khanna",
-      "master_type": "PERSON",
-      "composite_score": 0.2412,
-      "degree_centrality": 0.3043,
-      "betweenness_centrality": 0.0379,
-      "pagerank": 0.0185,
-      "source_count": 12,
-      "relation_count": 26
+      "source_count": 6,
+      "relation_count": 30
     },
     {
       "master_id": "MASTER_ee1fa35b",
       "name": "Rajan Mehta",
       "master_type": "PERSON",
-      "composite_score": 0.2291,
+      "composite_score": 0.2652,
       "degree_centrality": 0.3261,
       "betweenness_centrality": 0.1047,
       "pagerank": 0.0912,
-      "source_count": 5,
-      "relation_count": 21
+      "source_count": 3,
+      "relation_count": 17
     },
     {
-      "master_id": "MASTER_6137f90b",
-      "name": "Arjun",
+      "master_id": "MASTER_f24caf16",
+      "name": "Vikram Khanna",
       "master_type": "PERSON",
-      "composite_score": 0.2159,
-      "degree_centrality": 0.2391,
-      "betweenness_centrality": 0.027,
-      "pagerank": 0.0294,
-      "source_count": 11,
-      "relation_count": 28
+      "composite_score": 0.2397,
+      "degree_centrality": 0.3043,
+      "betweenness_centrality": 0.0379,
+      "pagerank": 0.0185,
+      "source_count": 4,
+      "relation_count": 16
     },
     {
       "master_id": "MASTER_ad6e0d66",
       "name": "Chatterjee Lane, Bowbazar, Kolkata",
       "master_type": "PLACE",
-      "composite_score": 0.1644,
+      "composite_score": 0.2252,
       "degree_centrality": 0.2174,
       "betweenness_centrality": 0.0263,
       "pagerank": 0.0458,
-      "source_count": 7,
-      "relation_count": 16
+      "source_count": 6,
+      "relation_count": 10
     },
     {
-      "master_id": "MASTER_cc9e76cc",
-      "name": "Group_Chat",
-      "master_type": "INFRASTRUCTURE",
-      "composite_score": 0.1596,
-      "degree_centrality": 0.0652,
-      "betweenness_centrality": 0.0,
-      "pagerank": 0.017,
-      "source_count": 17,
+      "master_id": "MASTER_6137f90b",
+      "name": "Arjun",
+      "master_type": "PERSON",
+      "composite_score": 0.2196,
+      "degree_centrality": 0.2391,
+      "betweenness_centrality": 0.027,
+      "pagerank": 0.0294,
+      "source_count": 4,
       "relation_count": 17
     },
     {
       "master_id": "MASTER_59760bb7",
       "name": "Bow Bazar North, Kolkata",
       "master_type": "PLACE",
-      "composite_score": 0.1274,
+      "composite_score": 0.179,
       "degree_centrality": 0.1957,
       "betweenness_centrality": 0.0093,
       "pagerank": 0.0576,
       "source_count": 4,
-      "relation_count": 11
-    },
-    {
-      "master_id": "MASTER_425adff9",
-      "name": "@Arjung",
-      "master_type": "PERSON",
-      "composite_score": 0.0943,
-      "degree_centrality": 0.1304,
-      "betweenness_centrality": 0.0164,
-      "pagerank": 0.0169,
-      "source_count": 4,
       "relation_count": 9
-    },
-    {
-      "master_id": "MASTER_e32ebe48",
-      "name": "Howrah Station",
-      "master_type": "PLACE",
-      "composite_score": 0.0897,
-      "degree_centrality": 0.1087,
-      "betweenness_centrality": 0.0,
-      "pagerank": 0.0229,
-      "source_count": 6,
-      "relation_count": 6
     },
     {
       "master_id": "MASTER_9e7d3007",
       "name": "Howrah Maidan, Haora",
       "master_type": "PLACE",
-      "composite_score": 0.0889,
+      "composite_score": 0.1203,
       "degree_centrality": 0.1087,
       "betweenness_centrality": 0.0,
       "pagerank": 0.0779,
-      "source_count": 4,
+      "source_count": 3,
+      "relation_count": 5
+    },
+    {
+      "master_id": "MASTER_10d0d169",
+      "name": "Biplabi Pulin Das Street, City College, Kolkata",
+      "master_type": "PLACE",
+      "composite_score": 0.1135,
+      "degree_centrality": 0.1087,
+      "betweenness_centrality": 0.0018,
+      "pagerank": 0.0417,
+      "source_count": 3,
+      "relation_count": 5
+    },
+    {
+      "master_id": "MASTER_425adff9",
+      "name": "@Arjung",
+      "master_type": "PERSON",
+      "composite_score": 0.0931,
+      "degree_centrality": 0.1304,
+      "betweenness_centrality": 0.0164,
+      "pagerank": 0.0169,
+      "source_count": 1,
+      "relation_count": 7
+    },
+    {
+      "master_id": "MASTER_4f3dc74c",
+      "name": "@Vikramk",
+      "master_type": "PERSON",
+      "composite_score": 0.0794,
+      "degree_centrality": 0.1087,
+      "betweenness_centrality": 0.0078,
+      "pagerank": 0.0139,
+      "source_count": 1,
       "relation_count": 6
     }
   ],
@@ -297,30 +294,30 @@
     ]
   },
   "communication_summary": {
-    "total_communications": 33,
+    "total_communications": 15,
     "by_type": {
-      "MESSAGED": 17,
-      "CALLED": 15,
+      "CALLED": 11,
+      "MESSAGED": 3,
       "EMAILED": 1
     },
-    "total_call_duration_seconds": 2380,
-    "avg_call_duration_seconds": 158.7,
+    "total_call_duration_seconds": 1600,
+    "avg_call_duration_seconds": 145.5,
     "most_active_communicators": [
       {
         "name": "Rahul Sen",
-        "count": 14
+        "count": 5
       },
       {
         "name": "Arjun",
-        "count": 9
+        "count": 4
       },
       {
         "name": "Vikram Khanna",
-        "count": 7
+        "count": 4
       },
       {
         "name": "Rajan Mehta",
-        "count": 3
+        "count": 2
       }
     ]
   },
@@ -349,25 +346,15 @@
       "out_degree_centrality": 0.4348,
       "pagerank": 0.034,
       "source_types": [
+        "",
         "bank_transaction",
         "cdr_record",
-        "chat.txt:message_0",
-        "chat.txt:message_11",
-        "chat.txt:message_12",
-        "chat.txt:message_16",
-        "chat.txt:message_2",
-        "chat.txt:message_4",
-        "chat.txt:message_6",
-        "chat.txt:message_8",
-        "emails.txt:body",
-        "emails.txt:header",
         "fir_document",
         "mobile_gps",
-        "social.json:post_tatva_post_006",
         "telecom_tower"
       ],
-      "source_count": 16,
-      "relation_count": 51,
+      "source_count": 6,
+      "relation_count": 30,
       "relation_types": [
         "CALLED",
         "CONNECTED_TO_TOWER",
@@ -400,14 +387,12 @@
       "out_degree_centrality": 0.1087,
       "pagerank": 0.0912,
       "source_types": [
+        "",
         "bank_transaction",
-        "cdr_record",
-        "chat.txt:message_14",
-        "chat.txt:message_3",
-        "emails.txt:body"
+        "cdr_record"
       ],
-      "source_count": 5,
-      "relation_count": 21,
+      "source_count": 3,
+      "relation_count": 17,
       "relation_types": [
         "CALLED",
         "CONNECTED_TO_TOWER",
@@ -436,21 +421,13 @@
       "out_degree_centrality": 0.2391,
       "pagerank": 0.0185,
       "source_types": [
+        "",
         "cdr_record",
-        "chat.txt:message_1",
-        "chat.txt:message_13",
-        "chat.txt:message_14",
-        "chat.txt:message_15",
-        "chat.txt:message_5",
-        "chat.txt:message_7",
-        "chat.txt:message_9",
-        "emails.txt:body",
-        "social.json:post_tatva_post_002",
         "telecom_tower",
         "wearable_device"
       ],
-      "source_count": 12,
-      "relation_count": 26,
+      "source_count": 4,
+      "relation_count": 16,
       "relation_types": [
         "CALLED",
         "CONNECTED_TO_TOWER",
@@ -478,20 +455,13 @@
       "out_degree_centrality": 0.1739,
       "pagerank": 0.0294,
       "source_types": [
+        "",
         "cdr_record",
-        "chat.txt:message_1",
-        "chat.txt:message_10",
-        "chat.txt:message_11",
-        "chat.txt:message_14",
-        "chat.txt:message_3",
-        "chat.txt:message_7",
-        "emails.txt:body",
-        "emails.txt:header",
         "fir_document",
         "telecom_tower"
       ],
-      "source_count": 11,
-      "relation_count": 28,
+      "source_count": 4,
+      "relation_count": 17,
       "relation_types": [
         "CALLED",
         "CONNECTED_TO_TOWER",
@@ -521,13 +491,12 @@
         "asset_tracker",
         "gps_analysis",
         "investigator_annotation",
-        "mobile_gps",
         "telecom_tower",
         "vehicle_tracker",
         "wearable_device"
       ],
-      "source_count": 7,
-      "relation_count": 16,
+      "source_count": 6,
+      "relation_count": 10,
       "relation_types": [
         "LOCATED_AT",
         "MOVED_TO"
@@ -555,7 +524,7 @@
         "wearable_device"
       ],
       "source_count": 4,
-      "relation_count": 11,
+      "relation_count": 9,
       "relation_types": [
         "LOCATED_AT",
         "MOVED_TO"
@@ -577,13 +546,10 @@
       "out_degree_centrality": 0.1087,
       "pagerank": 0.0169,
       "source_types": [
-        "social.json:post_tatva_post_001",
-        "social.json:post_tatva_post_002",
-        "social.json:post_tatva_post_004",
-        "social.json:post_tatva_post_005"
+        ""
       ],
-      "source_count": 4,
-      "relation_count": 9,
+      "source_count": 1,
+      "relation_count": 7,
       "relation_types": [
         "MENTIONED",
         "MENTIONED_USER",
@@ -608,15 +574,10 @@
       "out_degree_centrality": 0.0,
       "pagerank": 0.0229,
       "source_types": [
-        "chat.txt:message_13",
-        "chat.txt:message_14",
-        "chat.txt:message_15",
-        "emails.txt:body",
-        "social.json:post_tatva_post_003",
-        "social.json:post_tatva_post_005"
+        ""
       ],
-      "source_count": 6,
-      "relation_count": 6,
+      "source_count": 1,
+      "relation_count": 5,
       "relation_types": [
         "MENTIONED"
       ]
@@ -665,12 +626,11 @@
       "pagerank": 0.0779,
       "source_types": [
         "gps_analysis",
-        "telecom_tower",
         "vehicle_tracker",
         "wearable_device"
       ],
-      "source_count": 4,
-      "relation_count": 6,
+      "source_count": 3,
+      "relation_count": 5,
       "relation_types": [
         "LOCATED_AT",
         "MOVED_TO"
@@ -693,40 +653,14 @@
       "out_degree_centrality": 0.087,
       "pagerank": 0.0139,
       "source_types": [
-        "social.json:post_tatva_post_003",
-        "social.json:post_tatva_post_005",
-        "social.json:post_tatva_post_006"
+        ""
       ],
-      "source_count": 3,
-      "relation_count": 7,
+      "source_count": 1,
+      "relation_count": 6,
       "relation_types": [
         "MENTIONED",
         "MENTIONED_USER",
         "POSTED_ON"
-      ]
-    },
-    {
-      "master_id": "MASTER_472a3eae",
-      "name": "Cab_102",
-      "master_type": "ENTITY",
-      "entity_types": [
-        "VEHICLE"
-      ],
-      "resolved_values": [
-        "cab_102"
-      ],
-      "degree_centrality": 0.0652,
-      "betweenness_centrality": 0.0,
-      "in_degree_centrality": 0.0,
-      "out_degree_centrality": 0.0652,
-      "pagerank": 0.011,
-      "source_types": [
-        "vehicle_tracker"
-      ],
-      "source_count": 1,
-      "relation_count": 3,
-      "relation_types": [
-        "LOCATED_AT"
       ]
     },
     {
@@ -756,30 +690,6 @@
       ]
     },
     {
-      "master_id": "MASTER_90d56781",
-      "name": "Tracker_001",
-      "master_type": "ENTITY",
-      "entity_types": [
-        "TRACKER"
-      ],
-      "resolved_values": [
-        "tracker_001"
-      ],
-      "degree_centrality": 0.0652,
-      "betweenness_centrality": 0.0,
-      "in_degree_centrality": 0.0,
-      "out_degree_centrality": 0.0652,
-      "pagerank": 0.011,
-      "source_types": [
-        "asset_tracker"
-      ],
-      "source_count": 1,
-      "relation_count": 3,
-      "relation_types": [
-        "LOCATED_AT"
-      ]
-    },
-    {
       "master_id": "MASTER_afcbc112",
       "name": "Maniktala, Kolkata",
       "master_type": "PLACE",
@@ -806,46 +716,6 @@
       ]
     },
     {
-      "master_id": "MASTER_cc9e76cc",
-      "name": "Group_Chat",
-      "master_type": "INFRASTRUCTURE",
-      "entity_types": [
-        "PLATFORM"
-      ],
-      "resolved_values": [
-        "group_chat"
-      ],
-      "degree_centrality": 0.0652,
-      "betweenness_centrality": 0.0,
-      "in_degree_centrality": 0.0652,
-      "out_degree_centrality": 0.0,
-      "pagerank": 0.017,
-      "source_types": [
-        "chat.txt:message_0",
-        "chat.txt:message_1",
-        "chat.txt:message_10",
-        "chat.txt:message_11",
-        "chat.txt:message_12",
-        "chat.txt:message_13",
-        "chat.txt:message_14",
-        "chat.txt:message_15",
-        "chat.txt:message_16",
-        "chat.txt:message_2",
-        "chat.txt:message_3",
-        "chat.txt:message_4",
-        "chat.txt:message_5",
-        "chat.txt:message_6",
-        "chat.txt:message_7",
-        "chat.txt:message_8",
-        "chat.txt:message_9"
-      ],
-      "source_count": 17,
-      "relation_count": 17,
-      "relation_types": [
-        "MESSAGED"
-      ]
-    },
-    {
       "master_id": "MASTER_656f09cf",
       "name": "@Rahulsen",
       "master_type": "PERSON",
@@ -861,15 +731,37 @@
       "out_degree_centrality": 0.0435,
       "pagerank": 0.0139,
       "source_types": [
-        "social.json:post_tatva_post_001",
-        "social.json:post_tatva_post_002",
-        "social.json:post_tatva_post_004"
+        ""
       ],
-      "source_count": 3,
-      "relation_count": 5,
+      "source_count": 1,
+      "relation_count": 3,
       "relation_types": [
         "MENTIONED_USER",
         "POSTED_ON"
+      ]
+    },
+    {
+      "master_id": "MASTER_cc9e76cc",
+      "name": "Group_Chat",
+      "master_type": "INFRASTRUCTURE",
+      "entity_types": [
+        "PLATFORM"
+      ],
+      "resolved_values": [
+        "group_chat"
+      ],
+      "degree_centrality": 0.0652,
+      "betweenness_centrality": 0.0,
+      "in_degree_centrality": 0.0652,
+      "out_degree_centrality": 0.0,
+      "pagerank": 0.017,
+      "source_types": [
+        ""
+      ],
+      "source_count": 1,
+      "relation_count": 3,
+      "relation_types": [
+        "MESSAGED"
       ]
     },
     {
@@ -897,27 +789,51 @@
       ]
     },
     {
-      "master_id": "MASTER_4df7510c",
-      "name": "Cell Tower (Twr_Kol_102)",
-      "master_type": "INFRASTRUCTURE",
+      "master_id": "MASTER_472a3eae",
+      "name": "Cab_102",
+      "master_type": "ENTITY",
       "entity_types": [
-        "CELL_TOWER"
+        "VEHICLE"
       ],
       "resolved_values": [
-        "cell tower (twr_kol_102)"
+        "cab_102"
       ],
-      "degree_centrality": 0.0435,
+      "degree_centrality": 0.0652,
       "betweenness_centrality": 0.0,
-      "in_degree_centrality": 0.0435,
-      "out_degree_centrality": 0.0,
-      "pagerank": 0.028,
+      "in_degree_centrality": 0.0,
+      "out_degree_centrality": 0.0652,
+      "pagerank": 0.011,
       "source_types": [
-        "cdr_record"
+        "vehicle_tracker"
       ],
       "source_count": 1,
-      "relation_count": 7,
+      "relation_count": 3,
       "relation_types": [
-        "CONNECTED_TO_TOWER"
+        "LOCATED_AT"
+      ]
+    },
+    {
+      "master_id": "MASTER_90d56781",
+      "name": "Tracker_001",
+      "master_type": "ENTITY",
+      "entity_types": [
+        "TRACKER"
+      ],
+      "resolved_values": [
+        "tracker_001"
+      ],
+      "degree_centrality": 0.0652,
+      "betweenness_centrality": 0.0,
+      "in_degree_centrality": 0.0,
+      "out_degree_centrality": 0.0652,
+      "pagerank": 0.011,
+      "source_types": [
+        "asset_tracker"
+      ],
+      "source_count": 1,
+      "relation_count": 3,
+      "relation_types": [
+        "LOCATED_AT"
       ]
     },
     {
@@ -1014,13 +930,36 @@
       "out_degree_centrality": 0.0,
       "pagerank": 0.0154,
       "source_types": [
-        "emails.txt:body",
-        "social.json:post_tatva_post_006"
+        ""
       ],
-      "source_count": 2,
+      "source_count": 1,
       "relation_count": 2,
       "relation_types": [
         "MENTIONED"
+      ]
+    },
+    {
+      "master_id": "MASTER_4df7510c",
+      "name": "Cell Tower (Twr_Kol_102)",
+      "master_type": "INFRASTRUCTURE",
+      "entity_types": [
+        "CELL_TOWER"
+      ],
+      "resolved_values": [
+        "cell tower (twr_kol_102)"
+      ],
+      "degree_centrality": 0.0435,
+      "betweenness_centrality": 0.0,
+      "in_degree_centrality": 0.0435,
+      "out_degree_centrality": 0.0,
+      "pagerank": 0.028,
+      "source_types": [
+        "cdr_record"
+      ],
+      "source_count": 1,
+      "relation_count": 2,
+      "relation_types": [
+        "CONNECTED_TO_TOWER"
       ]
     },
     {
@@ -1216,6 +1155,28 @@
       ]
     },
     {
+      "master_id": "MASTER_e6f4f60a",
+      "name": "MASTER_e6f4f60a",
+      "master_type": "PERSON",
+      "entity_types": [
+        "PERSON"
+      ],
+      "resolved_values": [],
+      "degree_centrality": 0.0217,
+      "betweenness_centrality": 0.0,
+      "in_degree_centrality": 0.0217,
+      "out_degree_centrality": 0.0,
+      "pagerank": 0.0125,
+      "source_types": [
+        ""
+      ],
+      "source_count": 1,
+      "relation_count": 1,
+      "relation_types": [
+        "MENTIONED"
+      ]
+    },
+    {
       "master_id": "MASTER_c3de5e12",
       "name": "Cell Tower (Twr_Kol_105)",
       "master_type": "INFRASTRUCTURE",
@@ -1234,7 +1195,7 @@
         "cdr_record"
       ],
       "source_count": 1,
-      "relation_count": 3,
+      "relation_count": 1,
       "relation_types": [
         "CONNECTED_TO_TOWER"
       ]
@@ -1258,7 +1219,7 @@
         "cdr_record"
       ],
       "source_count": 1,
-      "relation_count": 3,
+      "relation_count": 1,
       "relation_types": [
         "CONNECTED_TO_TOWER"
       ]
@@ -1282,31 +1243,81 @@
         "cdr_record"
       ],
       "source_count": 1,
-      "relation_count": 2,
+      "relation_count": 1,
       "relation_types": [
         "CONNECTED_TO_TOWER"
       ]
     },
     {
-      "master_id": "MASTER_e6f4f60a",
-      "name": "MASTER_e6f4f60a",
-      "master_type": "PERSON",
+      "master_id": "MASTER_bc85a6b2",
+      "name": "Twitter",
+      "master_type": "INFRASTRUCTURE",
       "entity_types": [
-        "PERSON"
+        "PLATFORM"
       ],
-      "resolved_values": [],
+      "resolved_values": [
+        "twitter"
+      ],
       "degree_centrality": 0.0217,
       "betweenness_centrality": 0.0,
       "in_degree_centrality": 0.0217,
       "out_degree_centrality": 0.0,
-      "pagerank": 0.0125,
+      "pagerank": 0.0169,
       "source_types": [
-        "emails.txt:body"
+        ""
       ],
       "source_count": 1,
       "relation_count": 1,
       "relation_types": [
-        "MENTIONED"
+        "POSTED_ON"
+      ]
+    },
+    {
+      "master_id": "MASTER_a811d74e",
+      "name": "Instagram",
+      "master_type": "INFRASTRUCTURE",
+      "entity_types": [
+        "PLATFORM"
+      ],
+      "resolved_values": [
+        "instagram"
+      ],
+      "degree_centrality": 0.0217,
+      "betweenness_centrality": 0.0,
+      "in_degree_centrality": 0.0217,
+      "out_degree_centrality": 0.0,
+      "pagerank": 0.0139,
+      "source_types": [
+        ""
+      ],
+      "source_count": 1,
+      "relation_count": 1,
+      "relation_types": [
+        "POSTED_ON"
+      ]
+    },
+    {
+      "master_id": "MASTER_ed885df3",
+      "name": "Facebook",
+      "master_type": "INFRASTRUCTURE",
+      "entity_types": [
+        "PLATFORM"
+      ],
+      "resolved_values": [
+        "facebook"
+      ],
+      "degree_centrality": 0.0217,
+      "betweenness_centrality": 0.0,
+      "in_degree_centrality": 0.0217,
+      "out_degree_centrality": 0.0,
+      "pagerank": 0.014,
+      "source_types": [
+        ""
+      ],
+      "source_count": 1,
+      "relation_count": 1,
+      "relation_types": [
+        "POSTED_ON"
       ]
     },
     {
@@ -1325,7 +1336,7 @@
       "out_degree_centrality": 0.0,
       "pagerank": 0.0125,
       "source_types": [
-        "emails.txt:body"
+        ""
       ],
       "source_count": 1,
       "relation_count": 1,
@@ -1349,87 +1360,12 @@
       "out_degree_centrality": 0.0,
       "pagerank": 0.0125,
       "source_types": [
-        "emails.txt:body"
+        ""
       ],
       "source_count": 1,
       "relation_count": 1,
       "relation_types": [
         "MENTIONED"
-      ]
-    },
-    {
-      "master_id": "MASTER_bc85a6b2",
-      "name": "Twitter",
-      "master_type": "INFRASTRUCTURE",
-      "entity_types": [
-        "PLATFORM"
-      ],
-      "resolved_values": [
-        "twitter"
-      ],
-      "degree_centrality": 0.0217,
-      "betweenness_centrality": 0.0,
-      "in_degree_centrality": 0.0217,
-      "out_degree_centrality": 0.0,
-      "pagerank": 0.0169,
-      "source_types": [
-        "social.json:post_tatva_post_001",
-        "social.json:post_tatva_post_004"
-      ],
-      "source_count": 2,
-      "relation_count": 2,
-      "relation_types": [
-        "POSTED_ON"
-      ]
-    },
-    {
-      "master_id": "MASTER_a811d74e",
-      "name": "Instagram",
-      "master_type": "INFRASTRUCTURE",
-      "entity_types": [
-        "PLATFORM"
-      ],
-      "resolved_values": [
-        "instagram"
-      ],
-      "degree_centrality": 0.0217,
-      "betweenness_centrality": 0.0,
-      "in_degree_centrality": 0.0217,
-      "out_degree_centrality": 0.0,
-      "pagerank": 0.0139,
-      "source_types": [
-        "social.json:post_tatva_post_002",
-        "social.json:post_tatva_post_005"
-      ],
-      "source_count": 2,
-      "relation_count": 2,
-      "relation_types": [
-        "POSTED_ON"
-      ]
-    },
-    {
-      "master_id": "MASTER_ed885df3",
-      "name": "Facebook",
-      "master_type": "INFRASTRUCTURE",
-      "entity_types": [
-        "PLATFORM"
-      ],
-      "resolved_values": [
-        "facebook"
-      ],
-      "degree_centrality": 0.0217,
-      "betweenness_centrality": 0.0,
-      "in_degree_centrality": 0.0217,
-      "out_degree_centrality": 0.0,
-      "pagerank": 0.014,
-      "source_types": [
-        "social.json:post_tatva_post_003",
-        "social.json:post_tatva_post_006"
-      ],
-      "source_count": 2,
-      "relation_count": 2,
-      "relation_types": [
-        "POSTED_ON"
       ]
     },
     {

@@ -609,10 +609,16 @@ def get_cache_stats():
 @app.post("/api/cache/clear")
 def clear_insights_cache():
     """Manually invalidate cached graph insights."""
+    import insights.graph_insights as gi
+    gi._GRAPH_DATA = {}
+    gi._SUSPECTS = []
+    gi._ALERTS = []
+    gi._TIMELINE = []
+    gi._SUMMARY = None
     if cache.connected:
         count = cache.invalidate_insights()
         return {"status": "success", "invalidated_keys_count": count}
-    return {"status": "error", "message": "Redis not connected"}
+    return {"status": "success", "message": "In-memory cache cleared successfully."}
 
 @app.get("/api/artifacts/status")
 def get_artifacts_status():

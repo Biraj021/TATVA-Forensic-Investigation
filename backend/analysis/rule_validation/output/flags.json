@@ -1,28 +1,28 @@
 {
-  "generated_at": "2026-05-31T05:55:23.100384",
-  "total_flags": 58,
+  "generated_at": "2026-05-31T10:19:49.312474",
+  "total_flags": 25,
   "severity_summary": {
     "CRITICAL": 0,
-    "HIGH": 38,
-    "MEDIUM": 20
+    "HIGH": 19,
+    "MEDIUM": 6
   },
   "flags": {
     "smurfing": [
       {
         "rule": "FIN_MULE_PATTERN",
         "severity": "HIGH",
-        "account_id": "MASTER_d7c86824",
-        "account_name": "ACC2001",
+        "account_id": "MASTER_9c967250",
+        "account_name": "ACC8001",
         "recipients": [
           "Rajan Mehta"
         ],
         "recipient_ids": [],
         "amounts": [
-          9400
+          9000
         ],
-        "total_amount": 9400,
+        "total_amount": 9000,
         "transfer_count": 1,
-        "time_window": "2026-05-22T21:35:00",
+        "time_window": "2026-05-22T21:41:00",
         "duration_minutes": 24,
         "description": "Flagged financial behavior (Mule Pattern): score contribution 13.9"
       },
@@ -47,6 +47,24 @@
       {
         "rule": "FIN_MULE_PATTERN",
         "severity": "HIGH",
+        "account_id": "MASTER_d7c86824",
+        "account_name": "ACC2001",
+        "recipients": [
+          "Rajan Mehta"
+        ],
+        "recipient_ids": [],
+        "amounts": [
+          9400
+        ],
+        "total_amount": 9400,
+        "transfer_count": 1,
+        "time_window": "2026-05-22T21:35:00",
+        "duration_minutes": 24,
+        "description": "Flagged financial behavior (Mule Pattern): score contribution 13.9"
+      },
+      {
+        "rule": "FIN_MULE_PATTERN",
+        "severity": "HIGH",
         "account_id": "MASTER_03b528ae",
         "account_name": "ACC4001",
         "recipients": [
@@ -59,24 +77,6 @@
         "total_amount": 9500,
         "transfer_count": 1,
         "time_window": "2026-05-22T21:37:00",
-        "duration_minutes": 24,
-        "description": "Flagged financial behavior (Mule Pattern): score contribution 13.9"
-      },
-      {
-        "rule": "FIN_MULE_PATTERN",
-        "severity": "HIGH",
-        "account_id": "MASTER_2eb1ee24",
-        "account_name": "ACC5001",
-        "recipients": [
-          "Rajan Mehta"
-        ],
-        "recipient_ids": [],
-        "amounts": [
-          8900
-        ],
-        "total_amount": 8900,
-        "transfer_count": 1,
-        "time_window": "2026-05-22T21:38:00",
         "duration_minutes": 24,
         "description": "Flagged financial behavior (Mule Pattern): score contribution 13.9"
       },
@@ -119,18 +119,18 @@
       {
         "rule": "FIN_MULE_PATTERN",
         "severity": "HIGH",
-        "account_id": "MASTER_9c967250",
-        "account_name": "ACC8001",
+        "account_id": "MASTER_2eb1ee24",
+        "account_name": "ACC5001",
         "recipients": [
           "Rajan Mehta"
         ],
         "recipient_ids": [],
         "amounts": [
-          9000
+          8900
         ],
-        "total_amount": 9000,
+        "total_amount": 8900,
         "transfer_count": 1,
-        "time_window": "2026-05-22T21:41:00",
+        "time_window": "2026-05-22T21:38:00",
         "duration_minutes": 24,
         "description": "Flagged financial behavior (Mule Pattern): score contribution 13.9"
       },
@@ -149,7 +149,7 @@
         "total_amount": 64400,
         "transfer_count": 1,
         "time_window": "2026-05-22T22:05:00",
-        "duration_minutes": 30,
+        "duration_minutes": 24,
         "description": "Flagged financial behavior (Mule Pattern): score contribution 13.91"
       },
       {
@@ -185,7 +185,7 @@
         "total_amount": 64400,
         "transfer_count": 1,
         "time_window": "2026-05-22T22:05:00",
-        "duration_minutes": 28,
+        "duration_minutes": 30,
         "description": "Flagged financial behavior (Mule Pattern): score contribution 13.91"
       },
       {
@@ -203,7 +203,7 @@
         "total_amount": 64400,
         "transfer_count": 1,
         "time_window": "2026-05-22T22:05:00",
-        "duration_minutes": 27,
+        "duration_minutes": 28,
         "description": "Flagged financial behavior (Mule Pattern): score contribution 13.91"
       },
       {
@@ -257,7 +257,7 @@
         "total_amount": 64400,
         "transfer_count": 1,
         "time_window": "2026-05-22T22:05:00",
-        "duration_minutes": 24,
+        "duration_minutes": 27,
         "description": "Flagged financial behavior (Mule Pattern): score contribution 13.91"
       },
       {
@@ -304,155 +304,9 @@
         "timestamp": "2026-05-22T19:45:00+05:30",
         "text_snippet": "Tonight's Operation - Final Plan",
         "description": "Forensic hit (Deletion Language): Tonight's Operation - Final Plan"
-      },
-      {
-        "rule": "FORENSIC_HIT",
-        "severity": "MEDIUM",
-        "channel": "messaged",
-        "source": "Rahul Sen",
-        "source_id": "MASTER_b41353c7",
-        "target": "Group_Chat",
-        "target_id": "",
-        "signal": "delete_instruction",
-        "timestamp": "2026-05-22T21:25:00",
-        "text_snippet": "Starting transfers now. Delete this chat after reading.",
-        "description": "Forensic hit (Deletion Language): Starting transfers now. Delete this chat after reading."
-      },
-      {
-        "rule": "FORENSIC_HIT",
-        "severity": "MEDIUM",
-        "channel": "messaged",
-        "source": "Arjun",
-        "source_id": "MASTER_6137f90b",
-        "target": "Group_Chat",
-        "target_id": "",
-        "signal": "has_money_ref",
-        "timestamp": "2026-05-22T20:22:00",
-        "text_snippet": "Rajan confirmed the mule accounts are ready. All below 10k each transfer.",
-        "description": "Forensic hit (Money Request): Rajan confirmed the mule accounts are ready. All below 10k each transfer."
-      },
-      {
-        "rule": "FORENSIC_HIT",
-        "severity": "MEDIUM",
-        "channel": "messaged",
-        "source": "Rahul Sen",
-        "source_id": "MASTER_b41353c7",
-        "target": "Group_Chat",
-        "target_id": "",
-        "signal": "has_money_ref",
-        "timestamp": "2026-05-22T20:45:00",
-        "text_snippet": "Arjun, transfer work will happen near Park Street tonight.",
-        "description": "Forensic hit (Money Request): Arjun, transfer work will happen near Park Street tonight."
-      },
-      {
-        "rule": "FORENSIC_HIT",
-        "severity": "MEDIUM",
-        "channel": "messaged",
-        "source": "Arjun",
-        "source_id": "MASTER_6137f90b",
-        "target": "Group_Chat",
-        "target_id": "",
-        "signal": "has_money_ref",
-        "timestamp": "2026-05-22T20:47:00",
-        "text_snippet": "I am ready. Coordinate with Vikram before withdrawing.",
-        "description": "Forensic hit (Money Request): I am ready. Coordinate with Vikram before withdrawing."
-      },
-      {
-        "rule": "FORENSIC_HIT",
-        "severity": "MEDIUM",
-        "channel": "messaged",
-        "source": "Arjun",
-        "source_id": "MASTER_6137f90b",
-        "target": "Group_Chat",
-        "target_id": "",
-        "signal": "has_money_ref",
-        "timestamp": "2026-05-22T21:10:00",
-        "text_snippet": "Rahul, Rajan just confirmed all 7 sub-accounts are live.",
-        "description": "Forensic hit (Money Request): Rahul, Rajan just confirmed all 7 sub-accounts are live."
-      },
-      {
-        "rule": "FORENSIC_HIT",
-        "severity": "HIGH",
-        "channel": "messaged",
-        "source": "Arjun",
-        "source_id": "MASTER_6137f90b",
-        "target": "Group_Chat",
-        "target_id": "",
-        "signal": "has_money_ref",
-        "timestamp": "2026-05-22T21:20:00",
-        "text_snippet": "ACC1001 should send the amount in small parts, below 9500 each.",
-        "description": "Forensic hit (Money Request): ACC1001 should send the amount in small parts, below 9500 each."
-      },
-      {
-        "rule": "FORENSIC_HIT",
-        "severity": "HIGH",
-        "channel": "messaged",
-        "source": "Rahul Sen",
-        "source_id": "MASTER_b41353c7",
-        "target": "Group_Chat",
-        "target_id": "",
-        "signal": "has_money_ref",
-        "timestamp": "2026-05-22T21:25:00",
-        "text_snippet": "Starting transfers now. Delete this chat after reading.",
-        "description": "Forensic hit (Money Request): Starting transfers now. Delete this chat after reading."
-      },
-      {
-        "rule": "FORENSIC_HIT",
-        "severity": "HIGH",
-        "channel": "messaged",
-        "source": "Vikram Khanna",
-        "source_id": "MASTER_f24caf16",
-        "target": "Group_Chat",
-        "target_id": "",
-        "signal": "has_money_ref",
-        "timestamp": "2026-05-22T21:45:00",
-        "text_snippet": "Cash in hand. Moving to Howrah Station now for delivery.",
-        "description": "Forensic hit (Money Request): Cash in hand. Moving to Howrah Station now for delivery."
       }
     ],
     "communication_bursts": [
-      {
-        "rule": "TEMP_COMM_TO_TRANSFER",
-        "severity": "HIGH",
-        "actors": [
-          "Vikram Khanna",
-          "Network Target"
-        ],
-        "actor_ids": [
-          "MASTER_f24caf16"
-        ],
-        "count": 1,
-        "window": "2026-05-22T21:11:00",
-        "description": "Communication pattern (Communication -> Transfer Coordination) flagged: score contribution 8.33"
-      },
-      {
-        "rule": "TEMP_COMM_TO_TRANSFER",
-        "severity": "HIGH",
-        "actors": [
-          "Rahul Sen",
-          "Network Target"
-        ],
-        "actor_ids": [
-          "MASTER_b41353c7"
-        ],
-        "count": 1,
-        "window": "2026-05-22T21:11:00",
-        "description": "Communication pattern (Communication -> Transfer Coordination) flagged: score contribution 8.33"
-      },
-      {
-        "rule": "TEMP_COMM_TO_TRANSFER",
-        "severity": "HIGH",
-        "actors": [
-          "Rajan Mehta",
-          "Network Target"
-        ],
-        "actor_ids": [
-          "MASTER_ee1fa35b"
-        ],
-        "count": 1,
-        "window": "2026-05-22T21:15:00",
-        "description": "Communication pattern (Communication -> Transfer Coordination) flagged: score contribution 8.33"
-      },
       {
         "rule": "TEMP_COMM_TO_TRANSFER",
         "severity": "HIGH",
@@ -466,435 +320,24 @@
         "count": 1,
         "window": "2026-05-22T22:05:00",
         "description": "Communication pattern (Communication -> Transfer Coordination) flagged: score contribution 8.35"
+      },
+      {
+        "rule": "TEMP_COMM_TO_TRANSFER",
+        "severity": "HIGH",
+        "actors": [
+          "Vikram Khanna",
+          "Network Target"
+        ],
+        "actor_ids": [
+          "MASTER_f24caf16"
+        ],
+        "count": 1,
+        "window": "2026-05-22T21:17:00",
+        "description": "Communication pattern (Communication -> Transfer Coordination) flagged: score contribution 8.33"
       }
     ],
-    "colocations": [
-      {
-        "rule": "TEMP_COLOCATION_TO_TRANSFER",
-        "severity": "HIGH",
-        "persons": [
-          "Rahul Sen",
-          "Known Suspect"
-        ],
-        "person_ids": [
-          "MASTER_b41353c7"
-        ],
-        "location": "Chatterjee Lane, Bowbazar, Kolkata",
-        "location_id": "",
-        "timestamps": [
-          "2026-05-22T21:11:00"
-        ],
-        "description": "Location activity (Rendezvous -> Money Transfer) observed at Chatterjee Lane, Bowbazar, Kolkata"
-      },
-      {
-        "rule": "TEMP_COLOCATION_TO_TRANSFER",
-        "severity": "HIGH",
-        "persons": [
-          "Tracker_001",
-          "Known Suspect"
-        ],
-        "person_ids": [
-          "MASTER_90d56781"
-        ],
-        "location": "Chatterjee Lane, Bowbazar, Kolkata",
-        "location_id": "",
-        "timestamps": [
-          "2026-05-22T21:11:00"
-        ],
-        "description": "Location activity (Rendezvous -> Money Transfer) observed at Chatterjee Lane, Bowbazar, Kolkata"
-      },
-      {
-        "rule": "TEMP_COLOCATION_TO_TRANSFER",
-        "severity": "HIGH",
-        "persons": [
-          "Rahul Sen",
-          "Known Suspect"
-        ],
-        "person_ids": [
-          "MASTER_b41353c7"
-        ],
-        "location": "Chatterjee Lane, Bowbazar, Kolkata",
-        "location_id": "",
-        "timestamps": [
-          "2026-05-22T21:11:00"
-        ],
-        "description": "Location activity (Rendezvous -> Money Transfer) observed at Chatterjee Lane, Bowbazar, Kolkata"
-      },
-      {
-        "rule": "TEMP_COLOCATION_TO_TRANSFER",
-        "severity": "HIGH",
-        "persons": [
-          "Vikram Khanna",
-          "Known Suspect"
-        ],
-        "person_ids": [
-          "MASTER_f24caf16"
-        ],
-        "location": "Chatterjee Lane, Bowbazar, Kolkata",
-        "location_id": "",
-        "timestamps": [
-          "2026-05-22T21:11:00"
-        ],
-        "description": "Location activity (Rendezvous -> Money Transfer) observed at Chatterjee Lane, Bowbazar, Kolkata"
-      },
-      {
-        "rule": "TEMP_COLOCATION_TO_TRANSFER",
-        "severity": "HIGH",
-        "persons": [
-          "Rahul Sen",
-          "Known Suspect"
-        ],
-        "person_ids": [
-          "MASTER_b41353c7"
-        ],
-        "location": "Chatterjee Lane, Bowbazar, Kolkata",
-        "location_id": "",
-        "timestamps": [
-          "2026-05-22T21:11:00"
-        ],
-        "description": "Location activity (Rendezvous -> Money Transfer) observed at Chatterjee Lane, Bowbazar, Kolkata"
-      },
-      {
-        "rule": "TEMP_COLOCATION_TO_TRANSFER",
-        "severity": "HIGH",
-        "persons": [
-          "Cab_102",
-          "Known Suspect"
-        ],
-        "person_ids": [
-          "MASTER_472a3eae"
-        ],
-        "location": "Chatterjee Lane, Bowbazar, Kolkata",
-        "location_id": "",
-        "timestamps": [
-          "2026-05-22T21:11:00"
-        ],
-        "description": "Location activity (Rendezvous -> Money Transfer) observed at Chatterjee Lane, Bowbazar, Kolkata"
-      },
-      {
-        "rule": "TEMP_COLOCATION_TO_TRANSFER",
-        "severity": "HIGH",
-        "persons": [
-          "Tracker_001",
-          "Known Suspect"
-        ],
-        "person_ids": [
-          "MASTER_90d56781"
-        ],
-        "location": "Chatterjee Lane, Bowbazar, Kolkata",
-        "location_id": "",
-        "timestamps": [
-          "2026-05-22T21:11:00"
-        ],
-        "description": "Location activity (Rendezvous -> Money Transfer) observed at Chatterjee Lane, Bowbazar, Kolkata"
-      },
-      {
-        "rule": "TEMP_COLOCATION_TO_TRANSFER",
-        "severity": "HIGH",
-        "persons": [
-          "Rahul Sen",
-          "Known Suspect"
-        ],
-        "person_ids": [
-          "MASTER_b41353c7"
-        ],
-        "location": "Chatterjee Lane, Bowbazar, Kolkata",
-        "location_id": "",
-        "timestamps": [
-          "2026-05-22T21:11:00"
-        ],
-        "description": "Location activity (Rendezvous -> Money Transfer) observed at Chatterjee Lane, Bowbazar, Kolkata"
-      },
-      {
-        "rule": "TEMP_COLOCATION_TO_TRANSFER",
-        "severity": "HIGH",
-        "persons": [
-          "Vikram Khanna",
-          "Known Suspect"
-        ],
-        "person_ids": [
-          "MASTER_f24caf16"
-        ],
-        "location": "Chatterjee Lane, Bowbazar, Kolkata",
-        "location_id": "",
-        "timestamps": [
-          "2026-05-22T21:11:00"
-        ],
-        "description": "Location activity (Rendezvous -> Money Transfer) observed at Chatterjee Lane, Bowbazar, Kolkata"
-      },
-      {
-        "rule": "TEMP_COLOCATION_TO_TRANSFER",
-        "severity": "HIGH",
-        "persons": [
-          "Rahul Sen",
-          "Known Suspect"
-        ],
-        "person_ids": [
-          "MASTER_b41353c7"
-        ],
-        "location": "Chatterjee Lane, Bowbazar, Kolkata",
-        "location_id": "",
-        "timestamps": [
-          "2026-05-22T21:11:00"
-        ],
-        "description": "Location activity (Rendezvous -> Money Transfer) observed at Chatterjee Lane, Bowbazar, Kolkata"
-      },
-      {
-        "rule": "TEMP_COLOCATION_TO_TRANSFER",
-        "severity": "HIGH",
-        "persons": [
-          "Rahul Sen",
-          "Known Suspect"
-        ],
-        "person_ids": [
-          "MASTER_b41353c7"
-        ],
-        "location": "Chatterjee Lane, Bowbazar, Kolkata",
-        "location_id": "",
-        "timestamps": [
-          "2026-05-22T21:11:00"
-        ],
-        "description": "Location activity (Rendezvous -> Money Transfer) observed at Chatterjee Lane, Bowbazar, Kolkata"
-      },
-      {
-        "rule": "TEMP_COLOCATION_TO_TRANSFER",
-        "severity": "HIGH",
-        "persons": [
-          "Cab_102",
-          "Known Suspect"
-        ],
-        "person_ids": [
-          "MASTER_472a3eae"
-        ],
-        "location": "Chatterjee Lane, Bowbazar, Kolkata",
-        "location_id": "",
-        "timestamps": [
-          "2026-05-22T21:11:00"
-        ],
-        "description": "Location activity (Rendezvous -> Money Transfer) observed at Chatterjee Lane, Bowbazar, Kolkata"
-      },
-      {
-        "rule": "RENDEZVOUS",
-        "severity": "MEDIUM",
-        "persons": [
-          "Tracker_001",
-          "Rahul Sen"
-        ],
-        "person_ids": [
-          "MASTER_90d56781"
-        ],
-        "location": "Chatterjee Lane, Bowbazar, Kolkata",
-        "location_id": "",
-        "timestamps": [
-          "2026-05-22T20:55:00"
-        ],
-        "description": "Location activity (Suspicious Co-location) observed at Chatterjee Lane, Bowbazar, Kolkata"
-      },
-      {
-        "rule": "RENDEZVOUS",
-        "severity": "MEDIUM",
-        "persons": [
-          "Vikram Khanna",
-          "Rahul Sen"
-        ],
-        "person_ids": [
-          "MASTER_f24caf16"
-        ],
-        "location": "Chatterjee Lane, Bowbazar, Kolkata",
-        "location_id": "",
-        "timestamps": [
-          "2026-05-22T20:58:00"
-        ],
-        "description": "Location activity (Suspicious Co-location) observed at Chatterjee Lane, Bowbazar, Kolkata"
-      },
-      {
-        "rule": "RENDEZVOUS",
-        "severity": "MEDIUM",
-        "persons": [
-          "Cab_102",
-          "Rahul Sen"
-        ],
-        "person_ids": [
-          "MASTER_472a3eae"
-        ],
-        "location": "Chatterjee Lane, Bowbazar, Kolkata",
-        "location_id": "",
-        "timestamps": [
-          "2026-05-22T21:00:00"
-        ],
-        "description": "Location activity (Suspicious Co-location) observed at Chatterjee Lane, Bowbazar, Kolkata"
-      },
-      {
-        "rule": "RENDEZVOUS",
-        "severity": "MEDIUM",
-        "persons": [
-          "Tracker_001",
-          "Rahul Sen"
-        ],
-        "person_ids": [
-          "MASTER_90d56781"
-        ],
-        "location": "Chatterjee Lane, Bowbazar, Kolkata",
-        "location_id": "",
-        "timestamps": [
-          "2026-05-22T21:00:00"
-        ],
-        "description": "Location activity (Suspicious Co-location) observed at Chatterjee Lane, Bowbazar, Kolkata"
-      },
-      {
-        "rule": "RENDEZVOUS",
-        "severity": "MEDIUM",
-        "persons": [
-          "Vikram Khanna",
-          "Rahul Sen"
-        ],
-        "person_ids": [
-          "MASTER_f24caf16"
-        ],
-        "location": "Chatterjee Lane, Bowbazar, Kolkata",
-        "location_id": "",
-        "timestamps": [
-          "2026-05-22T21:00:00"
-        ],
-        "description": "Location activity (Suspicious Co-location) observed at Chatterjee Lane, Bowbazar, Kolkata"
-      },
-      {
-        "rule": "RENDEZVOUS",
-        "severity": "MEDIUM",
-        "persons": [
-          "Cab_102",
-          "Rahul Sen"
-        ],
-        "person_ids": [
-          "MASTER_472a3eae"
-        ],
-        "location": "Chatterjee Lane, Bowbazar, Kolkata",
-        "location_id": "",
-        "timestamps": [
-          "2026-05-22T21:00:00"
-        ],
-        "description": "Location activity (Suspicious Co-location) observed at Chatterjee Lane, Bowbazar, Kolkata"
-      },
-      {
-        "rule": "RENDEZVOUS",
-        "severity": "HIGH",
-        "persons": [
-          "Arjun",
-          "Rahul Sen"
-        ],
-        "person_ids": [
-          "MASTER_6137f90b"
-        ],
-        "location": "Bow Bazar North, Kolkata",
-        "location_id": "",
-        "timestamps": [
-          "2026-05-22T21:30:00"
-        ],
-        "description": "Location activity (Suspicious Co-location) observed at Bow Bazar North, Kolkata"
-      },
-      {
-        "rule": "RENDEZVOUS",
-        "severity": "HIGH",
-        "persons": [
-          "Vikram Khanna",
-          "Rahul Sen"
-        ],
-        "person_ids": [
-          "MASTER_f24caf16"
-        ],
-        "location": "Bow Bazar North, Kolkata",
-        "location_id": "",
-        "timestamps": [
-          "2026-05-22T21:30:00"
-        ],
-        "description": "Location activity (Suspicious Co-location) observed at Bow Bazar North, Kolkata"
-      },
-      {
-        "rule": "GPS_FREQUENT_VISITS",
-        "severity": "MEDIUM",
-        "persons": [
-          "Rahul Sen",
-          "Known Suspect"
-        ],
-        "person_ids": [
-          "MASTER_b41353c7"
-        ],
-        "location": "Chatterjee Lane, Bowbazar, Kolkata",
-        "location_id": "",
-        "timestamps": [
-          "2026-05-22T22:05:00"
-        ],
-        "description": "Location activity (Frequent Visits) observed at Chatterjee Lane, Bowbazar, Kolkata"
-      }
-    ],
+    "colocations": [],
     "cross_source_corroboration": [
-      {
-        "rule": "CO_CORROBORATION",
-        "severity": "HIGH",
-        "entity_name": "Rahul Sen",
-        "entity_id": "MASTER_b41353c7",
-        "entity_type": "PERSON",
-        "sources": [
-          "bank_transaction",
-          "cdr_record",
-          "chat",
-          "emails",
-          "fir_document",
-          "mobile_gps",
-          "social",
-          "telecom_tower"
-        ],
-        "source_count": 8,
-        "description": "Corroboration flag: appears across 8 sources"
-      },
-      {
-        "rule": "CO_CORROBORATION",
-        "severity": "HIGH",
-        "entity_name": "Arjun",
-        "entity_id": "MASTER_6137f90b",
-        "entity_type": "PERSON",
-        "sources": [
-          "cdr_record",
-          "chat",
-          "emails",
-          "fir_document",
-          "telecom_tower"
-        ],
-        "source_count": 5,
-        "description": "Corroboration flag: appears across 5 sources"
-      },
-      {
-        "rule": "CO_CORROBORATION",
-        "severity": "MEDIUM",
-        "entity_name": "Vikram Khanna",
-        "entity_id": "MASTER_f24caf16",
-        "entity_type": "PERSON",
-        "sources": [
-          "cdr_record",
-          "chat",
-          "emails",
-          "social",
-          "telecom_tower",
-          "wearable_device"
-        ],
-        "source_count": 6,
-        "description": "Corroboration flag: appears across 6 sources"
-      },
-      {
-        "rule": "CO_CORROBORATION",
-        "severity": "MEDIUM",
-        "entity_name": "Rajan Mehta",
-        "entity_id": "MASTER_ee1fa35b",
-        "entity_type": "PERSON",
-        "sources": [
-          "bank_transaction",
-          "cdr_record",
-          "chat",
-          "emails"
-        ],
-        "source_count": 4,
-        "description": "Corroboration flag: appears across 4 sources"
-      },
       {
         "rule": "CO_CORROBORATION",
         "severity": "MEDIUM",
@@ -905,13 +348,12 @@
           "asset_tracker",
           "gps_analysis",
           "investigator_annotation",
-          "mobile_gps",
           "telecom_tower",
           "vehicle_tracker",
           "wearable_device"
         ],
-        "source_count": 7,
-        "description": "Corroboration flag: appears across 7 sources"
+        "source_count": 6,
+        "description": "Corroboration flag: appears across 6 sources"
       },
       {
         "rule": "CO_CORROBORATION",
@@ -950,23 +392,52 @@
         "entity_type": "PLACE",
         "sources": [
           "gps_analysis",
-          "telecom_tower",
           "vehicle_tracker",
           "wearable_device"
         ],
-        "source_count": 4,
-        "description": "Corroboration flag: appears across 4 sources"
+        "source_count": 3,
+        "description": "Corroboration flag: appears across 3 sources"
+      },
+      {
+        "rule": "CO_CORROBORATION",
+        "severity": "HIGH",
+        "entity_name": "Rahul Sen",
+        "entity_id": "MASTER_b41353c7",
+        "entity_type": "PERSON",
+        "sources": [
+          "bank_transaction",
+          "cdr_record",
+          "fir_document",
+          "mobile_gps",
+          "telecom_tower"
+        ],
+        "source_count": 5,
+        "description": "Corroboration flag: appears across 5 sources"
+      },
+      {
+        "rule": "CO_CORROBORATION",
+        "severity": "HIGH",
+        "entity_name": "Arjun",
+        "entity_id": "MASTER_6137f90b",
+        "entity_type": "PERSON",
+        "sources": [
+          "cdr_record",
+          "fir_document",
+          "telecom_tower"
+        ],
+        "source_count": 3,
+        "description": "Corroboration flag: appears across 3 sources"
       },
       {
         "rule": "CO_CORROBORATION",
         "severity": "MEDIUM",
-        "entity_name": "Howrah Station",
-        "entity_id": "MASTER_e32ebe48",
-        "entity_type": "PLACE",
+        "entity_name": "Vikram Khanna",
+        "entity_id": "MASTER_f24caf16",
+        "entity_type": "PERSON",
         "sources": [
-          "chat",
-          "emails",
-          "social"
+          "cdr_record",
+          "telecom_tower",
+          "wearable_device"
         ],
         "source_count": 3,
         "description": "Corroboration flag: appears across 3 sources"

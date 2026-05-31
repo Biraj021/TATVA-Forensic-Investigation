@@ -1,46 +1,44 @@
 {
-  "generated_at": "2026-05-30T13:41:19.313014",
+  "generated_at": "2026-05-31T10:19:53.591865",
   "incident_window": {
     "start": "2026-05-22T19:45:00",
     "end": "2026-05-29T23:30:55.454719",
     "duration_minutes": 10305.9
   },
   "stats": {
-    "total_events": 136,
+    "total_events": 92,
     "total_scenes": 9,
     "action_type_counts": {
-      "MENTIONED": 23,
-      "LOCATED_AT": 23,
-      "MESSAGED": 17,
-      "CALLED": 15,
-      "CONNECTED_TO_TOWER": 15,
+      "MENTIONED": 19,
+      "LOCATED_AT": 16,
       "TRANSFERRED_TO": 15,
-      "MOVED_TO": 13,
-      "POSTED_ON": 6,
-      "MENTIONED_USER": 4,
+      "MOVED_TO": 12,
+      "CALLED": 11,
+      "CONNECTED_TO_TOWER": 5,
+      "POSTED_ON": 3,
+      "MENTIONED_USER": 3,
+      "MESSAGED": 3,
       "DETECTED": 3,
       "EMAILED": 1,
       "TRANSFERRED_MONEY": 1
     },
     "source_type_counts": {
-      "cdr_record": 30,
-      "chat": 26,
-      "social": 16,
+      "unknown": 29,
+      "cdr_record": 16,
       "bank_transaction": 15,
-      "gps_analysis": 13,
-      "emails": 9,
-      "mobile_gps": 7,
-      "telecom_tower": 6,
+      "gps_analysis": 12,
+      "telecom_tower": 4,
       "wearable_device": 4,
       "asset_tracker": 3,
       "vehicle_tracker": 3,
       "vehicle_camera": 3,
+      "mobile_gps": 2,
       "fir_document": 1
     },
-    "peak_activity_scene": "SCENE_03",
-    "peak_activity_count": 31
+    "peak_activity_scene": "SCENE_04",
+    "peak_activity_count": 22
   },
-  "total_events": 136,
+  "total_events": 92,
   "total_scenes": 9,
   "scenes": [
     {
@@ -54,7 +52,7 @@
         "EMAILED": 1
       },
       "dominant_source_types": [
-        "emails"
+        "unknown"
       ],
       "active_actors": [
         "Arjun",
@@ -75,18 +73,18 @@
           "from_id": "MASTER_b41353c7",
           "to": "Arjun",
           "to_id": "MASTER_6137f90b",
-          "source_type": "emails",
+          "source_type": "unknown",
           "confidence": 0.97,
           "attributes": {
-            "subject": "Tonight's Operation - Final Plan",
-            "is_reply": false,
             "forensic_signals": {
               "requests_otp": false,
               "impersonates_bank": false,
               "requests_account_info": false,
               "urgency_language": false,
               "delete_instruction": true
-            }
+            },
+            "subject": "Tonight's Operation - Final Plan",
+            "is_reply": false
           },
           "description": "Rahul Sen emailed Arjun -- Subject: Tonight's Operation - Final Plan [FLAGGED: delete_instruction]"
         },
@@ -95,23 +93,9 @@
           "action": "MENTIONED",
           "from": "Rahul Sen",
           "from_id": "MASTER_b41353c7",
-          "to": "Vikram Khanna",
-          "to_id": "MASTER_f24caf16",
-          "source_type": "emails",
-          "confidence": 0.75,
-          "attributes": {
-            "context": "email_body"
-          },
-          "description": "Rahul Sen mentioned Vikram Khanna"
-        },
-        {
-          "timestamp": "2026-05-22T19:45:00",
-          "action": "MENTIONED",
-          "from": "Rahul Sen",
-          "from_id": "MASTER_b41353c7",
           "to": "Howrah Station",
           "to_id": "MASTER_e32ebe48",
-          "source_type": "emails",
+          "source_type": "unknown",
           "confidence": 0.75,
           "attributes": {
             "context": "email_body"
@@ -125,7 +109,7 @@
           "from_id": "MASTER_b41353c7",
           "to": "Arjun",
           "to_id": "MASTER_6137f90b",
-          "source_type": "emails",
+          "source_type": "unknown",
           "confidence": 0.75,
           "attributes": {
             "context": "email_body"
@@ -137,9 +121,37 @@
           "action": "MENTIONED",
           "from": "Rahul Sen",
           "from_id": "MASTER_b41353c7",
+          "to": "Rajan Mehta",
+          "to_id": "MASTER_ee1fa35b",
+          "source_type": "unknown",
+          "confidence": 0.75,
+          "attributes": {
+            "context": "email_body"
+          },
+          "description": "Rahul Sen mentioned Rajan Mehta"
+        },
+        {
+          "timestamp": "2026-05-22T19:45:00",
+          "action": "MENTIONED",
+          "from": "Rahul Sen",
+          "from_id": "MASTER_b41353c7",
+          "to": "Vikram Khanna",
+          "to_id": "MASTER_f24caf16",
+          "source_type": "unknown",
+          "confidence": 0.75,
+          "attributes": {
+            "context": "email_body"
+          },
+          "description": "Rahul Sen mentioned Vikram Khanna"
+        },
+        {
+          "timestamp": "2026-05-22T19:45:00",
+          "action": "MENTIONED",
+          "from": "Rahul Sen",
+          "from_id": "MASTER_b41353c7",
           "to": "Hyundai",
           "to_id": "MASTER_359a9c21",
-          "source_type": "emails",
+          "source_type": "unknown",
           "confidence": 0.75,
           "attributes": {
             "context": "email_body"
@@ -153,7 +165,7 @@
           "from_id": "MASTER_b41353c7",
           "to": "MASTER_e6f4f60a",
           "to_id": "MASTER_e6f4f60a",
-          "source_type": "emails",
+          "source_type": "unknown",
           "confidence": 0.75,
           "attributes": {
             "context": "email_body"
@@ -165,23 +177,9 @@
           "action": "MENTIONED",
           "from": "Rahul Sen",
           "from_id": "MASTER_b41353c7",
-          "to": "Rajan Mehta",
-          "to_id": "MASTER_ee1fa35b",
-          "source_type": "emails",
-          "confidence": 0.75,
-          "attributes": {
-            "context": "email_body"
-          },
-          "description": "Rahul Sen mentioned Rajan Mehta"
-        },
-        {
-          "timestamp": "2026-05-22T19:45:00",
-          "action": "MENTIONED",
-          "from": "Rahul Sen",
-          "from_id": "MASTER_b41353c7",
           "to": "Email_Address_Cc44D0C6",
           "to_id": "MASTER_c824d68e",
-          "source_type": "emails",
+          "source_type": "unknown",
           "confidence": 0.75,
           "attributes": {
             "context": "email_body"
@@ -195,7 +193,7 @@
           "from_id": "MASTER_b41353c7",
           "to": "Email_Address_5029504C",
           "to_id": "MASTER_277d526f",
-          "source_type": "emails",
+          "source_type": "unknown",
           "confidence": 0.75,
           "attributes": {
             "context": "email_body"
@@ -208,57 +206,21 @@
       "scene_id": "SCENE_02",
       "window_start": "20:15",
       "window_end": "20:45",
-      "label": "Chat Activity",
-      "event_count": 16,
+      "label": "Social Media Activity",
+      "event_count": 2,
       "action_breakdown": {
-        "MESSAGED": 6,
-        "POSTED_ON": 2,
-        "MENTIONED_USER": 2,
-        "MENTIONED": 2,
-        "LOCATED_AT": 2,
-        "CALLED": 1,
-        "CONNECTED_TO_TOWER": 1
+        "POSTED_ON": 1,
+        "MENTIONED_USER": 1
       },
       "dominant_source_types": [
-        "chat",
-        "social",
-        "cdr_record"
+        "unknown"
       ],
       "active_actors": [
         "@Arjung",
         "@Rahulsen",
-        "Arjun",
-        "Cell Tower (Twr_Kol_102)",
-        "Chatterjee Lane, Bowbazar, Kolkata",
-        "Group_Chat",
-        "Rahul Sen",
-        "Rajan Mehta",
-        "Twitter",
-        "Vikram Khanna"
+        "Twitter"
       ],
       "events": [
-        {
-          "timestamp": "2026-05-22T20:15:00",
-          "action": "MESSAGED",
-          "from": "Rahul Sen",
-          "from_id": "MASTER_b41353c7",
-          "to": "Group_Chat",
-          "to_id": "MASTER_cc9e76cc",
-          "source_type": "chat",
-          "confidence": 0.95,
-          "attributes": {
-            "text": "Arjun, tonight is the night. Park Street, 9 PM sharp.",
-            "platform": "whatsapp/telegram",
-            "message_index": 0,
-            "forensic_signals": {
-              "has_urgency": false,
-              "has_money_ref": false,
-              "has_target_ref": false,
-              "has_coordination": false
-            }
-          },
-          "description": "Rahul Sen -> Group_Chat: 'Arjun, tonight is the night. Park Street, 9 PM sharp.'"
-        },
         {
           "timestamp": "2026-05-22T20:15:00",
           "action": "POSTED_ON",
@@ -266,7 +228,7 @@
           "from_id": "MASTER_656f09cf",
           "to": "Twitter",
           "to_id": "MASTER_bc85a6b2",
-          "source_type": "social",
+          "source_type": "unknown",
           "confidence": 0.95,
           "attributes": {
             "post_id": "tatva_post_004",
@@ -285,238 +247,10 @@
           "from_id": "MASTER_656f09cf",
           "to": "@Arjung",
           "to_id": "MASTER_425adff9",
-          "source_type": "social",
+          "source_type": "unknown",
           "confidence": 0.85,
           "attributes": {
             "post_id": "tatva_post_004"
-          },
-          "description": "@Rahulsen -> @Arjung"
-        },
-        {
-          "timestamp": "2026-05-22T20:17:00",
-          "action": "MESSAGED",
-          "from": "Arjun",
-          "from_id": "MASTER_6137f90b",
-          "to": "Group_Chat",
-          "to_id": "MASTER_cc9e76cc",
-          "source_type": "chat",
-          "confidence": 0.95,
-          "attributes": {
-            "text": "Confirmed. Vikram is also on standby near Park Street.",
-            "platform": "whatsapp/telegram",
-            "message_index": 1,
-            "forensic_signals": {
-              "has_urgency": false,
-              "has_money_ref": false,
-              "has_target_ref": false,
-              "has_coordination": false
-            }
-          },
-          "description": "Arjun -> Group_Chat: 'Confirmed. Vikram is also on standby near Park Street.'"
-        },
-        {
-          "timestamp": "2026-05-22T20:17:00",
-          "action": "MENTIONED",
-          "from": "Arjun",
-          "from_id": "MASTER_6137f90b",
-          "to": "Vikram Khanna",
-          "to_id": "MASTER_f24caf16",
-          "source_type": "chat",
-          "confidence": 0.75,
-          "attributes": {
-            "message_index": 1
-          },
-          "description": "Arjun mentioned Vikram Khanna"
-        },
-        {
-          "timestamp": "2026-05-22T20:20:00",
-          "action": "MESSAGED",
-          "from": "Rahul Sen",
-          "from_id": "MASTER_b41353c7",
-          "to": "Group_Chat",
-          "to_id": "MASTER_cc9e76cc",
-          "source_type": "chat",
-          "confidence": 0.95,
-          "attributes": {
-            "text": "I will use ANDROID_001. Keep 9876543210 active at all times.",
-            "platform": "whatsapp/telegram",
-            "message_index": 2,
-            "forensic_signals": {
-              "has_urgency": false,
-              "has_money_ref": false,
-              "has_target_ref": false,
-              "has_coordination": false
-            }
-          },
-          "description": "Rahul Sen -> Group_Chat: 'I will use ANDROID_001. Keep 9876543210 active at all times.'"
-        },
-        {
-          "timestamp": "2026-05-22T20:22:00",
-          "action": "MESSAGED",
-          "from": "Arjun",
-          "from_id": "MASTER_6137f90b",
-          "to": "Group_Chat",
-          "to_id": "MASTER_cc9e76cc",
-          "source_type": "chat",
-          "confidence": 0.95,
-          "attributes": {
-            "text": "Rajan confirmed the mule accounts are ready. All below 10k each transfer.",
-            "platform": "whatsapp/telegram",
-            "message_index": 3,
-            "forensic_signals": {
-              "has_urgency": false,
-              "has_money_ref": true,
-              "has_target_ref": false,
-              "has_coordination": true
-            }
-          },
-          "description": "Arjun -> Group_Chat: 'Rajan confirmed the mule accounts are ready. All below 10k each transfer.'"
-        },
-        {
-          "timestamp": "2026-05-22T20:22:00",
-          "action": "MENTIONED",
-          "from": "Arjun",
-          "from_id": "MASTER_6137f90b",
-          "to": "Rajan Mehta",
-          "to_id": "MASTER_ee1fa35b",
-          "source_type": "chat",
-          "confidence": 0.75,
-          "attributes": {
-            "message_index": 3
-          },
-          "description": "Arjun mentioned Rajan Mehta"
-        },
-        {
-          "timestamp": "2026-05-22T20:25:00",
-          "action": "MESSAGED",
-          "from": "Rahul Sen",
-          "from_id": "MASTER_b41353c7",
-          "to": "Group_Chat",
-          "to_id": "MASTER_cc9e76cc",
-          "source_type": "chat",
-          "confidence": 0.95,
-          "attributes": {
-            "text": "Good. ACC1001 will initiate. Split into at least 7 tranches.",
-            "platform": "whatsapp/telegram",
-            "message_index": 4,
-            "forensic_signals": {
-              "has_urgency": false,
-              "has_money_ref": false,
-              "has_target_ref": false,
-              "has_coordination": false
-            }
-          },
-          "description": "Rahul Sen -> Group_Chat: 'Good. ACC1001 will initiate. Split into at least 7 tranches.'"
-        },
-        {
-          "timestamp": "2026-05-22T20:30:00",
-          "action": "CALLED",
-          "from": "Rahul Sen",
-          "from_id": "MASTER_b41353c7",
-          "to": "Arjun",
-          "to_id": "MASTER_6137f90b",
-          "source_type": "cdr_record",
-          "confidence": 0.99,
-          "attributes": {
-            "duration": 185,
-            "call_type": "OUTGOING"
-          },
-          "description": "Rahul Sen called Arjun (185s, outgoing)"
-        },
-        {
-          "timestamp": "2026-05-22T20:30:00",
-          "action": "CONNECTED_TO_TOWER",
-          "from": "Rahul Sen",
-          "from_id": "MASTER_b41353c7",
-          "to": "Cell Tower (Twr_Kol_102)",
-          "to_id": "MASTER_4df7510c",
-          "source_type": "cdr_record",
-          "confidence": 0.95,
-          "attributes": {},
-          "description": "Rahul Sen connected to Cell Tower (Twr_Kol_102)"
-        },
-        {
-          "timestamp": "2026-05-22T20:30:00",
-          "action": "LOCATED_AT",
-          "from": "Rahul Sen",
-          "from_id": "MASTER_b41353c7",
-          "to": "Chatterjee Lane, Bowbazar, Kolkata",
-          "to_id": "MASTER_ad6e0d66",
-          "source_type": "mobile_gps",
-          "confidence": 0.95,
-          "attributes": {
-            "accuracy": 4.2,
-            "speed": 0.0
-          },
-          "description": "Rahul Sen at Chatterjee Lane, Bowbazar, Kolkata (accuracy: 4.2m, stationary)"
-        },
-        {
-          "timestamp": "2026-05-22T20:30:00",
-          "action": "MESSAGED",
-          "from": "Vikram Khanna",
-          "from_id": "MASTER_f24caf16",
-          "to": "Group_Chat",
-          "to_id": "MASTER_cc9e76cc",
-          "source_type": "chat",
-          "confidence": 0.95,
-          "attributes": {
-            "text": "WATCH_ABC shows I am 500 meters from Park Street. Arriving in 5 minutes.",
-            "platform": "whatsapp/telegram",
-            "message_index": 5,
-            "forensic_signals": {
-              "has_urgency": false,
-              "has_money_ref": false,
-              "has_target_ref": false,
-              "has_coordination": false
-            }
-          },
-          "description": "Vikram Khanna -> Group_Chat: 'WATCH_ABC shows I am 500 meters from Park Street. Arriving in 5 minutes.'"
-        },
-        {
-          "timestamp": "2026-05-22T20:31:00",
-          "action": "LOCATED_AT",
-          "from": "Rahul Sen",
-          "from_id": "MASTER_b41353c7",
-          "to": "Chatterjee Lane, Bowbazar, Kolkata",
-          "to_id": "MASTER_ad6e0d66",
-          "source_type": "telecom_tower",
-          "confidence": 0.95,
-          "attributes": {
-            "accuracy": 120.0,
-            "speed": 0.0
-          },
-          "description": "Rahul Sen at Chatterjee Lane, Bowbazar, Kolkata (accuracy: 120.0m, stationary)"
-        },
-        {
-          "timestamp": "2026-05-22T20:40:00",
-          "action": "POSTED_ON",
-          "from": "@Rahulsen",
-          "from_id": "MASTER_656f09cf",
-          "to": "Twitter",
-          "to_id": "MASTER_bc85a6b2",
-          "source_type": "social",
-          "confidence": 0.95,
-          "attributes": {
-            "post_id": "tatva_post_001",
-            "content": "Big plans for tonight near Park Street. @ArjunG keep the account ready. All systems go.",
-            "hashtags": [
-              "kolkata",
-              "tonight"
-            ]
-          },
-          "description": "@Rahulsen posted on Twitter: 'Big plans for tonight near Park Street. @ArjunG keep the account ready. All syst...'"
-        },
-        {
-          "timestamp": "2026-05-22T20:40:00",
-          "action": "MENTIONED_USER",
-          "from": "@Rahulsen",
-          "from_id": "MASTER_656f09cf",
-          "to": "@Arjung",
-          "to_id": "MASTER_425adff9",
-          "source_type": "social",
-          "confidence": 0.85,
-          "attributes": {
-            "post_id": "tatva_post_001"
           },
           "description": "@Rahulsen -> @Arjung"
         }
@@ -526,22 +260,20 @@
       "scene_id": "SCENE_03",
       "window_start": "20:45",
       "window_end": "21:15",
-      "label": "Coordinated Communications",
-      "event_count": 31,
+      "label": "Financial Transfers",
+      "event_count": 16,
       "action_breakdown": {
-        "LOCATED_AT": 7,
-        "MESSAGED": 5,
-        "CALLED": 4,
-        "CONNECTED_TO_TOWER": 4,
-        "MENTIONED": 4,
+        "LOCATED_AT": 5,
         "TRANSFERRED_TO": 4,
-        "POSTED_ON": 2,
+        "MENTIONED": 3,
+        "CALLED": 2,
+        "POSTED_ON": 1,
         "MENTIONED_USER": 1
       },
       "dominant_source_types": [
-        "cdr_record",
-        "chat",
-        "social"
+        "unknown",
+        "bank_transaction",
+        "cdr_record"
       ],
       "active_actors": [
         "@Arjung",
@@ -554,16 +286,10 @@
         "Arjun",
         "Bowbazar, Kolkata",
         "Cab_102",
-        "Cell Tower (Twr_Kol_102)",
-        "Cell Tower (Twr_Kol_105)",
-        "Cell Tower (Twr_Kol_210)",
         "Chatterjee Lane, Bowbazar, Kolkata",
         "Facebook",
-        "Group_Chat",
         "Hyundai",
-        "Instagram",
         "Rahul Sen",
-        "Rajan Mehta",
         "Surya Sen Street, Baithakkhana, Kolkata",
         "Tracker_001",
         "Vikram Khanna"
@@ -586,33 +312,6 @@
         },
         {
           "timestamp": "2026-05-22T20:45:00",
-          "action": "CONNECTED_TO_TOWER",
-          "from": "Arjun",
-          "from_id": "MASTER_6137f90b",
-          "to": "Cell Tower (Twr_Kol_105)",
-          "to_id": "MASTER_c3de5e12",
-          "source_type": "cdr_record",
-          "confidence": 0.95,
-          "attributes": {},
-          "description": "Arjun connected to Cell Tower (Twr_Kol_105)"
-        },
-        {
-          "timestamp": "2026-05-22T20:45:00",
-          "action": "LOCATED_AT",
-          "from": "Rahul Sen",
-          "from_id": "MASTER_b41353c7",
-          "to": "Chatterjee Lane, Bowbazar, Kolkata",
-          "to_id": "MASTER_ad6e0d66",
-          "source_type": "mobile_gps",
-          "confidence": 0.95,
-          "attributes": {
-            "accuracy": 3.9,
-            "speed": 2.5
-          },
-          "description": "Rahul Sen at Chatterjee Lane, Bowbazar, Kolkata (accuracy: 3.9m, moving)"
-        },
-        {
-          "timestamp": "2026-05-22T20:45:00",
           "action": "LOCATED_AT",
           "from": "Arjun",
           "from_id": "MASTER_6137f90b",
@@ -621,117 +320,10 @@
           "source_type": "telecom_tower",
           "confidence": 0.95,
           "attributes": {
-            "accuracy": 140.0,
-            "speed": 5.5
+            "speed": 5.5,
+            "accuracy": 140.0
           },
           "description": "Arjun at Surya Sen Street, Baithakkhana, Kolkata (accuracy: 140.0m, moving)"
-        },
-        {
-          "timestamp": "2026-05-22T20:45:00",
-          "action": "MESSAGED",
-          "from": "Rahul Sen",
-          "from_id": "MASTER_b41353c7",
-          "to": "Group_Chat",
-          "to_id": "MASTER_cc9e76cc",
-          "source_type": "chat",
-          "confidence": 0.95,
-          "attributes": {
-            "text": "Arjun, transfer work will happen near Park Street tonight.",
-            "platform": "whatsapp/telegram",
-            "message_index": 6,
-            "forensic_signals": {
-              "has_urgency": false,
-              "has_money_ref": true,
-              "has_target_ref": false,
-              "has_coordination": false
-            }
-          },
-          "description": "Rahul Sen -> Group_Chat: 'Arjun, transfer work will happen near Park Street tonight.'"
-        },
-        {
-          "timestamp": "2026-05-22T20:47:00",
-          "action": "MESSAGED",
-          "from": "Arjun",
-          "from_id": "MASTER_6137f90b",
-          "to": "Group_Chat",
-          "to_id": "MASTER_cc9e76cc",
-          "source_type": "chat",
-          "confidence": 0.95,
-          "attributes": {
-            "text": "I am ready. Coordinate with Vikram before withdrawing.",
-            "platform": "whatsapp/telegram",
-            "message_index": 7,
-            "forensic_signals": {
-              "has_urgency": false,
-              "has_money_ref": false,
-              "has_target_ref": false,
-              "has_coordination": true
-            }
-          },
-          "description": "Arjun -> Group_Chat: 'I am ready. Coordinate with Vikram before withdrawing.'"
-        },
-        {
-          "timestamp": "2026-05-22T20:47:00",
-          "action": "MENTIONED",
-          "from": "Arjun",
-          "from_id": "MASTER_6137f90b",
-          "to": "Vikram Khanna",
-          "to_id": "MASTER_f24caf16",
-          "source_type": "chat",
-          "confidence": 0.75,
-          "attributes": {
-            "message_index": 7
-          },
-          "description": "Arjun mentioned Vikram Khanna"
-        },
-        {
-          "timestamp": "2026-05-22T20:50:00",
-          "action": "MESSAGED",
-          "from": "Rahul Sen",
-          "from_id": "MASTER_b41353c7",
-          "to": "Group_Chat",
-          "to_id": "MASTER_cc9e76cc",
-          "source_type": "chat",
-          "confidence": 0.95,
-          "attributes": {
-            "text": "Use ANDROID_001 and keep 9876543210 active.",
-            "platform": "whatsapp/telegram",
-            "message_index": 8,
-            "forensic_signals": {
-              "has_urgency": false,
-              "has_money_ref": false,
-              "has_target_ref": false,
-              "has_coordination": false
-            }
-          },
-          "description": "Rahul Sen -> Group_Chat: 'Use ANDROID_001 and keep 9876543210 active.'"
-        },
-        {
-          "timestamp": "2026-05-22T20:55:00",
-          "action": "CALLED",
-          "from": "Rahul Sen",
-          "from_id": "MASTER_b41353c7",
-          "to": "Vikram Khanna",
-          "to_id": "MASTER_f24caf16",
-          "source_type": "cdr_record",
-          "confidence": 0.99,
-          "attributes": {
-            "duration": 240,
-            "call_type": "OUTGOING"
-          },
-          "description": "Rahul Sen called Vikram Khanna (240s, outgoing)"
-        },
-        {
-          "timestamp": "2026-05-22T20:55:00",
-          "action": "CONNECTED_TO_TOWER",
-          "from": "Rahul Sen",
-          "from_id": "MASTER_b41353c7",
-          "to": "Cell Tower (Twr_Kol_102)",
-          "to_id": "MASTER_4df7510c",
-          "source_type": "cdr_record",
-          "confidence": 0.95,
-          "attributes": {},
-          "description": "Rahul Sen connected to Cell Tower (Twr_Kol_102)"
         },
         {
           "timestamp": "2026-05-22T20:55:00",
@@ -743,8 +335,8 @@
           "source_type": "asset_tracker",
           "confidence": 0.95,
           "attributes": {
-            "accuracy": 2.5,
-            "speed": 0.0
+            "speed": 0.0,
+            "accuracy": 2.5
           },
           "description": "Tracker_001 at Chatterjee Lane, Bowbazar, Kolkata (accuracy: 2.5m, stationary)"
         },
@@ -758,25 +350,10 @@
           "source_type": "wearable_device",
           "confidence": 0.95,
           "attributes": {
-            "accuracy": 6.5,
-            "speed": 2.1
+            "speed": 2.1,
+            "accuracy": 6.5
           },
           "description": "Vikram Khanna at Chatterjee Lane, Bowbazar, Kolkata (accuracy: 6.5m, moving)"
-        },
-        {
-          "timestamp": "2026-05-22T21:00:00",
-          "action": "LOCATED_AT",
-          "from": "Rahul Sen",
-          "from_id": "MASTER_b41353c7",
-          "to": "Chatterjee Lane, Bowbazar, Kolkata",
-          "to_id": "MASTER_ad6e0d66",
-          "source_type": "mobile_gps",
-          "confidence": 0.95,
-          "attributes": {
-            "accuracy": 5.1,
-            "speed": 0.0
-          },
-          "description": "Rahul Sen at Chatterjee Lane, Bowbazar, Kolkata (accuracy: 5.1m, stationary)"
         },
         {
           "timestamp": "2026-05-22T21:00:00",
@@ -788,25 +365,38 @@
           "source_type": "telecom_tower",
           "confidence": 0.95,
           "attributes": {
-            "accuracy": 130.0,
-            "speed": 0.0
+            "speed": 0.0,
+            "accuracy": 130.0
           },
           "description": "Vikram Khanna at Bowbazar, Kolkata (accuracy: 130.0m, stationary)"
         },
         {
           "timestamp": "2026-05-22T21:00:00",
-          "action": "LOCATED_AT",
-          "from": "Cab_102",
-          "from_id": "MASTER_472a3eae",
-          "to": "Chatterjee Lane, Bowbazar, Kolkata",
-          "to_id": "MASTER_ad6e0d66",
-          "source_type": "vehicle_tracker",
-          "confidence": 0.95,
+          "action": "MENTIONED",
+          "from": "@Vikramk",
+          "from_id": "MASTER_4f3dc74c",
+          "to": "Rahul Sen",
+          "to_id": "MASTER_b41353c7",
+          "source_type": "unknown",
+          "confidence": 0.7,
           "attributes": {
-            "accuracy": 3.5,
-            "speed": 0.0
+            "post_id": "tatva_post_006"
           },
-          "description": "Cab_102 at Chatterjee Lane, Bowbazar, Kolkata (accuracy: 3.5m, stationary)"
+          "description": "@Vikramk mentioned Rahul Sen"
+        },
+        {
+          "timestamp": "2026-05-22T21:00:00",
+          "action": "MENTIONED",
+          "from": "@Vikramk",
+          "from_id": "MASTER_4f3dc74c",
+          "to": "Hyundai",
+          "to_id": "MASTER_359a9c21",
+          "source_type": "unknown",
+          "confidence": 0.7,
+          "attributes": {
+            "post_id": "tatva_post_006"
+          },
+          "description": "@Vikramk mentioned Hyundai"
         },
         {
           "timestamp": "2026-05-22T21:00:00",
@@ -815,7 +405,7 @@
           "from_id": "MASTER_4f3dc74c",
           "to": "Facebook",
           "to_id": "MASTER_ed885df3",
-          "source_type": "social",
+          "source_type": "unknown",
           "confidence": 0.95,
           "attributes": {
             "post_id": "tatva_post_006",
@@ -829,31 +419,18 @@
         },
         {
           "timestamp": "2026-05-22T21:00:00",
-          "action": "MENTIONED",
-          "from": "@Vikramk",
-          "from_id": "MASTER_4f3dc74c",
-          "to": "Hyundai",
-          "to_id": "MASTER_359a9c21",
-          "source_type": "social",
-          "confidence": 0.7,
+          "action": "LOCATED_AT",
+          "from": "Cab_102",
+          "from_id": "MASTER_472a3eae",
+          "to": "Chatterjee Lane, Bowbazar, Kolkata",
+          "to_id": "MASTER_ad6e0d66",
+          "source_type": "vehicle_tracker",
+          "confidence": 0.95,
           "attributes": {
-            "post_id": "tatva_post_006"
+            "speed": 0.0,
+            "accuracy": 3.5
           },
-          "description": "@Vikramk mentioned Hyundai"
-        },
-        {
-          "timestamp": "2026-05-22T21:00:00",
-          "action": "MENTIONED",
-          "from": "@Vikramk",
-          "from_id": "MASTER_4f3dc74c",
-          "to": "Rahul Sen",
-          "to_id": "MASTER_b41353c7",
-          "source_type": "social",
-          "confidence": 0.7,
-          "attributes": {
-            "post_id": "tatva_post_006"
-          },
-          "description": "@Vikramk mentioned Rahul Sen"
+          "description": "Cab_102 at Chatterjee Lane, Bowbazar, Kolkata (accuracy: 3.5m, stationary)"
         },
         {
           "timestamp": "2026-05-22T21:05:00",
@@ -871,106 +448,18 @@
           "description": "Vikram Khanna called Rahul Sen (90s, incoming)"
         },
         {
-          "timestamp": "2026-05-22T21:05:00",
-          "action": "CONNECTED_TO_TOWER",
-          "from": "Vikram Khanna",
-          "from_id": "MASTER_f24caf16",
-          "to": "Cell Tower (Twr_Kol_210)",
-          "to_id": "MASTER_0df9e8ff",
-          "source_type": "cdr_record",
-          "confidence": 0.95,
-          "attributes": {},
-          "description": "Vikram Khanna connected to Cell Tower (Twr_Kol_210)"
-        },
-        {
-          "timestamp": "2026-05-22T21:05:00",
-          "action": "MESSAGED",
-          "from": "Vikram Khanna",
-          "from_id": "MASTER_f24caf16",
-          "to": "Group_Chat",
-          "to_id": "MASTER_cc9e76cc",
-          "source_type": "chat",
-          "confidence": 0.95,
-          "attributes": {
-            "text": "WATCH_ABC shows I am close to Park Street. In position.",
-            "platform": "whatsapp/telegram",
-            "message_index": 9,
-            "forensic_signals": {
-              "has_urgency": false,
-              "has_money_ref": false,
-              "has_target_ref": false,
-              "has_coordination": false
-            }
-          },
-          "description": "Vikram Khanna -> Group_Chat: 'WATCH_ABC shows I am close to Park Street. In position.'"
-        },
-        {
           "timestamp": "2026-05-22T21:10:00",
-          "action": "CALLED",
-          "from": "Rahul Sen",
-          "from_id": "MASTER_b41353c7",
-          "to": "Rajan Mehta",
-          "to_id": "MASTER_ee1fa35b",
-          "source_type": "cdr_record",
-          "confidence": 0.99,
-          "attributes": {
-            "duration": 310,
-            "call_type": "OUTGOING"
-          },
-          "description": "Rahul Sen called Rajan Mehta (310s, outgoing)"
-        },
-        {
-          "timestamp": "2026-05-22T21:10:00",
-          "action": "CONNECTED_TO_TOWER",
-          "from": "Rahul Sen",
-          "from_id": "MASTER_b41353c7",
-          "to": "Cell Tower (Twr_Kol_102)",
-          "to_id": "MASTER_4df7510c",
-          "source_type": "cdr_record",
-          "confidence": 0.95,
-          "attributes": {},
-          "description": "Rahul Sen connected to Cell Tower (Twr_Kol_102)"
-        },
-        {
-          "timestamp": "2026-05-22T21:10:00",
-          "action": "MESSAGED",
-          "from": "Arjun",
-          "from_id": "MASTER_6137f90b",
-          "to": "Group_Chat",
-          "to_id": "MASTER_cc9e76cc",
-          "source_type": "chat",
-          "confidence": 0.95,
-          "attributes": {
-            "text": "Rahul, Rajan just confirmed all 7 sub-accounts are live.",
-            "platform": "whatsapp/telegram",
-            "message_index": 10,
-            "forensic_signals": {
-              "has_urgency": false,
-              "has_money_ref": false,
-              "has_target_ref": false,
-              "has_coordination": false
-            }
-          },
-          "description": "Arjun -> Group_Chat: 'Rahul, Rajan just confirmed all 7 sub-accounts are live.'"
-        },
-        {
-          "timestamp": "2026-05-22T21:10:00",
-          "action": "POSTED_ON",
+          "action": "MENTIONED",
           "from": "@Arjung",
           "from_id": "MASTER_425adff9",
-          "to": "Instagram",
-          "to_id": "MASTER_a811d74e",
-          "source_type": "social",
-          "confidence": 0.95,
+          "to": "Vikram Khanna",
+          "to_id": "MASTER_f24caf16",
+          "source_type": "unknown",
+          "confidence": 0.7,
           "attributes": {
-            "post_id": "tatva_post_002",
-            "content": "Waiting near Park Street. Rahul said Vikram will confirm after the call. Everything on schedule.",
-            "hashtags": [
-              "meet",
-              "kolkata"
-            ]
+            "post_id": "tatva_post_002"
           },
-          "description": "@Arjung posted on Instagram: 'Waiting near Park Street. Rahul said Vikram will confirm after the call. Everyth...'"
+          "description": "@Arjung mentioned Vikram Khanna"
         },
         {
           "timestamp": "2026-05-22T21:10:00",
@@ -979,26 +468,12 @@
           "from_id": "MASTER_425adff9",
           "to": "@Rahulsen",
           "to_id": "MASTER_656f09cf",
-          "source_type": "social",
+          "source_type": "unknown",
           "confidence": 0.85,
           "attributes": {
             "post_id": "tatva_post_002"
           },
           "description": "@Arjung -> @Rahulsen"
-        },
-        {
-          "timestamp": "2026-05-22T21:10:00",
-          "action": "MENTIONED",
-          "from": "@Arjung",
-          "from_id": "MASTER_425adff9",
-          "to": "Vikram Khanna",
-          "to_id": "MASTER_f24caf16",
-          "source_type": "social",
-          "confidence": 0.7,
-          "attributes": {
-            "post_id": "tatva_post_002"
-          },
-          "description": "@Arjung mentioned Vikram Khanna"
         },
         {
           "timestamp": "2026-05-22T21:11:00",
@@ -1011,8 +486,8 @@
           "confidence": 0.99,
           "attributes": {
             "amount": 9400,
-            "transaction_type": "UPI",
-            "location": "Kolkata"
+            "location": "Kolkata",
+            "transaction_type": "UPI"
           },
           "description": "Rahul Sen -> ACC2001: Rs.9,400 (UPI)"
         },
@@ -1027,8 +502,8 @@
           "confidence": 0.99,
           "attributes": {
             "amount": 9200,
-            "transaction_type": "UPI",
-            "location": "Kolkata"
+            "location": "Kolkata",
+            "transaction_type": "UPI"
           },
           "description": "Rahul Sen -> ACC3001: Rs.9,200 (UPI)"
         },
@@ -1043,8 +518,8 @@
           "confidence": 0.99,
           "attributes": {
             "amount": 9500,
-            "transaction_type": "UPI",
-            "location": "Kolkata"
+            "location": "Kolkata",
+            "transaction_type": "UPI"
           },
           "description": "Rahul Sen -> ACC4001: Rs.9,500 (UPI)"
         },
@@ -1059,8 +534,8 @@
           "confidence": 0.99,
           "attributes": {
             "amount": 8900,
-            "transaction_type": "UPI",
-            "location": "Kolkata"
+            "location": "Kolkata",
+            "transaction_type": "UPI"
           },
           "description": "Rahul Sen -> ACC5001: Rs.8,900 (UPI)"
         }
@@ -1071,20 +546,18 @@
       "window_start": "21:15",
       "window_end": "21:45",
       "label": "Financial Transfers",
-      "event_count": 30,
+      "event_count": 22,
       "action_breakdown": {
         "TRANSFERRED_TO": 10,
-        "LOCATED_AT": 6,
-        "MOVED_TO": 5,
-        "CALLED": 3,
-        "CONNECTED_TO_TOWER": 3,
-        "MESSAGED": 2,
+        "LOCATED_AT": 5,
+        "MOVED_TO": 4,
+        "CALLED": 2,
         "MENTIONED": 1
       },
       "dominant_source_types": [
         "bank_transaction",
-        "cdr_record",
-        "gps_analysis"
+        "gps_analysis",
+        "wearable_device"
       ],
       "active_actors": [
         "ACC2001",
@@ -1098,11 +571,7 @@
         "Biplabi Pulin Das Street, City College, Kolkata",
         "Bow Bazar North, Kolkata",
         "Cab_102",
-        "Cell Tower (Twr_Kol_102)",
-        "Cell Tower (Twr_Kol_105)",
-        "Cell Tower (Twr_Kol_315)",
         "Chatterjee Lane, Bowbazar, Kolkata",
-        "Group_Chat",
         "Rahul Sen",
         "Rajan Mehta",
         "Sri Gopal Mullick Ln, Bowbazar, Kolkata",
@@ -1110,48 +579,6 @@
         "Vikram Khanna"
       ],
       "events": [
-        {
-          "timestamp": "2026-05-22T21:15:00",
-          "action": "CALLED",
-          "from": "Rajan Mehta",
-          "from_id": "MASTER_ee1fa35b",
-          "to": "Rahul Sen",
-          "to_id": "MASTER_b41353c7",
-          "source_type": "cdr_record",
-          "confidence": 0.99,
-          "attributes": {
-            "duration": 45,
-            "call_type": "INCOMING"
-          },
-          "description": "Rajan Mehta called Rahul Sen (45s, incoming)"
-        },
-        {
-          "timestamp": "2026-05-22T21:15:00",
-          "action": "CONNECTED_TO_TOWER",
-          "from": "Rajan Mehta",
-          "from_id": "MASTER_ee1fa35b",
-          "to": "Cell Tower (Twr_Kol_315)",
-          "to_id": "MASTER_2660ab98",
-          "source_type": "cdr_record",
-          "confidence": 0.95,
-          "attributes": {},
-          "description": "Rajan Mehta connected to Cell Tower (Twr_Kol_315)"
-        },
-        {
-          "timestamp": "2026-05-22T21:15:00",
-          "action": "LOCATED_AT",
-          "from": "Vikram Khanna",
-          "from_id": "MASTER_f24caf16",
-          "to": "Sri Gopal Mullick Ln, Bowbazar, Kolkata",
-          "to_id": "MASTER_d11a8cf5",
-          "source_type": "wearable_device",
-          "confidence": 0.95,
-          "attributes": {
-            "accuracy": 6.2,
-            "speed": 0.0
-          },
-          "description": "Vikram Khanna at Sri Gopal Mullick Ln, Bowbazar, Kolkata (accuracy: 6.2m, stationary)"
-        },
         {
           "timestamp": "2026-05-22T21:15:00",
           "action": "MOVED_TO",
@@ -1177,10 +604,25 @@
           "confidence": 0.99,
           "attributes": {
             "amount": 9300,
-            "transaction_type": "UPI",
-            "location": "Kolkata"
+            "location": "Kolkata",
+            "transaction_type": "UPI"
           },
           "description": "Rahul Sen -> ACC6001: Rs.9,300 (UPI)"
+        },
+        {
+          "timestamp": "2026-05-22T21:15:00",
+          "action": "LOCATED_AT",
+          "from": "Vikram Khanna",
+          "from_id": "MASTER_f24caf16",
+          "to": "Sri Gopal Mullick Ln, Bowbazar, Kolkata",
+          "to_id": "MASTER_d11a8cf5",
+          "source_type": "wearable_device",
+          "confidence": 0.95,
+          "attributes": {
+            "speed": 0.0,
+            "accuracy": 6.2
+          },
+          "description": "Vikram Khanna at Sri Gopal Mullick Ln, Bowbazar, Kolkata (accuracy: 6.2m, stationary)"
         },
         {
           "timestamp": "2026-05-22T21:16:00",
@@ -1193,8 +635,8 @@
           "confidence": 0.99,
           "attributes": {
             "amount": 9100,
-            "transaction_type": "UPI",
-            "location": "Kolkata"
+            "location": "Kolkata",
+            "transaction_type": "UPI"
           },
           "description": "Rahul Sen -> ACC7001: Rs.9,100 (UPI)"
         },
@@ -1209,10 +651,24 @@
           "confidence": 0.99,
           "attributes": {
             "amount": 9000,
-            "transaction_type": "UPI",
-            "location": "Kolkata"
+            "location": "Kolkata",
+            "transaction_type": "UPI"
           },
           "description": "Rahul Sen -> ACC8001: Rs.9,000 (UPI)"
+        },
+        {
+          "timestamp": "2026-05-22T21:20:00",
+          "action": "MOVED_TO",
+          "from": "Surya Sen Street, Baithakkhana, Kolkata",
+          "from_id": "MASTER_08924bd8",
+          "to": "Bow Bazar North, Kolkata",
+          "to_id": "MASTER_59760bb7",
+          "source_type": "gps_analysis",
+          "confidence": 0.9,
+          "attributes": {
+            "distance_meters": 37.99
+          },
+          "description": "Movement: Surya Sen Street, Baithakkhana, Kolkata -> Bow Bazar North, Kolkata (38m)"
         },
         {
           "timestamp": "2026-05-22T21:20:00",
@@ -1231,18 +687,6 @@
         },
         {
           "timestamp": "2026-05-22T21:20:00",
-          "action": "CONNECTED_TO_TOWER",
-          "from": "Arjun",
-          "from_id": "MASTER_6137f90b",
-          "to": "Cell Tower (Twr_Kol_105)",
-          "to_id": "MASTER_c3de5e12",
-          "source_type": "cdr_record",
-          "confidence": 0.95,
-          "attributes": {},
-          "description": "Arjun connected to Cell Tower (Twr_Kol_105)"
-        },
-        {
-          "timestamp": "2026-05-22T21:20:00",
           "action": "LOCATED_AT",
           "from": "Arjun",
           "from_id": "MASTER_6137f90b",
@@ -1251,46 +695,10 @@
           "source_type": "telecom_tower",
           "confidence": 0.95,
           "attributes": {
-            "accuracy": 135.0,
-            "speed": 0.0
+            "speed": 0.0,
+            "accuracy": 135.0
           },
           "description": "Arjun at Bow Bazar North, Kolkata (accuracy: 135.0m, stationary)"
-        },
-        {
-          "timestamp": "2026-05-22T21:20:00",
-          "action": "MOVED_TO",
-          "from": "Surya Sen Street, Baithakkhana, Kolkata",
-          "from_id": "MASTER_08924bd8",
-          "to": "Bow Bazar North, Kolkata",
-          "to_id": "MASTER_59760bb7",
-          "source_type": "gps_analysis",
-          "confidence": 0.9,
-          "attributes": {
-            "distance_meters": 37.99
-          },
-          "description": "Movement: Surya Sen Street, Baithakkhana, Kolkata -> Bow Bazar North, Kolkata (38m)"
-        },
-        {
-          "timestamp": "2026-05-22T21:20:00",
-          "action": "MESSAGED",
-          "from": "Arjun",
-          "from_id": "MASTER_6137f90b",
-          "to": "Group_Chat",
-          "to_id": "MASTER_cc9e76cc",
-          "source_type": "chat",
-          "confidence": 0.95,
-          "attributes": {
-            "text": "ACC1001 should send the amount in small parts, below 9500 each.",
-            "platform": "whatsapp/telegram",
-            "message_index": 11,
-            "forensic_signals": {
-              "has_urgency": false,
-              "has_money_ref": true,
-              "has_target_ref": false,
-              "has_coordination": false
-            }
-          },
-          "description": "Arjun -> Group_Chat: 'ACC1001 should send the amount in small parts, below 9500 each.'"
         },
         {
           "timestamp": "2026-05-22T21:20:00",
@@ -1299,78 +707,12 @@
           "from_id": "MASTER_6137f90b",
           "to": "Rahul Sen",
           "to_id": "MASTER_b41353c7",
-          "source_type": "chat",
+          "source_type": "unknown",
           "confidence": 0.75,
           "attributes": {
             "message_index": 11
           },
           "description": "Arjun mentioned Rahul Sen"
-        },
-        {
-          "timestamp": "2026-05-22T21:25:00",
-          "action": "MESSAGED",
-          "from": "Rahul Sen",
-          "from_id": "MASTER_b41353c7",
-          "to": "Group_Chat",
-          "to_id": "MASTER_cc9e76cc",
-          "source_type": "chat",
-          "confidence": 0.95,
-          "attributes": {
-            "text": "Starting transfers now. Delete this chat after reading.",
-            "platform": "whatsapp/telegram",
-            "message_index": 12,
-            "forensic_signals": {
-              "has_urgency": true,
-              "has_money_ref": false,
-              "has_target_ref": false,
-              "has_coordination": false
-            }
-          },
-          "description": "Rahul Sen -> Group_Chat: 'Starting transfers now. Delete this chat after reading.'"
-        },
-        {
-          "timestamp": "2026-05-22T21:30:00",
-          "action": "LOCATED_AT",
-          "from": "Rahul Sen",
-          "from_id": "MASTER_b41353c7",
-          "to": "Bow Bazar North, Kolkata",
-          "to_id": "MASTER_59760bb7",
-          "source_type": "mobile_gps",
-          "confidence": 0.95,
-          "attributes": {
-            "accuracy": 4.5,
-            "speed": 3.0
-          },
-          "description": "Rahul Sen at Bow Bazar North, Kolkata (accuracy: 4.5m, moving)"
-        },
-        {
-          "timestamp": "2026-05-22T21:30:00",
-          "action": "MOVED_TO",
-          "from": "Chatterjee Lane, Bowbazar, Kolkata",
-          "from_id": "MASTER_ad6e0d66",
-          "to": "Bow Bazar North, Kolkata",
-          "to_id": "MASTER_59760bb7",
-          "source_type": "gps_analysis",
-          "confidence": 0.9,
-          "attributes": {
-            "distance_meters": 67.93
-          },
-          "description": "Movement: Chatterjee Lane, Bowbazar, Kolkata -> Bow Bazar North, Kolkata (68m)"
-        },
-        {
-          "timestamp": "2026-05-22T21:30:00",
-          "action": "LOCATED_AT",
-          "from": "Cab_102",
-          "from_id": "MASTER_472a3eae",
-          "to": "Biplabi Pulin Das Street, City College, Kolkata",
-          "to_id": "MASTER_10d0d169",
-          "source_type": "vehicle_tracker",
-          "confidence": 0.95,
-          "attributes": {
-            "accuracy": 3.2,
-            "speed": 35.0
-          },
-          "description": "Cab_102 at Biplabi Pulin Das Street, City College, Kolkata (accuracy: 3.2m, moving)"
         },
         {
           "timestamp": "2026-05-22T21:30:00",
@@ -1388,21 +730,6 @@
         },
         {
           "timestamp": "2026-05-22T21:30:00",
-          "action": "LOCATED_AT",
-          "from": "Vikram Khanna",
-          "from_id": "MASTER_f24caf16",
-          "to": "Bow Bazar North, Kolkata",
-          "to_id": "MASTER_59760bb7",
-          "source_type": "wearable_device",
-          "confidence": 0.95,
-          "attributes": {
-            "accuracy": 5.9,
-            "speed": 4.5
-          },
-          "description": "Vikram Khanna at Bow Bazar North, Kolkata (accuracy: 5.9m, moving)"
-        },
-        {
-          "timestamp": "2026-05-22T21:30:00",
           "action": "MOVED_TO",
           "from": "Sri Gopal Mullick Ln, Bowbazar, Kolkata",
           "from_id": "MASTER_d11a8cf5",
@@ -1414,6 +741,36 @@
             "distance_meters": 90.81
           },
           "description": "Movement: Sri Gopal Mullick Ln, Bowbazar, Kolkata -> Bow Bazar North, Kolkata (91m)"
+        },
+        {
+          "timestamp": "2026-05-22T21:30:00",
+          "action": "LOCATED_AT",
+          "from": "Vikram Khanna",
+          "from_id": "MASTER_f24caf16",
+          "to": "Bow Bazar North, Kolkata",
+          "to_id": "MASTER_59760bb7",
+          "source_type": "wearable_device",
+          "confidence": 0.95,
+          "attributes": {
+            "speed": 4.5,
+            "accuracy": 5.9
+          },
+          "description": "Vikram Khanna at Bow Bazar North, Kolkata (accuracy: 5.9m, moving)"
+        },
+        {
+          "timestamp": "2026-05-22T21:30:00",
+          "action": "LOCATED_AT",
+          "from": "Cab_102",
+          "from_id": "MASTER_472a3eae",
+          "to": "Biplabi Pulin Das Street, City College, Kolkata",
+          "to_id": "MASTER_10d0d169",
+          "source_type": "vehicle_tracker",
+          "confidence": 0.95,
+          "attributes": {
+            "speed": 35.0,
+            "accuracy": 3.2
+          },
+          "description": "Cab_102 at Biplabi Pulin Das Street, City College, Kolkata (accuracy: 3.2m, moving)"
         },
         {
           "timestamp": "2026-05-22T21:35:00",
@@ -1432,18 +789,6 @@
         },
         {
           "timestamp": "2026-05-22T21:35:00",
-          "action": "CONNECTED_TO_TOWER",
-          "from": "Rahul Sen",
-          "from_id": "MASTER_b41353c7",
-          "to": "Cell Tower (Twr_Kol_102)",
-          "to_id": "MASTER_4df7510c",
-          "source_type": "cdr_record",
-          "confidence": 0.95,
-          "attributes": {},
-          "description": "Rahul Sen connected to Cell Tower (Twr_Kol_102)"
-        },
-        {
-          "timestamp": "2026-05-22T21:35:00",
           "action": "LOCATED_AT",
           "from": "Rahul Sen",
           "from_id": "MASTER_b41353c7",
@@ -1452,8 +797,8 @@
           "source_type": "telecom_tower",
           "confidence": 0.95,
           "attributes": {
-            "accuracy": 115.0,
-            "speed": 0.0
+            "speed": 0.0,
+            "accuracy": 115.0
           },
           "description": "Rahul Sen at Chatterjee Lane, Bowbazar, Kolkata (accuracy: 115.0m, stationary)"
         },
@@ -1468,8 +813,8 @@
           "confidence": 0.99,
           "attributes": {
             "amount": 9400,
-            "transaction_type": "IMPS",
-            "location": "Kolkata"
+            "location": "Kolkata",
+            "transaction_type": "IMPS"
           },
           "description": "ACC2001 -> Rajan Mehta: Rs.9,400 (IMPS)"
         },
@@ -1484,8 +829,8 @@
           "confidence": 0.99,
           "attributes": {
             "amount": 9200,
-            "transaction_type": "IMPS",
-            "location": "Kolkata"
+            "location": "Kolkata",
+            "transaction_type": "IMPS"
           },
           "description": "ACC3001 -> Rajan Mehta: Rs.9,200 (IMPS)"
         },
@@ -1500,8 +845,8 @@
           "confidence": 0.99,
           "attributes": {
             "amount": 9500,
-            "transaction_type": "IMPS",
-            "location": "Kolkata"
+            "location": "Kolkata",
+            "transaction_type": "IMPS"
           },
           "description": "ACC4001 -> Rajan Mehta: Rs.9,500 (IMPS)"
         },
@@ -1516,8 +861,8 @@
           "confidence": 0.99,
           "attributes": {
             "amount": 8900,
-            "transaction_type": "IMPS",
-            "location": "Kolkata"
+            "location": "Kolkata",
+            "transaction_type": "IMPS"
           },
           "description": "ACC5001 -> Rajan Mehta: Rs.8,900 (IMPS)"
         },
@@ -1532,8 +877,8 @@
           "confidence": 0.99,
           "attributes": {
             "amount": 9300,
-            "transaction_type": "IMPS",
-            "location": "Kolkata"
+            "location": "Kolkata",
+            "transaction_type": "IMPS"
           },
           "description": "ACC6001 -> Rajan Mehta: Rs.9,300 (IMPS)"
         },
@@ -1548,8 +893,8 @@
           "confidence": 0.99,
           "attributes": {
             "amount": 9100,
-            "transaction_type": "IMPS",
-            "location": "Kolkata"
+            "location": "Kolkata",
+            "transaction_type": "IMPS"
           },
           "description": "ACC7001 -> Rajan Mehta: Rs.9,100 (IMPS)"
         },
@@ -1564,8 +909,8 @@
           "confidence": 0.99,
           "attributes": {
             "amount": 9000,
-            "transaction_type": "IMPS",
-            "location": "Kolkata"
+            "location": "Kolkata",
+            "transaction_type": "IMPS"
           },
           "description": "ACC8001 -> Rajan Mehta: Rs.9,000 (IMPS)"
         }
@@ -1576,20 +921,19 @@
       "window_start": "21:45",
       "window_end": "22:15",
       "label": "Voice Communications",
-      "event_count": 21,
+      "event_count": 15,
       "action_breakdown": {
-        "MENTIONED": 5,
-        "CALLED": 3,
-        "CONNECTED_TO_TOWER": 3,
-        "LOCATED_AT": 3,
+        "MENTIONED": 4,
         "MOVED_TO": 3,
-        "MESSAGED": 2,
-        "POSTED_ON": 1,
+        "CALLED": 3,
+        "LOCATED_AT": 2,
+        "CONNECTED_TO_TOWER": 1,
+        "MESSAGED": 1,
         "TRANSFERRED_TO": 1
       },
       "dominant_source_types": [
+        "unknown",
         "cdr_record",
-        "chat",
         "gps_analysis"
       ],
       "active_actors": [
@@ -1599,11 +943,8 @@
         "Biplabi Pulin Das Street, City College, Kolkata",
         "Bow Bazar North, Kolkata",
         "Cab_102",
-        "Cell Tower (Twr_Kol_102)",
-        "Cell Tower (Twr_Kol_210)",
         "Cell Tower (Twr_Kol_315)",
         "Chatterjee Lane, Bowbazar, Kolkata",
-        "Facebook",
         "Group_Chat",
         "Howrah Maidan, Haora",
         "Howrah Station",
@@ -1614,6 +955,20 @@
         "Vikram Khanna"
       ],
       "events": [
+        {
+          "timestamp": "2026-05-22T21:45:00",
+          "action": "MOVED_TO",
+          "from": "Chatterjee Lane, Bowbazar, Kolkata",
+          "from_id": "MASTER_ad6e0d66",
+          "to": "Maniktala, Kolkata",
+          "to_id": "MASTER_afcbc112",
+          "source_type": "gps_analysis",
+          "confidence": 0.9,
+          "attributes": {
+            "distance_meters": 3305.17
+          },
+          "description": "Movement: Chatterjee Lane, Bowbazar, Kolkata -> Maniktala, Kolkata (3305m)"
+        },
         {
           "timestamp": "2026-05-22T21:45:00",
           "action": "CALLED",
@@ -1631,18 +986,6 @@
         },
         {
           "timestamp": "2026-05-22T21:45:00",
-          "action": "CONNECTED_TO_TOWER",
-          "from": "Vikram Khanna",
-          "from_id": "MASTER_f24caf16",
-          "to": "Cell Tower (Twr_Kol_210)",
-          "to_id": "MASTER_0df9e8ff",
-          "source_type": "cdr_record",
-          "confidence": 0.95,
-          "attributes": {},
-          "description": "Vikram Khanna connected to Cell Tower (Twr_Kol_210)"
-        },
-        {
-          "timestamp": "2026-05-22T21:45:00",
           "action": "LOCATED_AT",
           "from": "Tracker_001",
           "from_id": "MASTER_90d56781",
@@ -1651,60 +994,10 @@
           "source_type": "asset_tracker",
           "confidence": 0.95,
           "attributes": {
-            "accuracy": 2.3,
-            "speed": 52.0
+            "speed": 52.0,
+            "accuracy": 2.3
           },
           "description": "Tracker_001 at Maniktala, Kolkata (accuracy: 2.3m, moving)"
-        },
-        {
-          "timestamp": "2026-05-22T21:45:00",
-          "action": "MOVED_TO",
-          "from": "Chatterjee Lane, Bowbazar, Kolkata",
-          "from_id": "MASTER_ad6e0d66",
-          "to": "Maniktala, Kolkata",
-          "to_id": "MASTER_afcbc112",
-          "source_type": "gps_analysis",
-          "confidence": 0.9,
-          "attributes": {
-            "distance_meters": 3305.17
-          },
-          "description": "Movement: Chatterjee Lane, Bowbazar, Kolkata -> Maniktala, Kolkata (3305m)"
-        },
-        {
-          "timestamp": "2026-05-22T21:45:00",
-          "action": "MESSAGED",
-          "from": "Vikram Khanna",
-          "from_id": "MASTER_f24caf16",
-          "to": "Group_Chat",
-          "to_id": "MASTER_cc9e76cc",
-          "source_type": "chat",
-          "confidence": 0.95,
-          "attributes": {
-            "text": "Cash in hand. Moving to Howrah Station now for delivery.",
-            "platform": "whatsapp/telegram",
-            "message_index": 13,
-            "forensic_signals": {
-              "has_urgency": true,
-              "has_money_ref": false,
-              "has_target_ref": false,
-              "has_coordination": false
-            }
-          },
-          "description": "Vikram Khanna -> Group_Chat: 'Cash in hand. Moving to Howrah Station now for delivery.'"
-        },
-        {
-          "timestamp": "2026-05-22T21:45:00",
-          "action": "MENTIONED",
-          "from": "Vikram Khanna",
-          "from_id": "MASTER_f24caf16",
-          "to": "Howrah Station",
-          "to_id": "MASTER_e32ebe48",
-          "source_type": "chat",
-          "confidence": 0.75,
-          "attributes": {
-            "message_index": 13
-          },
-          "description": "Vikram Khanna mentioned Howrah Station"
         },
         {
           "timestamp": "2026-05-22T22:00:00",
@@ -1735,6 +1028,20 @@
         },
         {
           "timestamp": "2026-05-22T22:05:00",
+          "action": "MOVED_TO",
+          "from": "Bow Bazar North, Kolkata",
+          "from_id": "MASTER_59760bb7",
+          "to": "Chatterjee Lane, Bowbazar, Kolkata",
+          "to_id": "MASTER_ad6e0d66",
+          "source_type": "gps_analysis",
+          "confidence": 0.9,
+          "attributes": {
+            "distance_meters": 23.35
+          },
+          "description": "Movement: Bow Bazar North, Kolkata -> Chatterjee Lane, Bowbazar, Kolkata (23m)"
+        },
+        {
+          "timestamp": "2026-05-22T22:05:00",
           "action": "CALLED",
           "from": "Rahul Sen",
           "from_id": "MASTER_b41353c7",
@@ -1750,89 +1057,12 @@
         },
         {
           "timestamp": "2026-05-22T22:05:00",
-          "action": "CONNECTED_TO_TOWER",
-          "from": "Rahul Sen",
-          "from_id": "MASTER_b41353c7",
-          "to": "Cell Tower (Twr_Kol_102)",
-          "to_id": "MASTER_4df7510c",
-          "source_type": "cdr_record",
-          "confidence": 0.95,
-          "attributes": {},
-          "description": "Rahul Sen connected to Cell Tower (Twr_Kol_102)"
-        },
-        {
-          "timestamp": "2026-05-22T22:05:00",
-          "action": "LOCATED_AT",
-          "from": "Rahul Sen",
-          "from_id": "MASTER_b41353c7",
-          "to": "Chatterjee Lane, Bowbazar, Kolkata",
-          "to_id": "MASTER_ad6e0d66",
-          "source_type": "mobile_gps",
-          "confidence": 0.95,
-          "attributes": {
-            "accuracy": 4.8,
-            "speed": 0.0
-          },
-          "description": "Rahul Sen at Chatterjee Lane, Bowbazar, Kolkata (accuracy: 4.8m, stationary)"
-        },
-        {
-          "timestamp": "2026-05-22T22:05:00",
-          "action": "MOVED_TO",
-          "from": "Bow Bazar North, Kolkata",
-          "from_id": "MASTER_59760bb7",
-          "to": "Chatterjee Lane, Bowbazar, Kolkata",
-          "to_id": "MASTER_ad6e0d66",
-          "source_type": "gps_analysis",
-          "confidence": 0.9,
-          "attributes": {
-            "distance_meters": 23.35
-          },
-          "description": "Movement: Bow Bazar North, Kolkata -> Chatterjee Lane, Bowbazar, Kolkata (23m)"
-        },
-        {
-          "timestamp": "2026-05-22T22:05:00",
-          "action": "MESSAGED",
-          "from": "Arjun",
-          "from_id": "MASTER_6137f90b",
-          "to": "Group_Chat",
-          "to_id": "MASTER_cc9e76cc",
-          "source_type": "chat",
-          "confidence": 0.95,
-          "attributes": {
-            "text": "Confirm when Vikram reaches Howrah. I will alert Rajan.",
-            "platform": "whatsapp/telegram",
-            "message_index": 14,
-            "forensic_signals": {
-              "has_urgency": false,
-              "has_money_ref": false,
-              "has_target_ref": false,
-              "has_coordination": true
-            }
-          },
-          "description": "Arjun -> Group_Chat: 'Confirm when Vikram reaches Howrah. I will alert Rajan.'"
-        },
-        {
-          "timestamp": "2026-05-22T22:05:00",
-          "action": "MENTIONED",
-          "from": "Arjun",
-          "from_id": "MASTER_6137f90b",
-          "to": "Vikram Khanna",
-          "to_id": "MASTER_f24caf16",
-          "source_type": "chat",
-          "confidence": 0.75,
-          "attributes": {
-            "message_index": 14
-          },
-          "description": "Arjun mentioned Vikram Khanna"
-        },
-        {
-          "timestamp": "2026-05-22T22:05:00",
           "action": "MENTIONED",
           "from": "Arjun",
           "from_id": "MASTER_6137f90b",
           "to": "Howrah Station",
           "to_id": "MASTER_e32ebe48",
-          "source_type": "chat",
+          "source_type": "unknown",
           "confidence": 0.75,
           "attributes": {
             "message_index": 14
@@ -1846,7 +1076,7 @@
           "from_id": "MASTER_6137f90b",
           "to": "Rajan Mehta",
           "to_id": "MASTER_ee1fa35b",
-          "source_type": "chat",
+          "source_type": "unknown",
           "confidence": 0.75,
           "attributes": {
             "message_index": 14
@@ -1855,36 +1085,39 @@
         },
         {
           "timestamp": "2026-05-22T22:05:00",
-          "action": "POSTED_ON",
-          "from": "@Vikramk",
-          "from_id": "MASTER_4f3dc74c",
-          "to": "Facebook",
-          "to_id": "MASTER_ed885df3",
-          "source_type": "social",
-          "confidence": 0.95,
+          "action": "MENTIONED",
+          "from": "Arjun",
+          "from_id": "MASTER_6137f90b",
+          "to": "Vikram Khanna",
+          "to_id": "MASTER_f24caf16",
+          "source_type": "unknown",
+          "confidence": 0.75,
           "attributes": {
-            "post_id": "tatva_post_003",
-            "content": "Reached Howrah Station after the withdrawal. Device WATCH_ABC is still on. Job done.",
-            "hashtags": [
-              "movement",
-              "done"
-            ]
+            "message_index": 14
           },
-          "description": "@Vikramk posted on Facebook: 'Reached Howrah Station after the withdrawal. Device WATCH_ABC is still on. Job d...'"
+          "description": "Arjun mentioned Vikram Khanna"
         },
         {
           "timestamp": "2026-05-22T22:05:00",
-          "action": "MENTIONED",
-          "from": "@Vikramk",
-          "from_id": "MASTER_4f3dc74c",
-          "to": "Howrah Station",
-          "to_id": "MASTER_e32ebe48",
-          "source_type": "social",
-          "confidence": 0.7,
+          "action": "MESSAGED",
+          "from": "Arjun",
+          "from_id": "MASTER_6137f90b",
+          "to": "Group_Chat",
+          "to_id": "MASTER_cc9e76cc",
+          "source_type": "unknown",
+          "confidence": 0.95,
           "attributes": {
-            "post_id": "tatva_post_003"
+            "forensic_signals": {
+              "has_urgency": false,
+              "has_money_ref": false,
+              "has_target_ref": false,
+              "has_coordination": true
+            },
+            "message_index": 14,
+            "text": "Confirm when Vikram reaches Howrah. I will alert Rajan.",
+            "platform": "whatsapp/telegram"
           },
-          "description": "@Vikramk mentioned Howrah Station"
+          "description": "Arjun -> Group_Chat: 'Confirm when Vikram reaches Howrah. I will alert Rajan.'"
         },
         {
           "timestamp": "2026-05-22T22:05:00",
@@ -1897,25 +1130,24 @@
           "confidence": 0.99,
           "attributes": {
             "amount": 64400,
-            "transaction_type": "NEFT",
-            "location": "Mumbai"
+            "location": "Mumbai",
+            "transaction_type": "NEFT"
           },
           "description": "Rajan Mehta -> ACC_HAWALA: Rs.64,400 (NEFT)"
         },
         {
-          "timestamp": "2026-05-22T22:10:00",
-          "action": "LOCATED_AT",
-          "from": "Cab_102",
-          "from_id": "MASTER_472a3eae",
-          "to": "Howrah Maidan, Haora",
-          "to_id": "MASTER_9e7d3007",
-          "source_type": "vehicle_tracker",
-          "confidence": 0.95,
+          "timestamp": "2026-05-22T22:05:00",
+          "action": "MENTIONED",
+          "from": "@Vikramk",
+          "from_id": "MASTER_4f3dc74c",
+          "to": "Howrah Station",
+          "to_id": "MASTER_e32ebe48",
+          "source_type": "unknown",
+          "confidence": 0.7,
           "attributes": {
-            "accuracy": 3.8,
-            "speed": 42.0
+            "post_id": "tatva_post_003"
           },
-          "description": "Cab_102 at Howrah Maidan, Haora (accuracy: 3.8m, moving)"
+          "description": "@Vikramk mentioned Howrah Station"
         },
         {
           "timestamp": "2026-05-22T22:10:00",
@@ -1930,6 +1162,21 @@
             "distance_meters": 3069.25
           },
           "description": "Movement: Biplabi Pulin Das Street, City College, Kolkata -> Howrah Maidan, Haora (3069m)"
+        },
+        {
+          "timestamp": "2026-05-22T22:10:00",
+          "action": "LOCATED_AT",
+          "from": "Cab_102",
+          "from_id": "MASTER_472a3eae",
+          "to": "Howrah Maidan, Haora",
+          "to_id": "MASTER_9e7d3007",
+          "source_type": "vehicle_tracker",
+          "confidence": 0.95,
+          "attributes": {
+            "speed": 42.0,
+            "accuracy": 3.8
+          },
+          "description": "Cab_102 at Howrah Maidan, Haora (accuracy: 3.8m, moving)"
         }
       ]
     },
@@ -1938,10 +1185,10 @@
       "window_start": "22:15",
       "window_end": "22:45",
       "label": "Voice Communications",
-      "event_count": 17,
+      "event_count": 16,
       "action_breakdown": {
-        "LOCATED_AT": 5,
         "MOVED_TO": 5,
+        "LOCATED_AT": 4,
         "CALLED": 2,
         "CONNECTED_TO_TOWER": 2,
         "MESSAGED": 2,
@@ -1950,7 +1197,7 @@
       "dominant_source_types": [
         "gps_analysis",
         "cdr_record",
-        "chat"
+        "unknown"
       ],
       "active_actors": [
         "Arjun",
@@ -1971,6 +1218,35 @@
         "Vikram Khanna"
       ],
       "events": [
+        {
+          "timestamp": "2026-05-22T22:20:00",
+          "action": "MOVED_TO",
+          "from": "Chatterjee Lane, Bowbazar, Kolkata",
+          "from_id": "MASTER_ad6e0d66",
+          "to": "Bow Bazar North, Kolkata",
+          "to_id": "MASTER_59760bb7",
+          "source_type": "gps_analysis",
+          "confidence": 0.9,
+          "attributes": {
+            "distance_meters": 221.63
+          },
+          "description": "Movement: Chatterjee Lane, Bowbazar, Kolkata -> Bow Bazar North, Kolkata (222m)"
+        },
+        {
+          "timestamp": "2026-05-22T22:20:00",
+          "action": "LOCATED_AT",
+          "from": "Rahul Sen",
+          "from_id": "MASTER_b41353c7",
+          "to": "Bow Bazar North, Kolkata",
+          "to_id": "MASTER_59760bb7",
+          "source_type": "mobile_gps",
+          "confidence": 0.95,
+          "attributes": {
+            "speed": 8.5,
+            "accuracy": 5.2
+          },
+          "description": "Rahul Sen at Bow Bazar North, Kolkata (accuracy: 5.2m, moving)"
+        },
         {
           "timestamp": "2026-05-22T22:20:00",
           "action": "CALLED",
@@ -1999,33 +1275,33 @@
           "description": "Vikram Khanna connected to Cell Tower (Twr_Kol_210)"
         },
         {
-          "timestamp": "2026-05-22T22:20:00",
-          "action": "LOCATED_AT",
-          "from": "Rahul Sen",
-          "from_id": "MASTER_b41353c7",
-          "to": "Bow Bazar North, Kolkata",
-          "to_id": "MASTER_59760bb7",
-          "source_type": "mobile_gps",
-          "confidence": 0.95,
-          "attributes": {
-            "accuracy": 5.2,
-            "speed": 8.5
-          },
-          "description": "Rahul Sen at Bow Bazar North, Kolkata (accuracy: 5.2m, moving)"
-        },
-        {
-          "timestamp": "2026-05-22T22:20:00",
+          "timestamp": "2026-05-22T22:35:00",
           "action": "MOVED_TO",
-          "from": "Chatterjee Lane, Bowbazar, Kolkata",
-          "from_id": "MASTER_ad6e0d66",
-          "to": "Bow Bazar North, Kolkata",
-          "to_id": "MASTER_59760bb7",
+          "from": "Bow Bazar North, Kolkata",
+          "from_id": "MASTER_59760bb7",
+          "to": "Biplabi Pulin Das Street, City College, Kolkata",
+          "to_id": "MASTER_10d0d169",
           "source_type": "gps_analysis",
           "confidence": 0.9,
           "attributes": {
-            "distance_meters": 221.63
+            "distance_meters": 908.09
           },
-          "description": "Movement: Chatterjee Lane, Bowbazar, Kolkata -> Bow Bazar North, Kolkata (222m)"
+          "description": "Movement: Bow Bazar North, Kolkata -> Biplabi Pulin Das Street, City College, Kolkata (908m)"
+        },
+        {
+          "timestamp": "2026-05-22T22:35:00",
+          "action": "LOCATED_AT",
+          "from": "Rahul Sen",
+          "from_id": "MASTER_b41353c7",
+          "to": "Biplabi Pulin Das Street, City College, Kolkata",
+          "to_id": "MASTER_10d0d169",
+          "source_type": "mobile_gps",
+          "confidence": 0.95,
+          "attributes": {
+            "speed": 15.0,
+            "accuracy": 4.7
+          },
+          "description": "Rahul Sen at Biplabi Pulin Das Street, City College, Kolkata (accuracy: 4.7m, moving)"
         },
         {
           "timestamp": "2026-05-22T22:35:00",
@@ -2055,50 +1331,6 @@
           "description": "Rajan Mehta connected to Cell Tower (Twr_Kol_102)"
         },
         {
-          "timestamp": "2026-05-22T22:35:00",
-          "action": "LOCATED_AT",
-          "from": "Rahul Sen",
-          "from_id": "MASTER_b41353c7",
-          "to": "Biplabi Pulin Das Street, City College, Kolkata",
-          "to_id": "MASTER_10d0d169",
-          "source_type": "mobile_gps",
-          "confidence": 0.95,
-          "attributes": {
-            "accuracy": 4.7,
-            "speed": 15.0
-          },
-          "description": "Rahul Sen at Biplabi Pulin Das Street, City College, Kolkata (accuracy: 4.7m, moving)"
-        },
-        {
-          "timestamp": "2026-05-22T22:35:00",
-          "action": "MOVED_TO",
-          "from": "Bow Bazar North, Kolkata",
-          "from_id": "MASTER_59760bb7",
-          "to": "Biplabi Pulin Das Street, City College, Kolkata",
-          "to_id": "MASTER_10d0d169",
-          "source_type": "gps_analysis",
-          "confidence": 0.9,
-          "attributes": {
-            "distance_meters": 908.09
-          },
-          "description": "Movement: Bow Bazar North, Kolkata -> Biplabi Pulin Das Street, City College, Kolkata (908m)"
-        },
-        {
-          "timestamp": "2026-05-22T22:38:00",
-          "action": "LOCATED_AT",
-          "from": "Vikram Khanna",
-          "from_id": "MASTER_f24caf16",
-          "to": "Howrah Maidan, Haora",
-          "to_id": "MASTER_9e7d3007",
-          "source_type": "wearable_device",
-          "confidence": 0.95,
-          "attributes": {
-            "accuracy": 7.1,
-            "speed": 0.0
-          },
-          "description": "Vikram Khanna at Howrah Maidan, Haora (accuracy: 7.1m, stationary)"
-        },
-        {
           "timestamp": "2026-05-22T22:38:00",
           "action": "MOVED_TO",
           "from": "Bow Bazar North, Kolkata",
@@ -2114,25 +1346,18 @@
         },
         {
           "timestamp": "2026-05-22T22:38:00",
-          "action": "MESSAGED",
+          "action": "LOCATED_AT",
           "from": "Vikram Khanna",
           "from_id": "MASTER_f24caf16",
-          "to": "Group_Chat",
-          "to_id": "MASTER_cc9e76cc",
-          "source_type": "chat",
+          "to": "Howrah Maidan, Haora",
+          "to_id": "MASTER_9e7d3007",
+          "source_type": "wearable_device",
           "confidence": 0.95,
           "attributes": {
-            "text": "Reached Howrah Station. Package handed over successfully.",
-            "platform": "whatsapp/telegram",
-            "message_index": 15,
-            "forensic_signals": {
-              "has_urgency": false,
-              "has_money_ref": false,
-              "has_target_ref": false,
-              "has_coordination": false
-            }
+            "speed": 0.0,
+            "accuracy": 7.1
           },
-          "description": "Vikram Khanna -> Group_Chat: 'Reached Howrah Station. Package handed over successfully.'"
+          "description": "Vikram Khanna at Howrah Maidan, Haora (accuracy: 7.1m, stationary)"
         },
         {
           "timestamp": "2026-05-22T22:38:00",
@@ -2141,7 +1366,7 @@
           "from_id": "MASTER_f24caf16",
           "to": "Howrah Station",
           "to_id": "MASTER_e32ebe48",
-          "source_type": "chat",
+          "source_type": "unknown",
           "confidence": 0.75,
           "attributes": {
             "message_index": 15
@@ -2149,19 +1374,26 @@
           "description": "Vikram Khanna mentioned Howrah Station"
         },
         {
-          "timestamp": "2026-05-22T22:40:00",
-          "action": "LOCATED_AT",
+          "timestamp": "2026-05-22T22:38:00",
+          "action": "MESSAGED",
           "from": "Vikram Khanna",
           "from_id": "MASTER_f24caf16",
-          "to": "Howrah Maidan, Haora",
-          "to_id": "MASTER_9e7d3007",
-          "source_type": "telecom_tower",
+          "to": "Group_Chat",
+          "to_id": "MASTER_cc9e76cc",
+          "source_type": "unknown",
           "confidence": 0.95,
           "attributes": {
-            "accuracy": 145.0,
-            "speed": 0.0
+            "forensic_signals": {
+              "has_urgency": false,
+              "has_money_ref": false,
+              "has_target_ref": false,
+              "has_coordination": false
+            },
+            "message_index": 15,
+            "text": "Reached Howrah Station. Package handed over successfully.",
+            "platform": "whatsapp/telegram"
           },
-          "description": "Vikram Khanna at Howrah Maidan, Haora (accuracy: 145.0m, stationary)"
+          "description": "Vikram Khanna -> Group_Chat: 'Reached Howrah Station. Package handed over successfully.'"
         },
         {
           "timestamp": "2026-05-22T22:40:00",
@@ -2176,21 +1408,6 @@
             "distance_meters": 2574.96
           },
           "description": "Movement: Bowbazar, Kolkata -> Howrah Maidan, Haora (2575m)"
-        },
-        {
-          "timestamp": "2026-05-22T22:40:00",
-          "action": "LOCATED_AT",
-          "from": "Tracker_001",
-          "from_id": "MASTER_90d56781",
-          "to": "Bidhannagar",
-          "to_id": "MASTER_8c5f6b57",
-          "source_type": "asset_tracker",
-          "confidence": 0.95,
-          "attributes": {
-            "accuracy": 2.1,
-            "speed": 65.0
-          },
-          "description": "Tracker_001 at Bidhannagar (accuracy: 2.1m, moving)"
         },
         {
           "timestamp": "2026-05-22T22:40:00",
@@ -2213,20 +1430,35 @@
           "from_id": "MASTER_b41353c7",
           "to": "Group_Chat",
           "to_id": "MASTER_cc9e76cc",
-          "source_type": "chat",
+          "source_type": "unknown",
           "confidence": 0.95,
           "attributes": {
-            "text": "Good work everyone. Clear your devices.",
-            "platform": "whatsapp/telegram",
-            "message_index": 16,
             "forensic_signals": {
               "has_urgency": false,
               "has_money_ref": false,
               "has_target_ref": false,
               "has_coordination": false
-            }
+            },
+            "message_index": 16,
+            "text": "Good work everyone. Clear your devices.",
+            "platform": "whatsapp/telegram"
           },
           "description": "Rahul Sen -> Group_Chat: 'Good work everyone. Clear your devices.'"
+        },
+        {
+          "timestamp": "2026-05-22T22:40:00",
+          "action": "LOCATED_AT",
+          "from": "Tracker_001",
+          "from_id": "MASTER_90d56781",
+          "to": "Bidhannagar",
+          "to_id": "MASTER_8c5f6b57",
+          "source_type": "asset_tracker",
+          "confidence": 0.95,
+          "attributes": {
+            "speed": 65.0,
+            "accuracy": 2.1
+          },
+          "description": "Tracker_001 at Bidhannagar (accuracy: 2.1m, moving)"
         }
       ]
     },
@@ -2244,7 +1476,7 @@
         "MENTIONED_USER": 1
       },
       "dominant_source_types": [
-        "social",
+        "unknown",
         "cdr_record"
       ],
       "active_actors": [
@@ -2261,12 +1493,40 @@
       "events": [
         {
           "timestamp": "2026-05-22T22:45:00",
+          "action": "MENTIONED",
+          "from": "@Arjung",
+          "from_id": "MASTER_425adff9",
+          "to": "Howrah Station",
+          "to_id": "MASTER_e32ebe48",
+          "source_type": "unknown",
+          "confidence": 0.7,
+          "attributes": {
+            "post_id": "tatva_post_005"
+          },
+          "description": "@Arjung mentioned Howrah Station"
+        },
+        {
+          "timestamp": "2026-05-22T22:45:00",
+          "action": "MENTIONED",
+          "from": "@Arjung",
+          "from_id": "MASTER_425adff9",
+          "to": "@Vikramk",
+          "to_id": "MASTER_4f3dc74c",
+          "source_type": "unknown",
+          "confidence": 0.7,
+          "attributes": {
+            "post_id": "tatva_post_005"
+          },
+          "description": "@Arjung mentioned @Vikramk"
+        },
+        {
+          "timestamp": "2026-05-22T22:45:00",
           "action": "POSTED_ON",
           "from": "@Arjung",
           "from_id": "MASTER_425adff9",
           "to": "Instagram",
           "to_id": "MASTER_a811d74e",
-          "source_type": "social",
+          "source_type": "unknown",
           "confidence": 0.95,
           "attributes": {
             "post_id": "tatva_post_005",
@@ -2284,40 +1544,12 @@
           "from_id": "MASTER_425adff9",
           "to": "@Vikramk",
           "to_id": "MASTER_4f3dc74c",
-          "source_type": "social",
+          "source_type": "unknown",
           "confidence": 0.85,
           "attributes": {
             "post_id": "tatva_post_005"
           },
           "description": "@Arjung -> @Vikramk"
-        },
-        {
-          "timestamp": "2026-05-22T22:45:00",
-          "action": "MENTIONED",
-          "from": "@Arjung",
-          "from_id": "MASTER_425adff9",
-          "to": "@Vikramk",
-          "to_id": "MASTER_4f3dc74c",
-          "source_type": "social",
-          "confidence": 0.7,
-          "attributes": {
-            "post_id": "tatva_post_005"
-          },
-          "description": "@Arjung mentioned @Vikramk"
-        },
-        {
-          "timestamp": "2026-05-22T22:45:00",
-          "action": "MENTIONED",
-          "from": "@Arjung",
-          "from_id": "MASTER_425adff9",
-          "to": "Howrah Station",
-          "to_id": "MASTER_e32ebe48",
-          "source_type": "social",
-          "confidence": 0.7,
-          "attributes": {
-            "post_id": "tatva_post_005"
-          },
-          "description": "@Arjung mentioned Howrah Station"
         },
         {
           "timestamp": "2026-05-22T22:50:00",
