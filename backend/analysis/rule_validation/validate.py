@@ -382,8 +382,8 @@ def run_validation_pipeline() -> dict:
     person_profiles = []
     for master in master_entities:
         mid = master["master_id"]
-        # Include if type is PERSON or is associated with evidence
-        if master.get("master_type") == "PERSON" or mid in evidence_by_person:
+        # Include only if type is PERSON
+        if master.get("master_type") == "PERSON":
             # Get evidence
             pe_evidence = evidence_by_person.get(mid, [])
             profile = build_person_profile(mid, master, name_map, pe_evidence, graph_metrics, relations)

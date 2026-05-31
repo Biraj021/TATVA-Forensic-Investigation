@@ -130,12 +130,13 @@ def get_graph_render_payload() -> GraphRenderPayload:
     for m in masters:
         mid = m["master_id"]
         entity_types = m.get("entity_types", [])
+        is_person = m.get("master_type", "ENTITY") == "PERSON"
         nodes.append(RenderNode(
             id=mid,
             label=_entity_label(m),
             type=m.get("master_type", "ENTITY"),
             sub_type=entity_types[0] if entity_types else "UNKNOWN",
-            risk_score=risk_lookup.get(mid, 0.0),
+            risk_score=risk_lookup.get(mid, 0.0) if is_person else 0.0,
         ))
 
     links: list[RenderLink] = []
