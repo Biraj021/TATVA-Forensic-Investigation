@@ -600,7 +600,9 @@ export default function InvestigationPage() {
           {/* Action Area */}
           <div className="p-6 border-t border-[#3f4852]/30 space-y-3 flex-shrink-0">
             <button
-              onClick={() => alert(JSON.stringify(selectedEntity || suspects, null, 2))}
+              onClick={() => {
+                window.open(`http://localhost:8000/api/cases/${ACTIVE_CASE_ID}/export-pdf`, '_blank');
+              }}
               className="w-full py-4 rounded-lg flex items-center justify-center gap-2 hover:brightness-110 active:scale-[0.98] transition-all"
               style={{ background: '#feb700', color: '#412d00', fontFamily: 'Geist', fontSize: '24px', fontWeight: '600', boxShadow: 'inset 0 0 10px rgba(152,203,255,0.1)' }}
             >

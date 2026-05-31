@@ -384,6 +384,46 @@ def get_case(case_id: str):
     data["evidence_files"] = db.get_evidence(case_id=case_id)
     return data
 
+@app.get("/api/cases/{case_id}/export-pdf")
+def export_case_pdf(case_id: str):
+    """
+    Generates and returns the Gemini-created investigation report as a beautifully styled PDF.
+    """
+    import os
+    from fastapi.responses import FileResponse
+    from api.pdf_generator import markdown_to_pdf
+    
+    # Check if the markdown report exists
+    md_report_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "Gemini_Engine", "outputs", "investigation_report.md")
+    
+    # If the markdown report does not exist, let's trigger the engine to run first (or fall back)
+    if not os.path.exists(md_report_path):
+        try:
+            print("[API] Markdown report not found. Running Gemini Engine to generate it...")
+            run_engine()
+        except Exception as e:
+            raise HTTPException(status_code=500, detail=f"Failed to generate report text: {e}")
+            
+    if not os.path.exists(md_report_path):
+        raise HTTPException(status_code=404, detail="Markdown report file could not be generated.")
+        
+    try:
+        with open(md_report_path, "r", encoding="utf-8") as f:
+            report_markdown = f.read()
+            
+        pdf_output_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "Gemini_Engine", "outputs", f"investigation_report_{case_id}.pdf")
+        
+        # Generate the PDF
+        markdown_to_pdf(report_markdown, pdf_output_path, case_id)
+        
+        return FileResponse(
+            path=pdf_output_path,
+            filename=f"TATVA_Investigation_Report_{case_id}.pdf",
+            media_type="application/pdf"
+        )
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to generate PDF: {str(e)}")
+
 @app.post("/api/cases/{case_id}/notes")
 def add_note(case_id: str, note: NoteCreate):
     """Add an investigator note or annotation to a case."""
