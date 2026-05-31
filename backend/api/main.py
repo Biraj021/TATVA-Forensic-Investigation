@@ -252,7 +252,45 @@ def read_graph_render():
 
 @app.get("/api/insights/suspects", response_model=List[SuspectDetail])
 def read_suspects():
-    """Returns a list of suspects scored by risk."""
+    """Returns a list of suspects scored by risk, synced with the core Risk Intelligence Engine."""
+    import os
+    import json
+    profiles_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "analysis", "rule_validation", "output", "person_risk_profiles.json")
+    if os.path.exists(profiles_path):
+        try:
+            with open(profiles_path, "r", encoding="utf-8") as f:
+                profs = json.load(f)
+                
+            suspect_details = []
+            for p in profs:
+                # Build list of reasons from triggered rules or evidence
+                reasons = []
+                for ev in p.get("evidence", []):
+                    rule_name = ev.get("rule_name", "")
+                    contrib = ev.get("weighted_contribution", 0.0)
+                    reasons.append(f"{rule_name} (Contribution: +{contrib:.1f}%)")
+                if not reasons:
+                    reasons = ["No suspicious forensic rules triggered. Risk based on graph connectivity."]
+                    
+                g_metrics = p.get("graph_metrics", {})
+                
+                suspect_details.append(SuspectDetail(
+                    master_id=p["person_id"],
+                    name=p["name"],
+                    risk_score=p["risk_score"],
+                    degree_centrality=g_metrics.get("degree", 0.0),
+                    betweenness_centrality=g_metrics.get("betweenness", 0.0),
+                    identifiers=p.get("identifiers", []),
+                    entity_types=p.get("entity_types", []),
+                    reasons=reasons
+                ))
+            # Sort suspects by risk score descending
+            suspect_details.sort(key=lambda s: s.risk_score, reverse=True)
+            return suspect_details
+        except Exception as e:
+            print(f"Error loading person risk profiles for suspects endpoint: {e}")
+            pass
+            
     return get_suspects()
 
 @app.get("/api/insights/transactions", response_model=List[TransactionAlert])
