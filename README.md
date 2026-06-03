@@ -2,6 +2,12 @@
 
 TATVA is a state-of-the-art, multi-dimensional digital forensics and intelligence synthesis platform designed to **empower, assist, and accelerate human investigators**—not to replace them. By acting as a diagnostic force multiplier, it dynamically ingests messy, heterogeneous evidence payloads (such as call detail records, banking transfers, tower coordinates, emails, and unstructured police reports), resolves entity duplication, maps interactive 3D knowledge graphs, and flags structural anomalies. It serves to augment investigator intuition and speed up key decision cycles, leaving final evidentiary interpretations and legal judgments strictly in human hands.
 
+## 🎥 Project Demo
+
+Check out the video demonstration of TATVA in action:
+
+[![TATVA Project Demo](https://img.youtube.com/vi/dKmn37V5rkk/maxresdefault.jpg)](https://youtu.be/dKmn37V5rkk?si=iw5Oixa_l2ETrYAg)
+
 ---
 
 ## 🚀 Key Forensic Pillars & Pipeline Architecture
