@@ -153,3 +153,17 @@ npm install
 npm run dev
 ```
 Open `http://localhost:5173` to access the TATVA portal.
+
+---
+
+## 👥 Core Contributors
+
+TATVA is developed and maintained by a dedicated team of developers:
+
+| Contributor | GitHub Profile |
+| :--- | :--- |
+| 🚀 **Subarno Chakraborty** | [@Kutan-Fuiton](https://github.com/Kutan-Fuiton) |
+| 💻 **Subhajit Das** | *Core Contributor* |
+| 🛡️ **Aritra Roy Choudhury** | [@rio-ARC](https://github.com/rio-ARC) |
+| ⚡ **Biraj Acherjee** | [@Biraj021](https://github.com/Biraj021) |
+
